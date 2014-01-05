@@ -56,9 +56,6 @@ public class UIConnectingToServer extends UIBlockyMenu
                 }
                 try
                 {
-//                    DatagramSocket socket = new DatagramSocket();
-////                    socket.connect(InetAddress.getByName(serverAddress), serverPort);
-//                    BlockyMain.instance.clientHandler = new ClientHandler(socket, serverAddress, serverPort);
                     ChannelFactory factory = new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
                     ClientBootstrap bootstrap = new ClientBootstrap(factory);
                     bootstrap.setPipelineFactory(new ChannelPipelineFactory() 

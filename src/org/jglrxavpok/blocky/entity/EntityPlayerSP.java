@@ -15,7 +15,6 @@ import org.jglrxavpok.blocky.utils.HUDComponent;
 import org.jglrxavpok.opengl.Tessellator;
 import org.jglrxavpok.opengl.Textures;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 public class EntityPlayerSP extends EntityPlayer
 {
@@ -40,11 +39,6 @@ public class EntityPlayerSP extends EntityPlayer
     }
 	public void tick()
 	{
-	    int scroll = Mouse.getDWheel();
-        if(scroll != 0)
-        {
-            this.incrementSelectedHotbar(-scroll/120f);
-        }
 		super.tick();
 		if(Keyboard.isKeyDown(Keyboard.KEY_T) && !tPressed)
 		{
@@ -92,7 +86,7 @@ public class EntityPlayerSP extends EntityPlayer
 		@Override
 		public void render()
 		{
-		    if(BlockyMain.instance.getLevel() == null && BlockyMain.instance.clientHandler == null)
+		    if(BlockyMain.instance.getLevel() == null)
             {
 		        BlockyMain.instance.removeHUDComponent(this);
 		        return;

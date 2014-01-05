@@ -3,10 +3,8 @@ package org.jglrxavpok.blocky.gui;
 import java.io.File;
 
 import org.jglrxavpok.blocky.BlockyMain;
-import org.jglrxavpok.blocky.achievements.AchievementDataBase;
 import org.jglrxavpok.blocky.achievements.AchievementList;
 import org.jglrxavpok.blocky.block.Block;
-import org.jglrxavpok.blocky.entity.Entity;
 import org.jglrxavpok.blocky.entity.EntityPlayerSP;
 import org.jglrxavpok.blocky.inventory.Inventory;
 import org.jglrxavpok.blocky.inventory.ItemStack;

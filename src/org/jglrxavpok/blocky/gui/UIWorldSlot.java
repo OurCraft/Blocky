@@ -15,7 +15,6 @@ import org.jglrxavpok.blocky.world.WorldInfos;
 import org.jglrxavpok.opengl.FontRenderer;
 import org.jglrxavpok.opengl.Tessellator;
 import org.jglrxavpok.opengl.Textures;
-import org.lwjgl.opengl.GL11;
 
 public class UIWorldSlot extends UISlot
 {
@@ -61,6 +60,7 @@ public class UIWorldSlot extends UISlot
         }
     }
 
+    @SuppressWarnings("deprecation")
     public void renderSlot(int id, float x, float y, int mx, int my, boolean[] buttons, boolean selected)
     {
         super.renderSlot(id, x, y, mx, my, buttons, selected);

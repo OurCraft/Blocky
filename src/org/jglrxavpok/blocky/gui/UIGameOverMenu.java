@@ -12,7 +12,7 @@ public class UIGameOverMenu extends UIMenu
         super.render(mx, my, buttons);
         OpenGlHelper.startNegativeMode();
         FontRenderer.setScale(2);
-        FontRenderer.drawString("GAME OVER", mx, my, 0xFFFFFF);
+        FontRenderer.drawString("Test§iGAME OVER§rTest", mx, my, 0xFFFFFF);
         FontRenderer.setScale(1);
         OpenGlHelper.endNegativeMode();
     }

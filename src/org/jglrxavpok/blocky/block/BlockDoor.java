@@ -2,7 +2,6 @@ package org.jglrxavpok.blocky.block;
 
 import org.jglrxavpok.blocky.entity.EntityPlayer;
 import org.jglrxavpok.blocky.world.World;
-import org.jglrxavpok.opengl.Tessellator;
 
 public class BlockDoor extends Block
 {

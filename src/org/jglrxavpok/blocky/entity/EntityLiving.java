@@ -18,6 +18,7 @@ public abstract class EntityLiving extends Entity
             life-=amount*(1f/this.getArmorMultiplier());
             if(life <= 0.f && onDeath(type, amount))
             {
+                alive = false;
                 this.die();
             }
             if(life > getMaxLife())

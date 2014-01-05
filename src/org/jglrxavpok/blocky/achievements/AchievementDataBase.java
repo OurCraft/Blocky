@@ -82,19 +82,4 @@ public class AchievementDataBase
             instance = new AchievementDataBase();
         return instance;
     }
-    
-    /**
-     * Testing
-     * @param args
-     */
-    public static void main(String[] args)
-    {
-        getInstance();
-        ArrayList<Achievement> list = instance.retrieveAchievementsOf("jglrxavpok");
-        for(int i = 0;i<list.size();i++)
-        {
-            System.out.println(list.get(i).getID());
-        }
-        System.err.println(instance.activateAchievement("jglrxavpok", AchievementList.touchWater));
-    }
 }

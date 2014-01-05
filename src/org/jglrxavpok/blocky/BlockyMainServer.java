@@ -4,7 +4,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
@@ -21,7 +20,6 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jglrxavpok.blocky.netty.NettyServerHandler;
-import org.jglrxavpok.blocky.server.ClientObject;
 
 public class BlockyMainServer
 {
@@ -41,7 +39,6 @@ public class BlockyMainServer
     }
 
     public static BlockyMainServer instance;
-    private ArrayList<ClientObject> clients = new ArrayList<ClientObject>();
     
     public BlockyMainServer()
     {
@@ -73,8 +70,6 @@ public class BlockyMainServer
     {
         try
         {
-//            server = new DatagramSocket(port);
-//            packetHandler = new PacketHandler(server);
             final String serverName = "Blocky server";
             ChannelFactory factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool());
             ServerBootstrap bootstrap = new ServerBootstrap(factory);
@@ -89,17 +84,11 @@ public class BlockyMainServer
             bootstrap.setOption("child.tcpNoDelay", true);
             bootstrap.setOption("child.keepAlive", true);
             bootstrap.bind(new InetSocketAddress(port));
-//            new ThreadPollConnections(server).start();
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-    }
-
-    public ArrayList<ClientObject> getClients()
-    {
-        return clients;
     }
 
 }

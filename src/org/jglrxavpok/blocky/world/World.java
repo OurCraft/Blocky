@@ -28,8 +28,6 @@ import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.block.BlockInfo;
 import org.jglrxavpok.blocky.entity.Entity;
 import org.jglrxavpok.blocky.entity.EntityPlayer;
-import org.jglrxavpok.blocky.entity.EntityPlayerSP;
-import org.jglrxavpok.blocky.gui.UIWorldCreationMenu;
 import org.jglrxavpok.blocky.netty.NettyClientHandler;
 import org.jglrxavpok.blocky.netty.NettyCommons;
 import org.jglrxavpok.blocky.server.Packet;
@@ -41,7 +39,6 @@ import org.jglrxavpok.blocky.world.WorldGenerator.WorldType;
 import org.jglrxavpok.opengl.FontRenderer;
 import org.jglrxavpok.opengl.Tessellator;
 import org.jglrxavpok.opengl.Textures;
-import org.jglrxavpok.opengl.Tessellator.OpenGlHelper;
 import org.jglrxavpok.storage.TaggedStorageChunk;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
@@ -64,13 +61,11 @@ public class World
 	private HashMap<Integer, WorldChunk>	chunksList;
 	public WorldType	worldType;
     private File chunkFolder;
-//    private ArrayList<Integer> chunkAsked = new ArrayList<Integer>();
-    private ArrayList<BlockInfo> queue = new ArrayList<BlockInfo>();
+    private ArrayList<Integer> chunkAsked = new ArrayList<Integer>();
     public boolean handlingChanges;
     public long time;
     private ParticleSystem particles = new ParticleSystem(2000);
     private ArrayList<EntityPlayer> loadedPlayers = new ArrayList<EntityPlayer>();
-    private boolean gotSaveImg;
 	
 	public static final World zeroBlocks = new World("zeroBlocks")
 	{
@@ -130,31 +125,7 @@ public class World
 		this.worldType = WorldType.NORMAL;
 	}
 	
-    private String getCorrectWorldFileName(File folder, String text)
-    {
-        int i = 1;
-        for(int ii = 0;ii<UIWorldCreationMenu.ILLEGAL_WORLD_NAMES.length;ii++)
-        {
-            if(text.equalsIgnoreCase(UIWorldCreationMenu.ILLEGAL_WORLD_NAMES[ii]))
-                text = "_"+text+"_";
-        }
-        for(int ii =0;ii<UIWorldCreationMenu.ILLEGAL_WORLD_NAME_COMPONENTS.length;ii++)
-        {
-            text = text.replace(UIWorldCreationMenu.ILLEGAL_WORLD_NAME_COMPONENTS[ii], '_');
-        }
-        if(new File(folder, text).exists())
-        {
-            while(new File(folder, text+ " ("+i+")").exists())
-            {
-                i++;
-            }
-            return text+" ("+i+")";
-        }
-        return text;
-    }
-
-	
-	public void setChunkFolder(File folder)
+    public void setChunkFolder(File folder)
 	{
 	    chunkFolder = folder;
 	    File entitiesFile = new File(chunkFolder, "entities.data");
@@ -208,7 +179,6 @@ public class World
 	                {
 	                    try
 	                    {
-    	                    String player = f.getName().replace(".data", "");
     	                    EntityPlayer playerEntity = new EntityPlayer();
     	                    InputStream in = new BufferedInputStream(new FileInputStream(f));
                             byte[] bytes = IO.read(in);
@@ -241,10 +211,6 @@ public class World
 			}
 		}
 
-//			if(chunk.chunkID < 0)
-//				x-=1;
-//		else
-//			x = x+chunk.chunkID*16;
 		return chunk.getBlock(x,y);
 	}
 	
@@ -314,10 +280,10 @@ public class World
 		{
 		    if(this.worldType == WorldType.CLIENT)
 		    {
-//		        if(!chunkAsked.contains((int)chunkID))
+		        if(!chunkAsked.contains((int)chunkID))
 		        {
 		            askForChunk((int)chunkID);
-//		            chunkAsked.add((int)chunkID);
+		            chunkAsked.add((int)chunkID);
 		        }
 		    }
 		    else
@@ -409,12 +375,6 @@ public class World
 	
 	public void render()
 	{
-//	    float r = (float)time/(18000f/2f);
-//	    if(r > 1.0f)
-//	        r = 1f-(r-1f);
-//	    float g = (float)time/(18000f/2f);
-//        if(g > 1.0f)
-//            g = 1f-(g-1f);
         float b = (float)time/(18000f);
         if(b > 1.0f)
             b = 1f-(b-1f);
@@ -443,28 +403,8 @@ public class World
         GL11.glPopMatrix();
 		if(centerOfTheWorld != null)
 		{
-			lvlox = -((centerOfTheWorld.x+centerOfTheWorld.w/2)-BlockyMain.width/2);
-			lvloy = -((centerOfTheWorld.y+centerOfTheWorld.h/2)-BlockyMain.height/2);
-			
-//			if(!showOutside)
-//			{
-//				if(lvlox > 0.f)
-//				{
-//					lvlox = 0.f;
-//				}
-//				if(lvloy > 0.f)
-//				{
-//					lvloy = 0.f;
-//				}
-//				if(lvlox+getWidth() < BlockyMain.width)
-//				{
-//					lvlox = -(getWidth()-BlockyMain.width);
-//				}
-//				if(lvloy+getHeight() < BlockyMain.height)
-//				{
-//					lvloy = -(getHeight()-BlockyMain.height);
-//				}
-//			}
+			lvlox = -((centerOfTheWorld.x+(float)centerOfTheWorld.w/2f)-(float)BlockyMain.width/2f);
+			lvloy = -((centerOfTheWorld.y+(float)centerOfTheWorld.h/2f)-(float)BlockyMain.height/2f);
 		}
 		for(int i = 0;i<entities.size();i++)
 		{
@@ -477,7 +417,6 @@ public class World
 		int startID = (int)((-(lvlox))/Block.BLOCK_WIDTH/16f)-1;
 		int endID = (int)(((-(lvlox))+BlockyMain.width)/Block.BLOCK_WIDTH/16f)+1;
 		int index = startID;
-//		System.out.println(startID+";"+endID+"  "+lvlox+":"+lvloy);
 		Textures.bind("/assets/textures/terrain.png");
 		Tessellator.instance.startDrawingQuads();
 		for(;index<endID;index++)
@@ -600,25 +539,12 @@ public class World
 	
     public void setData(int x, int y, int index, String data)
 	{
-//		if(this.data == null || x < 0 || y < 0 || x >= this.data.length || y >= this.data[0].length)
-//			return;
-//		if(!data.equals(this.data[x][y][index]))
-//		{
-//			for(int i = 0;i<listeners.size();i++)
-//			{
-//				listeners.get(i).onDataChanged(this.data[x][y][index], x, y, data, index);
-//			}
-//		}
-//		if(data != null)
-//			this.data[x][y][index] = data;
-//		
+        // TODO
 	}
 	
 	public String getData(int x, int y, int index)
 	{
-//		if(this.data == null || x < 0 || y < 0 || x >= this.data.length || y >= this.data[0].length)
-//			return "OUTOFLEVEL";
-//		return data[x][y][index];
+	    // TODO
 		return "out";
 	}
 	
@@ -785,18 +711,15 @@ public class World
                     e.printStackTrace();
                 }
         }
-//        else
+        if(x != 0)
         {
-            if(x != 0)
+            x = x-chunk.chunkID*16;
+            if(chunk.chunkID < 0)
             {
-                x = x-chunk.chunkID*16;
-                if(chunk.chunkID < 0)
-                {
-                    x = 15-x;
-                }
+                x = 15-x;
             }
-            chunk.setAttackValueToBlock(x, y, value, player);
         }
+        chunk.setAttackValueToBlock(x, y, value, player);
     }
     
     public int getLastBlockChange(int x, int y)

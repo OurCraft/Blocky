@@ -5,8 +5,7 @@ import java.io.File;
 import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.entity.Entity;
-import org.jglrxavpok.blocky.entity.EntityFakePlayer;
-import org.jglrxavpok.blocky.entity.EntityPlayerSP;
+import org.jglrxavpok.blocky.entity.EntityDemoPlayer;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.ui.UIButton;
 import org.jglrxavpok.blocky.ui.UIComponentBase;
@@ -24,7 +23,7 @@ public class UIMainMenu extends UIBlockyMenu
 
     static
     {
-        Entity p = new EntityFakePlayer().move(50*Block.BLOCK_WIDTH, 120*Block.BLOCK_HEIGHT);
+        Entity p = new EntityDemoPlayer().move(50*Block.BLOCK_WIDTH, 120*Block.BLOCK_HEIGHT);
         background.centerOfTheWorld = p;
         background.addEntity(p);
     }
@@ -52,13 +51,6 @@ public class UIMainMenu extends UIBlockyMenu
         }
         else if(c == playButton)
         {
-//            World level = new World("Blocky Indev second world");
-//            level.setChunkFolder(new File(new File(BlockyMain.getFolder(), "saves"), level.getName()));
-//            Entity p = new EntityPlayerSP().move(25*Block.BLOCK_WIDTH, 120*Block.BLOCK_HEIGHT);
-//            level.centerOfTheWorld = p;
-//            level.addEntity(p);
-//            BlockyMain.instance.loadLevel(level);
-//            UI.displayMenu(null);
             UI.displayMenu(new UIWorldList(this, new File(BlockyMain.getFolder(), "saves")));
         }
     }

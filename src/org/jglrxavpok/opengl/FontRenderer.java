@@ -48,7 +48,6 @@ public class FontRenderer
 			return true;
 		GL11.glPushMatrix();
 		boolean flag = true;
-		float startX = x;
 		font.bind();
 		Tessellator t = Tessellator.instance;
 		float r = ((color >> 16) & 0xFF)/255f;
@@ -166,33 +165,24 @@ public class FontRenderer
 				}
 				else
 					v=1f/(256f*6/(256f*6-v));
-				float italicsRotation = -15f;
-	//			if(italics)
-	//			{
-	//				GL11.glEnd();
-	//				GL11.glTranslatef(x-8f, 8f, 0);
-	//				GL11.glRotatef(italicsRotation, 0, 0, 1);
-	//				GL11.glTranslatef(-x+8f, -8f, 0);				
-	//				GL11.glBegin(GL11.GL_QUADS);
-	//			}
-				t.addVertexWithUV(x, y+font.getCharHeight(c)*scale, 0, u, v);
-				t.addVertexWithUV(x+font.getCharWidth(c)*scale, y+font.getCharHeight(c)*scale, 0, u+1f/(256f/16f), v);
-				t.addVertexWithUV(x+font.getCharWidth(c)*scale, y, 0, u+1f/(256f/16f), v-1f/(256f*6/16f));
-				t.addVertexWithUV(x, y, 0, u, v-1f/(256f*6/16f));
-	//			if(italics)
-	//			{
-	//				GL11.glEnd();
-	//				GL11.glTranslatef(x-8f, 8f, 0);
-	//				GL11.glRotatef(-italicsRotation, 0, 0, 1);
-	//				GL11.glTranslatef(-x+8f, -8f, 0);
-	//				GL11.glBegin(GL11.GL_QUADS);
-	//			}
-	
+				if(italics)
+				{
+				    float italicsRotation = 6f;
+				    t.addVertexWithUV(x+italicsRotation, y+font.getCharHeight(c)*scale, 0, u, v);
+                    t.addVertexWithUV(x+font.getCharWidth(c)*scale+italicsRotation, y+font.getCharHeight(c)*scale, 0, u+1f/(256f/16f), v);
+                    t.addVertexWithUV(x+font.getCharWidth(c)*scale-italicsRotation, y, 0, u+1f/(256f/16f), v-1f/(256f*6/16f));
+                    t.addVertexWithUV(x-italicsRotation, y, 0, u, v-1f/(256f*6/16f));
+				}
+				else
+				{
+    				t.addVertexWithUV(x, y+font.getCharHeight(c)*scale, 0, u, v);
+    				t.addVertexWithUV(x+font.getCharWidth(c)*scale, y+font.getCharHeight(c)*scale, 0, u+1f/(256f/16f), v);
+    				t.addVertexWithUV(x+font.getCharWidth(c)*scale, y, 0, u+1f/(256f/16f), v-1f/(256f*6/16f));
+    				t.addVertexWithUV(x, y, 0, u, v-1f/(256f*6/16f));
+				}
 			}
 		}
 		t.flush();
-//		GL11.glEnd();
-		
 		t.setColorOpaque_I(0xFFFFFF);
 		
 		GL11.glPopMatrix();

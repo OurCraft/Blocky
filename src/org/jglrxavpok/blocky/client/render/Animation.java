@@ -1,9 +1,8 @@
 package org.jglrxavpok.blocky.client.render;
 
-import java.util.ArrayList;
-
 import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.opengl.Tessellator;
+import org.jglrxavpok.opengl.Textures;
 
 public class Animation
 {
@@ -18,7 +17,7 @@ public class Animation
     private long lastChecked;
 
     /**
-     * 
+     * SHOULD BE TESTED
      * @param texID
      * @param texW
      * @param texH
@@ -38,6 +37,7 @@ public class Animation
     
     public void render(float posX, float posY, float w, float h)
     {
+        Textures.bind(id);
         frame+=(lastChecked-BlockyMain.instance.timeRunning)*(frameDuration/60f);
         lastChecked = BlockyMain.instance.timeRunning;
         Tessellator t = Tessellator.instance;

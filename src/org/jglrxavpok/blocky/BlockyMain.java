@@ -29,7 +29,6 @@ import net.java.games.input.ControllerEnvironment;
 import org.jglrxavpok.blocky.achievements.AchievementRenderer;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.client.ChatHUDComponent;
-import org.jglrxavpok.blocky.client.ClientHandler;
 import org.jglrxavpok.blocky.gui.UIMainMenu;
 import org.jglrxavpok.blocky.gui.UIPauseMenu;
 import org.jglrxavpok.blocky.input.ClientInput;
@@ -147,6 +146,18 @@ public class BlockyMain implements Runnable
     private boolean screenshotKey;
     private ArrayList<String> chatContent = new ArrayList<String>();
     private ArrayList<Long> chatTime = new ArrayList<Long>();
+    
+    private ArrayList<Controller> foundControllers;
+    private int cursorX;
+    private int cursorY;
+    private int polledControllers;
+    private float backgroundRed;
+    private float backgroundGreen;
+    private float backgroundBlue;
+    public long timeRunning;
+    public AchievementRenderer achievementRenderer;
+    private boolean f11Pressed;
+    
     public static double ratioW;
     public static double ratioH;
 
@@ -200,7 +211,6 @@ public class BlockyMain implements Runnable
 			GLU.gluOrtho2D(0, width,  0,height);
 			Mouse.create();
 	    	Keyboard.create();
-//			Mouse.setGrabbed(true);
 			Fluid.load();
 			Block.loadAll();
 	    	Textures.get(ImageUtils.toBufferedImage(FileSystemView.getFileSystemView().getSystemIcon(new File(System.getProperty("user.home")))));
@@ -305,19 +315,6 @@ public class BlockyMain implements Runnable
 	}
 	
 
-    private ArrayList<Controller> foundControllers;
-    private int cursorX;
-    private int cursorY;
-    private ArrayList<InputProcessor> inputProcessorsToAdd = new ArrayList<InputProcessor>();
-    private int polledControllers;
-    public ClientHandler clientHandler;
-    private float backgroundRed;
-    private float backgroundGreen;
-    private float backgroundBlue;
-    public long timeRunning;
-    public AchievementRenderer achievementRenderer;
-    private boolean f11Pressed;
-
     /**
      * Search (and save) for controllers of type Controller.Type.STICK,
      * Controller.Type.GAMEPAD, Controller.Type.WHEEL and Controller.Type.FINGERSTICK.
@@ -350,8 +347,9 @@ public class BlockyMain implements Runnable
             if(k == Keyboard.KEY_F10 && b)
                 mainFrame.setAlwaysOnTop(!mainFrame.isAlwaysOnTop());
             UI.onKeyEvent(c, k, b);
-            for(InputProcessor proc : inputProcessors)
+            for(int index1 = 0;index1<inputProcessors.size();index1++)
             {
+                InputProcessor proc = inputProcessors.get(index1);
                 proc.onKeyEvent(c, k, b);
             }
         }
@@ -362,13 +360,15 @@ public class BlockyMain implements Runnable
             int button = Mouse.getEventButton();
             boolean b = Mouse.getEventButtonState();
             UI.onMouseEvent(cursorX,cursorY,button,b);
-            for(InputProcessor proc : inputProcessors)
+            for(int index1 = 0;index1<inputProcessors.size();index1++)
             {
+                InputProcessor proc = inputProcessors.get(index1);
                 proc.onMouseEvent(mx, my, button, b);
             }
         }
-        for(InputProcessor proc : inputProcessors)
+        for(int index1 = 0;index1<inputProcessors.size();index1++)
         {
+            InputProcessor proc = inputProcessors.get(index1);
             proc.onUpdate();
         }
         pollControllerData();
@@ -377,7 +377,6 @@ public class BlockyMain implements Runnable
 	private void pollControllerData()
 	{
 	    polledControllers = 0;
-//	    this.searchForControllers();
 	    for(int index = 0;index<foundControllers.size();index++)
 	    {
             // Currently selected controller.
@@ -406,8 +405,9 @@ public class BlockyMain implements Runnable
                     if(component.getPollData() == 0.0f)
                         isItPressed = false;
                     
-                    for(InputProcessor proc : inputProcessors)
+                    for(int index1 = 0;index1<inputProcessors.size();index1++)
                     {
+                        InputProcessor proc = inputProcessors.get(index1);
                         proc.onButtonUpdate(index, isItPressed, component);
                     }
                 }
@@ -416,8 +416,9 @@ public class BlockyMain implements Runnable
                 if(componentIdentifier == Component.Identifier.Axis.POV)
                 {
                     float hatSwitchPosition = component.getPollData();
-                    for(InputProcessor proc : inputProcessors)
+                    for(int index1 = 0;index1<inputProcessors.size();index1++)
                     {
+                        InputProcessor proc = inputProcessors.get(index1);
                         proc.onPovUpdate(index, hatSwitchPosition, component);
                     }
                 }
@@ -426,14 +427,16 @@ public class BlockyMain implements Runnable
                 if(component.isAnalog())
                 {
                     float axisValue = component.getPollData();
-                    for(InputProcessor proc : inputProcessors)
+                    for(int index1 = 0;index1<inputProcessors.size();index1++)
                     {
+                        InputProcessor proc = inputProcessors.get(index1);
                         proc.onAxisUpdate(index, axisValue, component);
                     }
                 }
                 
-                for(InputProcessor proc : inputProcessors)
+                for(int index1 = 0;index1<inputProcessors.size();index1++)
                 {
+                    InputProcessor proc = inputProcessors.get(index1);
                     proc.onCustomComponentUpdate(index, component);
                 }
             }
@@ -452,8 +455,6 @@ public class BlockyMain implements Runnable
 
 	private void updateLoop()
 	{
-	    this.inputProcessors.addAll(inputProcessorsToAdd);
-	    inputProcessorsToAdd.clear();
 	    pollEvents();
 	    if(!UI.doesMenuPauseGame())
 	    {
@@ -553,7 +554,7 @@ public class BlockyMain implements Runnable
 
     public void addInputProcessor(InputProcessor proc)
     {
-        this.inputProcessorsToAdd.add(proc);
+        this.inputProcessors.add(proc);
     }
     
     public int getCursorX()
@@ -592,6 +593,11 @@ public class BlockyMain implements Runnable
     {
         this.chatContent.add(txt);
         this.chatTime.add(System.currentTimeMillis());
+    }
+
+    public void removeInputProcessor(InputProcessor proc)
+    {
+        this.inputProcessors.remove(proc);
     }
 
 }

@@ -15,7 +15,6 @@ import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jglrxavpok.blocky.BlockyMain;
-import org.jglrxavpok.blocky.BlockyMainServer;
 import org.jglrxavpok.blocky.block.BlockInfo;
 import org.jglrxavpok.blocky.entity.EntityPlayer;
 import org.jglrxavpok.blocky.server.Packet;

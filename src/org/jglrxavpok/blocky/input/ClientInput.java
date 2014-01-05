@@ -3,9 +3,6 @@ package org.jglrxavpok.blocky.input;
 import net.java.games.input.Component;
 
 import org.jglrxavpok.blocky.BlockyMain;
-import org.jglrxavpok.blocky.block.Block;
-import org.jglrxavpok.blocky.gui.UIPauseMenu;
-import org.jglrxavpok.blocky.inventory.ItemStack;
 import org.jglrxavpok.blocky.ui.UI;
 
 public class ClientInput implements InputProcessor
@@ -30,7 +27,6 @@ public class ClientInput implements InputProcessor
     @Override
     public void onAxisUpdate(int controllerID, float value, Component component)
     {
-        // TODO Auto-generated method stub
         
     }
 
@@ -42,8 +38,6 @@ public class ClientInput implements InputProcessor
         {
             String buttonIndex;
             buttonIndex = component.getIdentifier().toString();
-            int mx = BlockyMain.instance.getCursorX();
-            int my = BlockyMain.instance.getCursorY();
             if(buttonIndex.equals("0"))
             {
                 if(!UI.isMenuNull())
@@ -61,7 +55,6 @@ public class ClientInput implements InputProcessor
     @Override
     public void onPovUpdate(int controllerID, float value, Component component)
     {
-        // TODO Auto-generated method stub
         
     }
 

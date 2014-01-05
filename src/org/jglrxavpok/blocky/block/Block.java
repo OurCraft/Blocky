@@ -470,8 +470,5 @@ public abstract class Block implements GameObject
     }
 
 
-    public void onEntityCollide(World world, int gridX, int gridY, Entity entity, boolean b)
-    {
-        
-    }
+    public void onEntityCollide(World world, int gridX, int gridY, Entity entity, boolean isEntityFullyInBlock){}
 }

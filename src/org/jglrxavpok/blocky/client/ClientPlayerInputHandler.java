@@ -14,7 +14,6 @@ import org.jglrxavpok.blocky.netty.NettyClientHandler;
 import org.jglrxavpok.blocky.netty.NettyCommons;
 import org.jglrxavpok.blocky.server.PacketPlayer;
 import org.jglrxavpok.blocky.ui.UI;
-import org.jglrxavpok.blocky.utils.AABB;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -86,7 +85,6 @@ public class ClientPlayerInputHandler implements InputProcessor
             int my = BlockyMain.instance.getCursorY();
             int tx = (int)((float)(mx-player.world.lvlox)/Block.BLOCK_WIDTH);
             int ty = (int)((float)(my-player.world.lvloy)/Block.BLOCK_HEIGHT);
-            AABB selection = new AABB(tx*Block.BLOCK_WIDTH,ty*Block.BLOCK_HEIGHT,Block.BLOCK_WIDTH,Block.BLOCK_WIDTH);
             if(buttonIndex.equals("0"))
             {
                 if(!UI.isMenuNull())
@@ -95,20 +93,13 @@ public class ClientPlayerInputHandler implements InputProcessor
                 }
                 if(player.canReachBlock(tx, ty) && Block.getBlock(player.world.getBlockAt(tx, ty)).canBeDestroyedWith(player.getHeldItem(), player))
                 {
-//                    if(player.world.getEntitiesInAABB(selection, player).size() > 0)
-//                    {
-//                        
-//                    }
-//                    else
+                    ItemStack held = player.getHeldItem();
+                    int multiplier = 1;
+                    if(held != null)
                     {
-                        ItemStack held = player.getHeldItem();
-                        int multiplier = 1;
-                        if(held != null)
-                        {
-                            multiplier = held.getStrengthAgainstBlock(player, tx,ty,player.world);
-                        }
-                        player.world.setAttackValue(tx, ty, player.world.getAttackValue(tx,ty)+multiplier, player.username);
+                        multiplier = held.getStrengthAgainstBlock(player, tx,ty,player.world);
                     }
+                    player.world.setAttackValue(tx, ty, player.world.getAttackValue(tx,ty)+multiplier, player.username);
                 }
             }
             if(buttonIndex.equals("1"))
@@ -165,6 +156,8 @@ public class ClientPlayerInputHandler implements InputProcessor
     
     public void onUpdate()
     {
+        if(player.alive == false)
+            BlockyMain.instance.removeInputProcessor(this);
         if(!BlockyMain.instance.hasControllerPlugged())
         {
             if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
@@ -188,6 +181,7 @@ public class ClientPlayerInputHandler implements InputProcessor
             catch (IOException e)
             {
                 e.printStackTrace();
-            }    
-        }
+            }
+    }
+    
 }

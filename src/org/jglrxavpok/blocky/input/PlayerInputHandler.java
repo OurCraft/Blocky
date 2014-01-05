@@ -7,7 +7,6 @@ import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.entity.EntityPlayerSP;
 import org.jglrxavpok.blocky.gui.UIPauseMenu;
 import org.jglrxavpok.blocky.inventory.ItemStack;
-import org.jglrxavpok.blocky.items.ItemBlock;
 import org.jglrxavpok.blocky.ui.UI;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -48,6 +47,11 @@ public class PlayerInputHandler implements InputProcessor
     {
         if(!BlockyMain.instance.hasControllerPlugged() || UI.doesMenuPauseGame())
         {
+            int scroll = Mouse.getDWheel();
+            if(scroll != 0)
+            {
+                this.player.incrementSelectedHotbar(-scroll/120f);
+            }
         }
     }
 
@@ -153,6 +157,8 @@ public class PlayerInputHandler implements InputProcessor
     
     public void onUpdate()
     {
+        if(player.alive == false)
+            BlockyMain.instance.removeInputProcessor(this);
         if(!BlockyMain.instance.hasControllerPlugged())
         {
             if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))

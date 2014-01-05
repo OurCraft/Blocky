@@ -28,7 +28,6 @@ public class ItemBlock extends Item
 		Textures.bind("/assets/textures/terrain.png");
 		t.startDrawingQuads();
 		t.setColorEnabled(true);
-//		block.render(posX, posY, 0, 0, Level.zeroBlocks);
 		float fX = width/Block.BLOCK_WIDTH;
 		float fY = h/Block.BLOCK_HEIGHT;
 		GL11.glScalef(fX, fY, 0);

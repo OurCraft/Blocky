@@ -143,18 +143,8 @@ public class EntityPlayer extends EntityLiving
             GL11.glRotatef(iangle, 0, 0, 1);
             
             Textures.bind("/assets/textures/items.png");
-
-//            t.startDrawingQuads();
             t.setColorRGBA_F(val,val,val,1f);
             i.renderHand(0, 0, 12, 12, direction == 1, this);
-//            int width = 12;
-//            int h = 12;
-//            t.addVertexWithUV(0, 0, 0, i.minU, i.minV);
-//            t.addVertexWithUV(width, 0, 0, i.maxU, i.minV);
-//            t.addVertexWithUV(width, h, 0, i.maxU, i.maxV);
-//            t.addVertexWithUV(0, h, 0, i.minU, i.maxV);
-//            t.flush();
-
             GL11.glPopMatrix();
         }
     }
@@ -169,7 +159,6 @@ public class EntityPlayer extends EntityLiving
         if(!isInAir)
         {
             vy = 5;
-//          SoundManager.instance.playSoundFX("/assets/sounds/Jump"+(rand.nextInt(3)+1)+".wav", 0.5f, 1);
         }
     }
 

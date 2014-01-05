@@ -9,7 +9,6 @@ public class Packet implements Serializable
     
     public String name;
     public byte[] data;
-//    public String playerName = null;
     
     public Packet(String name, byte[] data)
     {

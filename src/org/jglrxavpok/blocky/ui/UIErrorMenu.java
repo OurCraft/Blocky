@@ -1,6 +1,5 @@
 package org.jglrxavpok.blocky.ui;
 
-import org.jglrxavpok.blocky.utils.Lang;
 import org.jglrxavpok.blocky.utils.TextFormatting;
 import org.jglrxavpok.opengl.FontRenderer;
 import org.jglrxavpok.opengl.Textures;
@@ -38,7 +37,6 @@ public class UIErrorMenu extends UIMenu
 	public void renderOverlay(int mx, int my, boolean[] buttons)
 	{
 		super.renderOverlay(mx, my, buttons);
-//		SkinMaker.instance.drawSlashText(w/2+496/2f, h-110+20);
 	}
 	
 	public void render(int mx, int my, boolean[] buttons)
@@ -51,19 +49,11 @@ public class UIErrorMenu extends UIMenu
 		GL11.glColor3f(1, 1, 1);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		super.render(mx, my, buttons);
-		float x = w/2f-496/2f;
 		float y = h-80;
-		float w = 496f;
-		float h = 40;
 		String guiName = "A guy";
 		if(parent != null)
 		{
-			String canonicalName = parent.getClass().getCanonicalName();
-			if(canonicalName.startsWith("org.jglrxavpok.skinmaker.ui."))
-			{
-				String className = parent.getClass().getName().replace("org.jglrxavpok.skinmaker.ui.",  "");
-				guiName = TextFormatting.UNDERLINE+"Bug in "+ className.replaceFirst("UI", "");
-			}
+			guiName = TextFormatting.UNDERLINE+"Bug in "+parent.getClass().getCanonicalName();
 		}
 		GL11.glPushMatrix();
 		float factor = 2;

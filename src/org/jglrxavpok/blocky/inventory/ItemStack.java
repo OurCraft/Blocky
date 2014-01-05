@@ -1,7 +1,6 @@
 package org.jglrxavpok.blocky.inventory;
 
 import org.jglrxavpok.blocky.entity.Entity;
-import org.jglrxavpok.blocky.entity.EntityPlayerSP;
 import org.jglrxavpok.blocky.items.Item;
 import org.jglrxavpok.blocky.world.World;
 
