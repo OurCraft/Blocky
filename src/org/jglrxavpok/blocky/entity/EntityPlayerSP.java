@@ -193,9 +193,7 @@ public class EntityPlayerSP extends EntityPlayer
                         heartContentMaxV = 1f;
                     }
                 }
-
-                
-                x+=w+2f;
+                x+=w+1f;
             }
             t.flush();
             w=32;

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/LWJGL 2.9/jinput.jar"/>
+	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/LWJGL 2.9/lwjgl.jar"/>
+	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/LWJGL 2.9/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/Apache Commons/commons-codec-1.8.jar"/>
+	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/Apache Commons/commons-codec-1.8-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/Apache Commons/commons-codec-1.8-sources.jar"/>
+	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/netty-3.8.0.Final/jar/netty-3.8.0.Final.jar"/>
+	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/netty-3.8.0.Final/jar/netty-3.8.0.Final-sources.jar"/>
+	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/LWJGL 2.9/lwjgl_natives.zip"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

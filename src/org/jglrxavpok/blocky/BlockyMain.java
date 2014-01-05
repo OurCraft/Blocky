@@ -150,8 +150,8 @@ public class BlockyMain implements Runnable
     public static double ratioW;
     public static double ratioH;
 
-	public static int width = 854;
-	public static int height = 480;
+	public static int width = 1920/2;
+	public static int height = 1080/2;
 	public static TaggedStorageSystem saveSystem = new TaggedStorageSystem();
 
 	public BlockyMain(){}
@@ -316,6 +316,7 @@ public class BlockyMain implements Runnable
     private float backgroundBlue;
     public long timeRunning;
     public AchievementRenderer achievementRenderer;
+    private boolean f11Pressed;
 
     /**
      * Search (and save) for controllers of type Controller.Type.STICK,
@@ -467,16 +468,21 @@ public class BlockyMain implements Runnable
         }
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) && level != null)
 		    UI.displayMenu(new UIPauseMenu());
-		if(Keyboard.isKeyDown(Keyboard.KEY_F11))
+		if(Keyboard.isKeyDown(Keyboard.KEY_F11) && !f11Pressed)
             try
             {
-                Display.setFullscreen(true);
+                Display.setFullscreen(!Display.isFullscreen());
                 Display.setVSyncEnabled(true);
+                f11Pressed = true;
             }
             catch (LWJGLException e)
             {
                 e.printStackTrace();
             }
+		else if(!Keyboard.isKeyDown(Keyboard.KEY_F11) && f11Pressed)
+		{
+		    f11Pressed = false;
+		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_F2) && !screenshotKey)
 		{
 		    screenshotKey = true;

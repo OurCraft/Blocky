@@ -15,6 +15,7 @@ public class ChatHUDComponent implements HUDComponent
     {
         this.list = list;
         this.chatTime = chatTime;
+        // Test
     }
     
     @Override

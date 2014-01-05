@@ -180,9 +180,10 @@ public class BlockFluid extends Block
         float val = w.getLightValue(x, y);
         if(val < 0.01f)
             val = 0.01f;
-        if(fluid.getLightingPower() > 0)
-            val = 1f;
-        t.setColorRGBA((int)(val*((float)c.getRed())),(int)(val*((float)c.getGreen())),(int)(val*((float)c.getBlue())), (int)(fluid.getOpacity()*255f));
+        if(fluid.getLightingPower() == 0)
+            t.setColorRGBA((int)(val*((float)c.getRed())),(int)(val*((float)c.getGreen())),(int)(val*((float)c.getBlue())), (int)(fluid.getOpacity()*255f));
+        else
+            t.setColorRGBA((int)(((float)c.getRed())),(int)(((float)c.getGreen())),(int)(((float)c.getBlue())), (int)(fluid.getOpacity()*255f));
         float h = ((float)(volume)/(float)this.fluid.getMaxVolume())*Block.BLOCK_HEIGHT;
         t.addVertexWithUV(posX, posY, 0,minU,minV);
         t.addVertexWithUV(posX+Block.BLOCK_WIDTH, posY, 0,maxU,minV);

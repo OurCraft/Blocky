@@ -470,8 +470,8 @@ public class World
 		{
 			Entity e = entities.get(i);
 			if(e != null && e.visible
-			&& e.x+e.w+this.lvlox+e.w >= 0 && e.x+e.w+e.w+this.lvlox-e.w < BlockyMain.width
-			&& e.y+e.h+this.lvloy+e.h >= 0 && e.y+e.h+e.h+this.lvloy-e.h < BlockyMain.height)
+			&& e.x+e.w+this.lvlox >= 0 && e.x+this.lvlox < BlockyMain.width
+			&& e.y+e.h+this.lvloy >= 0 && e.y+this.lvloy < BlockyMain.height)
 				e.render(lvlox+e.x+e.offsetX, lvloy+e.y+e.offsetY, 1);
 		}
 		int startID = (int)((-(lvlox))/Block.BLOCK_WIDTH/16f)-1;
