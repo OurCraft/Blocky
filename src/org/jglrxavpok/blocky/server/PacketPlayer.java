@@ -2,6 +2,7 @@ package org.jglrxavpok.blocky.server;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.util.Random;
 
 import org.jglrxavpok.blocky.entity.EntityPlayer;
 
@@ -21,6 +22,8 @@ public class PacketPlayer extends Packet
             out.writeFloat(player.y);
             out.writeFloat(player.vx);
             out.writeFloat(player.vy);
+            if(player.username == null)
+                player.username = "Player_"+new Random().nextInt(20000);
             out.writeUTF(player.username);
             out.close();
             data = baos.toByteArray();

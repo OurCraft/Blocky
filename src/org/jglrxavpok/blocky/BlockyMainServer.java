@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
@@ -14,12 +15,17 @@ import javax.swing.JSpinner;
 import javax.swing.UIManager;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.netty.NettyServerHandler;
+import org.jglrxavpok.blocky.server.ThreadUpdateLevel;
+import org.jglrxavpok.blocky.utils.Fluid;
+import org.jglrxavpok.blocky.world.World;
 
 public class BlockyMainServer
 {
@@ -35,10 +41,13 @@ public class BlockyMainServer
             e.printStackTrace();
         }
         BlockyMain.instance = new BlockyMain();
+        Fluid.load();
+        Block.loadAll();
         new BlockyMainServer();
     }
 
     public static BlockyMainServer instance;
+    public static World level;
     
     public BlockyMainServer()
     {
@@ -66,10 +75,14 @@ public class BlockyMainServer
         portFrame.setVisible(true);
     }
     
+    public static ArrayList<Channel> clients = new ArrayList<Channel>();
+    
     private void startServer(int port)
     {
         try
         {
+            level = new World("Server level");
+            new ThreadUpdateLevel(level, clients).start();
             final String serverName = "Blocky server";
             ChannelFactory factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool());
             ServerBootstrap bootstrap = new ServerBootstrap(factory);

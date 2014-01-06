@@ -28,7 +28,7 @@ public class NettyCommons
     
     public static void sendPacket(Packet p, Channel c) throws IOException
     {
-        if(c == null)
+        if(c == null || !c.isOpen())
             return;
         try
         {

@@ -52,6 +52,7 @@ public abstract class Entity implements GameObject
 	public ArrayList<Point> blocksDone = new ArrayList<Point>();
 	public Inventory inv;
     protected Fluid fluidIn;
+    public int entityID;
 	
 	public Entity()
 	{
@@ -332,6 +333,7 @@ public abstract class Entity implements GameObject
         chunk.setFloat("max-VY", maxNegativeVY);
         chunk.setFloat("decceleration", decceleration);
         chunk.setInteger("ticksAlive", ticksAlive);
+        chunk.setString("class", this.getClass().getCanonicalName());
         if(inv != null)
         {
             inv.write("invEntity",chunk);
@@ -342,5 +344,10 @@ public abstract class Entity implements GameObject
     public boolean canBeHurt(DamageType lava)
     {
         return false;
+    }
+
+    public boolean shouldSendUpdate()
+    {
+        return true;
     }
 }

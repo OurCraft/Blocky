@@ -16,19 +16,23 @@ import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.block.BlockInfo;
 import org.jglrxavpok.blocky.client.ClientPlayerInputHandler;
+import org.jglrxavpok.blocky.entity.Entity;
 import org.jglrxavpok.blocky.entity.EntityPlayer;
 import org.jglrxavpok.blocky.entity.EntityPlayerSP;
 import org.jglrxavpok.blocky.gui.UIMainMenu;
 import org.jglrxavpok.blocky.server.Packet;
 import org.jglrxavpok.blocky.server.PacketBlockInfos;
 import org.jglrxavpok.blocky.server.PacketChatContent;
+import org.jglrxavpok.blocky.server.PacketEntityUpdate;
 import org.jglrxavpok.blocky.server.PacketPlayer;
 import org.jglrxavpok.blocky.server.PacketServerInfos;
+import org.jglrxavpok.blocky.server.PacketTime;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.ui.UIErrorMenu;
 import org.jglrxavpok.blocky.world.World;
 import org.jglrxavpok.blocky.world.WorldChunk;
 import org.jglrxavpok.blocky.world.WorldGenerator.WorldType;
+import org.jglrxavpok.storage.TaggedStorageChunk;
 
 public class NettyClientHandler extends SimpleChannelHandler
 {
@@ -93,7 +97,7 @@ public class NettyClientHandler extends SimpleChannelHandler
                 }
                 System.out.println("Ping server "+infos.serverName+"->"+infos.playerCount+"/"+infos.maxPlayers+" "+(System.currentTimeMillis()-infos.pingTime));
             }
-            else
+            else if(p.name.startsWith("Connected "))
             {
                 if(waitingForAnwser)
                 {
@@ -101,14 +105,16 @@ public class NettyClientHandler extends SimpleChannelHandler
                     level = new World("Server handled level");
                     level.worldType = WorldType.CLIENT;
                     EntityPlayerSP playerSp = new EntityPlayerSP();
-                    playerSp.move(0, 252*Block.BLOCK_HEIGHT);
+                    playerSp.move(25000*Block.BLOCK_WIDTH, 252*Block.BLOCK_HEIGHT);
                     level.addEntity(playerSp);
+                    playerSp.entityID = Integer.parseInt(p.name.replace("Connected ", ""));
                     level.centerOfTheWorld = playerSp;
                     BlockyMain.instance.loadLevel(level);
                     BlockyMain.instance.addInputProcessor(new ClientPlayerInputHandler(playerSp));
+                    UI.displayMenu(null);
                 }
-                dispatchPacket(p);
             }
+            dispatchPacket(p);
         }
         catch (ClassNotFoundException e1)
         {
@@ -129,6 +135,7 @@ public class NettyClientHandler extends SimpleChannelHandler
 
     private void dispatchPacket(Packet p)
     {
+        System.out.println(p.name);
         if(p.name.startsWith("Response "))
         {
             String responseType = p.name.replaceFirst("Response ", "");
@@ -145,6 +152,45 @@ public class NettyClientHandler extends SimpleChannelHandler
                 {
                     e.printStackTrace();
                 }
+            }
+        }
+        else if(p instanceof PacketTime)
+        {
+            level.time = Long.parseLong(p.name.replace("Time: ", ""));
+        }
+        else if(p instanceof PacketEntityUpdate)
+        {
+            try
+            {
+                TaggedStorageChunk chunk = Packet.tagSystem.readChunk(p.data);
+                int entityID = Integer.parseInt(chunk.getChunkName().substring(chunk.getChunkName().length()-1, chunk.getChunkName().length()));
+                Entity e = level.getEntityByID(entityID);
+                if(e == null)
+                {
+                    try
+                    {
+                        String entityClass = chunk.getString("class");
+                        e = (Entity) Class.forName(entityClass).newInstance();
+                        e.readFromChunk(chunk);
+                        level.addEntity(e);
+                        e.entityID = entityID;
+                    }
+                    catch(Exception e1)
+                    {
+                        ;
+                    }
+                }
+                else
+                {
+                    if(e instanceof EntityPlayer)
+                        ;
+                    else
+                        e.readFromChunk(chunk);
+                }
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
             }
         }
         else if(p instanceof PacketBlockInfos)

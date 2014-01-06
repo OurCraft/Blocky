@@ -28,10 +28,13 @@ import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.block.BlockInfo;
 import org.jglrxavpok.blocky.entity.Entity;
 import org.jglrxavpok.blocky.entity.EntityPlayer;
+import org.jglrxavpok.blocky.entity.EntityPlayerSP;
 import org.jglrxavpok.blocky.netty.NettyClientHandler;
 import org.jglrxavpok.blocky.netty.NettyCommons;
 import org.jglrxavpok.blocky.server.Packet;
 import org.jglrxavpok.blocky.server.PacketBlockInfos;
+import org.jglrxavpok.blocky.server.PacketEntityUpdate;
+import org.jglrxavpok.blocky.server.PacketTime;
 import org.jglrxavpok.blocky.utils.AABB;
 import org.jglrxavpok.blocky.utils.IO;
 import org.jglrxavpok.blocky.utils.MathHelper;
@@ -66,6 +69,7 @@ public class World
     public long time;
     private ParticleSystem particles = new ParticleSystem(2000);
     private ArrayList<EntityPlayer> loadedPlayers = new ArrayList<EntityPlayer>();
+    public int entityID;
 	
 	public static final World zeroBlocks = new World("zeroBlocks")
 	{
@@ -280,10 +284,10 @@ public class World
 		{
 		    if(this.worldType == WorldType.CLIENT)
 		    {
-		        if(!chunkAsked.contains((int)chunkID))
+//		        if(!chunkAsked.contains((int)chunkID))
 		        {
 		            askForChunk((int)chunkID);
-		            chunkAsked.add((int)chunkID);
+//		            chunkAsked.add((int)chunkID);
 		        }
 		    }
 		    else
@@ -323,7 +327,7 @@ public class World
 		return chunk;
 	}
 
-	private void askForChunk(int chunkID)
+	public void askForChunk(int chunkID)
     {
 	    if(NettyClientHandler.current != null)
             try
@@ -347,10 +351,10 @@ public class World
         {
             time = 0;
         }
+	    if(worldType != WorldType.CLIENT)
         time+=1;
 		
 		ticks+=tickSpeed;
-		
 		this.particles.tickAll(this);
         
 		int startID = (int)((-(lvlox))/Block.BLOCK_WIDTH/16f)-1;
@@ -361,12 +365,12 @@ public class World
         {
             WorldChunk chunk = getChunkByID(index, true);
             if(chunk != null)
-            chunk.tick();
+                chunk.tick();
         }
         for(int i = 0;i<entities.size();i++)
         {
             Entity e = entities.get(i);
-            if(e != null)
+            if(e != null && (worldType != WorldType.CLIENT || e instanceof EntityPlayerSP))
             {
                 e.tick();
             }
@@ -475,7 +479,18 @@ public class World
 			players.add((EntityPlayer) e);
 		}
 		entities.add(e);
+		e.entityID = ++entityID;
 		e.world = this;
+	}
+	
+	public Entity getEntityByID(int id)
+	{
+	    for(Entity e : entities)
+	    {
+	        if(e.entityID == id)
+	            return e;
+	    }
+	    return null;
 	}
 	
 	public ArrayList<Entity> getEntitiesInAABB(AABB aabb, Entity exclude)
@@ -782,5 +797,21 @@ public class World
     public void spawnParticle(Particle p)
     {
         particles.spawnParticle(p);
+    }
+
+    public ArrayList<Packet> getUpdatePackets()
+    {
+        ArrayList<Packet> list = new ArrayList<Packet>();
+        for(int i =0;i< entities.size();i++)
+        {
+            Entity e = entities.get(i);
+            if(e != null)
+            if(e.shouldSendUpdate())
+            {
+                list.add(new PacketEntityUpdate(e, e.entityID));
+            }
+        }
+        list.add(new PacketTime(time));
+        return list;
     }
 }

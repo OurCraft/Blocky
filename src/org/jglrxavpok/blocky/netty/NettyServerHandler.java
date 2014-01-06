@@ -1,11 +1,13 @@
 package org.jglrxavpok.blocky.netty;
 
+import static org.jglrxavpok.blocky.BlockyMainServer.clients;
+import static org.jglrxavpok.blocky.BlockyMainServer.level;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
@@ -14,7 +16,6 @@ import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
-import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.block.BlockInfo;
 import org.jglrxavpok.blocky.entity.EntityPlayer;
 import org.jglrxavpok.blocky.server.Packet;
@@ -22,22 +23,15 @@ import org.jglrxavpok.blocky.server.PacketBlockInfos;
 import org.jglrxavpok.blocky.server.PacketChatContent;
 import org.jglrxavpok.blocky.server.PacketPlayer;
 import org.jglrxavpok.blocky.server.PacketServerInfos;
-import org.jglrxavpok.blocky.world.World;
 
 public class NettyServerHandler extends SimpleChannelHandler
 {
 
-    public static ArrayList<Channel> clients = new ArrayList<Channel>();
     private String serverName;
-    private static World level;
     
     public NettyServerHandler(String serverName)
     {
         this.serverName = serverName;
-        if(level == null)
-        {
-            level = new World("Server level");
-        }
     }
     
     @Override
@@ -59,7 +53,7 @@ public class NettyServerHandler extends SimpleChannelHandler
             }
             else if(p.name.equals("Connection"))
             {
-                NettyCommons.sendPacket(new Packet("Connected",null), e.getChannel());
+                NettyCommons.sendPacket(new Packet("Connected "+level.entityID++,null), e.getChannel());
             }
             else
                 dispatchPacket(p, e.getChannel());
@@ -96,7 +90,6 @@ public class NettyServerHandler extends SimpleChannelHandler
         }
         else if(packetReceived instanceof PacketBlockInfos)
         {
-            System.out.println("BlockInfos packet!");
             level.handlingChanges = true;
             PacketBlockInfos infosPacket = (PacketBlockInfos)packetReceived;
             if(infosPacket.id == BlockInfo.ID)
@@ -166,7 +159,7 @@ public class NettyServerHandler extends SimpleChannelHandler
             try
             {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                baos.write(BlockyMain.saveSystem.writeChunk(level.getChunkAt(chunkID*16, 0, true).createStorageChunk()));
+                baos.write(Packet.tagSystem.writeChunk(level.getChunkAt(chunkID*16, 0, true).createStorageChunk()));
                 baos.close();
                 NettyCommons.sendPacket(new Packet("Response ChunkContent "+chunkID, baos.toByteArray()), sender);
             }

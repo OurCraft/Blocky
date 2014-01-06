@@ -67,6 +67,11 @@ public class EntityPlayer extends EntityLiving
         return achievementGet.contains(a);
     }
 
+    public boolean shouldSendUpdate()
+    {
+        return false;
+    }
+    
     public void render(float posX,float posY, float alpha)
     {
         if(vx < 0.f)
