@@ -15,6 +15,7 @@ import org.jglrxavpok.blocky.ui.UIComponentBase;
 import org.jglrxavpok.blocky.ui.UIList;
 import org.jglrxavpok.blocky.ui.UIMenu;
 import org.jglrxavpok.blocky.ui.UISlot;
+import org.jglrxavpok.blocky.utils.IO;
 import org.jglrxavpok.blocky.world.World;
 import org.jglrxavpok.opengl.Textures;
 import org.lwjgl.opengl.GL11;
@@ -28,6 +29,7 @@ public class UIWorldList extends UIBlockyMenu
     private UIButton playButton;
     private UIButton newGame;
     private UIButton backButton;
+    private UIButton delete;
 
     public UIWorldList(UIMenu parent, File saveFolder)
     {
@@ -67,12 +69,16 @@ public class UIWorldList extends UIBlockyMenu
             
                 });
         worldList.slots = array;
-        playButton = new UIButton(this, w/2-170, 50, 150, 30, "Play");
+        playButton = new UIButton(this, w/2-170, 90, 150, 30, "Play");
         backButton = new UIButton(this, w/2+20, 50, 150, 30, "Back");
-        newGame = new UIButton(this, w/2-170, 90, 150, 30, "Create new world");
+        newGame = new UIButton(this, w/2-170, 50, 150, 30, "Create new world");
+        delete = new UIButton(this, w/2+20, 90, 150, 30, "Delete");
+        playButton.enabled = false;
+        delete.enabled = false;
         comps.add(playButton);
         comps.add(backButton);
         comps.add(newGame);
+        comps.add(delete);
     }
     
     public void componentClicked(UIComponentBase c)
@@ -81,6 +87,8 @@ public class UIWorldList extends UIBlockyMenu
         if(c instanceof UIWorldSlot)
         {
             worldList.setSelected((UIWorldSlot)c);
+            playButton.enabled = true;
+            delete.enabled = true;
         }
         else if(c == playButton)
         {
@@ -94,6 +102,17 @@ public class UIWorldList extends UIBlockyMenu
                 level.addEntity(p);
                 BlockyMain.instance.loadLevel(level);
                 UI.displayMenu(null);
+            }
+        }
+        else if(c == delete)
+        {
+            UISlot s = worldList.getSelected();
+            if(s != null && s instanceof UIWorldSlot)
+            {
+                UIWorldSlot slot = (UIWorldSlot)s;
+                IO.deleteFolderContents(slot.getWorldInfos().worldFolder);
+                slot.getWorldInfos().worldFolder.delete();
+                UI.displayMenu(new UIWorldList(parentScreen,folder));
             }
         }
         else if(c == newGame)

@@ -11,7 +11,7 @@ public class UIList extends UIComponentBase
 	public int slotsVisible = -1;
 	private boolean	mouseInScrollBar;
 	private boolean	showBarOnlyIfNecessary;
-	private int	selectedIndex;
+	private int	selectedIndex = -1;
 	private float	totalHeight;
 	
 	public UIList(float x, float y, float w, float h)

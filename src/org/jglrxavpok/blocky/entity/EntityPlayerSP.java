@@ -130,6 +130,7 @@ public class EntityPlayerSP extends EntityPlayer
                 ItemStack stack = player.inv.getStackIn(i);
                 if(stack != null)
                 {
+                    if(stack.nbr > 1)
                     FontRenderer.drawString(stack.nbr+"", x-FontRenderer.getWidth(""+stack.nbr), y, 0xFFFFFF);
                 }
                 x+=w+5;

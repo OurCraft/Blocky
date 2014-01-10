@@ -2,6 +2,7 @@ package org.jglrxavpok.blocky.utils;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -56,5 +57,21 @@ public final class IO
 			ous.close();
 			return ous.toByteArray();
 	}
+
+    public static void deleteFolderContents(File folder)
+    {
+        File[] files = folder.listFiles();
+        if(files != null)
+            for(File f : files)
+            {
+                if(f.isDirectory())
+                {
+                    deleteFolderContents(f);
+                    f.delete();
+                }
+                else
+                    f.delete();
+            }
+    }
 	
 }
