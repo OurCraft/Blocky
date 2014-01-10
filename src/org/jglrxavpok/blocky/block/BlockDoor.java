@@ -1,6 +1,8 @@
 package org.jglrxavpok.blocky.block;
 
 import org.jglrxavpok.blocky.entity.EntityPlayer;
+import org.jglrxavpok.blocky.items.Item;
+import org.jglrxavpok.blocky.items.ItemDoor;
 import org.jglrxavpok.blocky.world.World;
 
 public class BlockDoor extends Block
@@ -94,6 +96,13 @@ public class BlockDoor extends Block
         super.render(posX, posY, x, y, lvl, selected);
     }
 
+    public Item getItem()
+    {
+        Item item = Item.get("door");
+        if(item == null)
+            item = new ItemDoor();
+        return item;
+    }
     @Override
     public boolean canBlockBeReplaced(int x, int y, World lvl, Block block)
     {

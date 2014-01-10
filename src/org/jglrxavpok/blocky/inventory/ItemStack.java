@@ -38,4 +38,11 @@ public class ItemStack
             return item.getStrengthAgainstBlock(owner,this,tx,ty,lvl);
         return 0;
     }
+
+    public float getStrengthAgainstEntity(Entity owner, Entity e, World world)
+    {
+        if(item != null)
+            return item.getStrengthEntity(owner,this,e,world);
+        return 0f;
+    }
 }

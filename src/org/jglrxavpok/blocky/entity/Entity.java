@@ -7,6 +7,7 @@ import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.block.BlockFluid;
 import org.jglrxavpok.blocky.inventory.BasicInventory;
 import org.jglrxavpok.blocky.inventory.Inventory;
+import org.jglrxavpok.blocky.inventory.ItemStack;
 import org.jglrxavpok.blocky.utils.AABB;
 import org.jglrxavpok.blocky.utils.DamageType;
 import org.jglrxavpok.blocky.utils.Fluid;
@@ -24,6 +25,7 @@ public abstract class Entity implements GameObject
 	public World world;
 	public float x,y,vx,vy;
 	protected int direction;
+	public float gravityEfficienty = 1f;
 	/**
 	 * 10 m/s
 	 */
@@ -147,8 +149,8 @@ public abstract class Entity implements GameObject
 		}
 		if(gravityEfficient)
 		{
-			vx+=world.gravity.x*2;
-			vy+=world.gravity.y*2;
+			vx+=world.gravity.x*2*this.gravityEfficienty;
+			vy+=world.gravity.y*2*this.gravityEfficienty;
 		}
 		boolean wasInFluid = fluidIn != null;
 		fluidIn = null;
@@ -349,5 +351,29 @@ public abstract class Entity implements GameObject
     public boolean shouldSendUpdate()
     {
         return true;
+    }
+
+    public void attackFrom(DamageType type, float amount)
+    {
+        if(type.getHasOwner())
+        {
+            Entity owner = type.getOwner();
+            this.knockback((owner.x-x > 0 ? -1f : 1)*1f, 10f);
+        }
+        if(amount > 2)
+            die();
+    }
+    
+    public void knockback(float xAxis, float yAxis)
+    {
+        vx=xAxis;
+        vy=yAxis;
+    }
+
+    public ItemStack addToInventory(ItemStack stack)
+    {
+        if(inv == null)
+        return stack;
+        return inv.tryAdd(stack);
     }
 }

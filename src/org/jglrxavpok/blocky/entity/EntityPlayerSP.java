@@ -12,6 +12,7 @@ import org.jglrxavpok.blocky.server.PacketChatContent;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.utils.DamageType;
 import org.jglrxavpok.blocky.utils.HUDComponent;
+import org.jglrxavpok.opengl.FontRenderer;
 import org.jglrxavpok.opengl.Tessellator;
 import org.jglrxavpok.opengl.Textures;
 import org.lwjgl.input.Keyboard;
@@ -123,6 +124,16 @@ public class EntityPlayerSP extends EntityPlayer
                 x+=w+5;
             }
             t.flush();
+            x = 30f;
+            for(int i = 0;i<10;i++)
+            {
+                ItemStack stack = player.inv.getStackIn(i);
+                if(stack != null)
+                {
+                    FontRenderer.drawString(stack.nbr+"", x-FontRenderer.getWidth(""+stack.nbr), y, 0xFFFFFF);
+                }
+                x+=w+5;
+            }
             
 			y-=h-10;
 			x = 0;

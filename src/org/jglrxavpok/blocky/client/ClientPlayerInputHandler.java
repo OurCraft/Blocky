@@ -1,11 +1,13 @@
 package org.jglrxavpok.blocky.client;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import net.java.games.input.Component;
 
 import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.block.Block;
+import org.jglrxavpok.blocky.entity.Entity;
 import org.jglrxavpok.blocky.entity.EntityPlayerSP;
 import org.jglrxavpok.blocky.gui.UIPauseMenu;
 import org.jglrxavpok.blocky.input.InputProcessor;
@@ -14,6 +16,8 @@ import org.jglrxavpok.blocky.netty.NettyClientHandler;
 import org.jglrxavpok.blocky.netty.NettyCommons;
 import org.jglrxavpok.blocky.server.PacketPlayer;
 import org.jglrxavpok.blocky.ui.UI;
+import org.jglrxavpok.blocky.utils.AABB;
+import org.jglrxavpok.blocky.utils.DamageType;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -93,13 +97,34 @@ public class ClientPlayerInputHandler implements InputProcessor
                 }
                 if(player.canReachBlock(tx, ty) && Block.getBlock(player.world.getBlockAt(tx, ty)).canBeDestroyedWith(player.getHeldItem(), player))
                 {
-                    ItemStack held = player.getHeldItem();
-                    int multiplier = 1;
-                    if(held != null)
+                    AABB selection = new AABB(tx*Block.BLOCK_WIDTH,ty*Block.BLOCK_HEIGHT,Block.BLOCK_WIDTH-1,Block.BLOCK_HEIGHT-1);
+                    ArrayList<Entity> list = player.world.getEntitiesInAABB(selection, player);
+                    if(list.size() > 0)
                     {
-                        multiplier = held.getStrengthAgainstBlock(player, tx,ty,player.world);
+                        ItemStack held = player.getHeldItem();
+                        float multiplier = 1;
+                        for(Entity e : list)
+                        {
+                            if(held != null)
+                            {
+                                multiplier = held.getStrengthAgainstEntity(player, e,player.world);
+                            }
+                            if(e.canBeHurt(DamageType.generic))
+                            {
+                                e.attackFrom(DamageType.getWithOwner(DamageType.generic, player), multiplier);
+                            }
+                        }
                     }
-                    player.world.setAttackValue(tx, ty, player.world.getAttackValue(tx,ty)+multiplier, player.username);
+                    else
+                    {
+                        ItemStack held = player.getHeldItem();
+                        int multiplier = 1;
+                        if(held != null)
+                        {
+                            multiplier = held.getStrengthAgainstBlock(player, tx,ty,player.world);
+                        }
+                        player.world.setAttackValue(tx, ty, player.world.getAttackValue(tx,ty)+multiplier, player.username);
+                    }
                 }
             }
             if(buttonIndex.equals("1"))

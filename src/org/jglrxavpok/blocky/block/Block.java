@@ -1,5 +1,7 @@
 package org.jglrxavpok.blocky.block;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,13 +9,16 @@ import java.util.Iterator;
 
 import org.jglrxavpok.blocky.GameObject;
 import org.jglrxavpok.blocky.entity.Entity;
+import org.jglrxavpok.blocky.entity.EntityItem;
 import org.jglrxavpok.blocky.entity.EntityPlayer;
 import org.jglrxavpok.blocky.inventory.ItemStack;
 import org.jglrxavpok.blocky.items.Item;
 import org.jglrxavpok.blocky.items.ItemBlock;
 import org.jglrxavpok.blocky.utils.AABB;
+import org.jglrxavpok.blocky.utils.ImageUtils;
 import org.jglrxavpok.blocky.utils.MathHelper;
 import org.jglrxavpok.blocky.utils.Points;
+import org.jglrxavpok.blocky.world.Particle;
 import org.jglrxavpok.blocky.world.World;
 import org.jglrxavpok.opengl.Tessellator;
 import org.lwjgl.opengl.GL11;
@@ -35,6 +40,7 @@ public abstract class Block implements GameObject
 	public float	resistance = 1f;
     private AABB aabb = new AABB(0,0,0,0);
     private int averageColor;
+    private ArrayList<Integer> particleColors = new ArrayList<Integer>();
 	/**
 	 * Placeholder to prevent bugs
 	 */
@@ -129,6 +135,7 @@ public abstract class Block implements GameObject
 	{
 		this.blockName = name;
 		blocks.put(blockName, this);
+		this.particleColors = new ArrayList<Integer>();
 	}
 	
 	
@@ -413,7 +420,27 @@ public abstract class Block implements GameObject
 
     public boolean onBlockDestroyedByPlayer(String lastAttackPlayerName, int rx, int y, World lvl)
     {
+        for(int i = 0;i<50;i++)
+        {
+            Particle p = new Particle();
+            ArrayList<Integer> list = Block.getBlock(lvl.getBlockAt(rx,y)).getParticleColors();
+            p.setColor(new Color(list.get(rand.nextInt(list.size()))).getRGB()/*0xFFFFFF*/);
+            p.setPos((rx)*Block.BLOCK_WIDTH+rand.nextInt((int) Block.BLOCK_WIDTH), y*Block.BLOCK_HEIGHT+rand.nextInt((int) Block.BLOCK_HEIGHT));
+            p.setVelocity(0, 0f);
+            p.setLife(50);
+            lvl.spawnParticle(p);
+        }
+        dropItems(lvl, rx, y);
         return true;
+    }
+    
+    public void dropItems(World w, int x, int y)
+    {
+        EntityItem item = new EntityItem(new ItemStack(this.getItem(), 1));
+        item.move(x*Block.BLOCK_WIDTH+Block.BLOCK_WIDTH/2-item.w/2, y*Block.BLOCK_HEIGHT+Block.BLOCK_HEIGHT/2-item.h/2);
+        item.vy = 1.5f;
+        item.gravityEfficienty = 0.5f;
+        w.addEntity(item);
     }
     
     public AABB getCollisionBox(int x, int y)
@@ -455,8 +482,26 @@ public abstract class Block implements GameObject
         for(String b : Block.getNameList())
         {
             Block.getBlock(b).getItem();
+            Block.getBlock(b).generateParticuleColors();
+        }
+        
+    }
+
+    private void generateParticuleColors()
+    {
+        BufferedImage img = ImageUtils.getFromClasspath("/assets/textures/terrain.png");
+        int h = (int)(((this.maxV-minV))*img.getHeight());
+        if(h == 0)
+            return;
+        BufferedImage i = ImageUtils.toBufferedImage(img.getSubimage((int)(this.minU*img.getWidth()), (int)((1f-this.maxV)*img.getHeight()), (int)((this.maxU-minU)*img.getWidth()), h));
+        int pixels[] = i.getRGB(0, 0, i.getWidth(), i.getHeight(), null, 0, i.getWidth());
+        for(int index = 0;index<pixels.length;index++)
+        {
+            if(!particleColors.contains(pixels[index]))
+                particleColors.add(pixels[index]);
         }
     }
+
 
     public Block setAverageColor(int color)
     {
@@ -471,4 +516,10 @@ public abstract class Block implements GameObject
 
 
     public void onEntityCollide(World world, int gridX, int gridY, Entity entity, boolean isEntityFullyInBlock){}
+
+
+    public ArrayList<Integer> getParticleColors()
+    {
+        return particleColors;
+    }
 }

@@ -1,5 +1,8 @@
 package org.jglrxavpok.blocky.world;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.opengl.Tessellator;
@@ -20,6 +23,7 @@ public class WorldChunk
 	private int[][] attackValue;
     private String[][] lastAttackPlayerName;
     private int[][] blockChanges;
+    private Random rand = new Random();
  
 	public WorldChunk(World lvl, int chunkID)
 	{

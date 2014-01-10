@@ -711,4 +711,9 @@ public class Tessellator
         }
     }
 
+    public int getColor()
+    {
+        return color;
+    }
+
 }

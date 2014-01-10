@@ -26,6 +26,10 @@ public class BasicInventory implements Inventory
 	{
 		if(slot < 0 || slot >= slots.length)
 			return null;
+		if(slots[slot] != null && slots[slot].nbr <= 0)
+		{
+		    slots[slot] = null;
+		}
 		return slots[slot];
 	}
 

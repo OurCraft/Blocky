@@ -52,8 +52,7 @@ public class WorldGenerator
         {
             for (int x = 0; x < 16; x++)
             {
-                int height = (int) ((Math.sin(x * (rand.nextInt(12) + 3))) * (rand
-                        .nextFloat() * 2f)) + 100;
+                int height = (int) ((Math.sin(x * (rand.nextInt(12) + 3))) * (rand.nextFloat() * 2f)) + 100;
                 for (int y = 1; y < height; y++)
                 {
                     chunk.setBlock(x, y, "rock");

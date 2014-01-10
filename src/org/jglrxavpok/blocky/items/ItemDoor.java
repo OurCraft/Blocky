@@ -27,12 +27,13 @@ public class ItemDoor extends Item
             {
                 lvl.setBlock(x,y,BlockDoor.closed.getBlockName());
                 lvl.setBlock(x,y+1,BlockDoor.closed.getBlockName());
+                if(owner instanceof EntityPlayer)
+                {
+                    s.nbr--;
+                }
             }
         }
-        if(owner instanceof EntityPlayer)
-        {
-            // TODO: No unlimited stacks
-        }
+        
     }
 
 }

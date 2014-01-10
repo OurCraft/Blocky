@@ -1,5 +1,7 @@
 package org.jglrxavpok.blocky.entity;
 
+import java.awt.Color;
+
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.opengl.Tessellator;
 import org.jglrxavpok.opengl.Textures;
@@ -40,7 +42,8 @@ public class EntityPig extends EntityLiving
         float val = world.getLightValue((int)((x+w/2)/Block.BLOCK_WIDTH), (int)((y+h/2)/Block.BLOCK_HEIGHT));
         if(val < 0.05f)
             val = 0.05f;
-        t.setColorRGBA_F(val,val,val,1f);
+        Color c = new Color(t.getColor());
+        t.setColorRGBA_F(val*((float)c.getRed()/255f),val*((float)c.getGreen()/255f),val*((float)c.getBlue()/255f),1f);
 
         if(direction == 0)
         {

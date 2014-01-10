@@ -6,6 +6,8 @@ public class DamageType
 {
 
     public static final DamageType lava = new DamageType("lava").setHasOwner(false);
+
+    public static final DamageType generic = new DamageType("generic").setHasOwner(true);
     
     private String id;
     private boolean ownership;
@@ -47,5 +49,17 @@ public class DamageType
     {
         ownership = hasOwner;
         return this;
+    }
+    
+    public static DamageType getWithOwner(DamageType type, Entity owner)
+    {
+        if(type.ownership == false)
+        {
+            throw new IllegalArgumentException("DamageType "+type.getID()+" can't have an owner");
+        }
+        else
+        {
+            return type.clone().setOwner(owner);
+        }
     }
 }

@@ -118,4 +118,9 @@ public class Item
     {
         return true;
     }
+
+    public float getStrengthEntity(Entity owner, ItemStack itemStack, Entity e, World world)
+    {
+        return 1;
+    }
 }

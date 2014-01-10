@@ -44,13 +44,13 @@ public class ItemBlock extends Item
 	public void onUse(ItemStack s, Entity owner, int x, int y, World lvl)
     {
 	    AABB aabb = new AABB(x*Block.BLOCK_WIDTH,y*Block.BLOCK_HEIGHT,Block.BLOCK_WIDTH, Block.BLOCK_HEIGHT);
-	    if(lvl.getEntitiesInAABB(aabb, null).size() == 0 || !block.isSolid())
+	    if((lvl.getEntitiesInAABB(aabb, null).size() == 0 || !block.isSolid()) && Block.getBlock(lvl.getBlockAt(x, y)) != block)
 	    {
 	        lvl.setBlock(x,y,block.getBlockName());
-	    }
-	    if(owner instanceof EntityPlayer)
-	    {
-	        // TODO: No unlimited stacks
+	        if(owner instanceof EntityPlayer)
+	        {
+	            s.nbr--;
+	        }
 	    }
     }
 
