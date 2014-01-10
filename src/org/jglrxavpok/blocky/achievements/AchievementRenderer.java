@@ -27,6 +27,7 @@ public class AchievementRenderer implements HUDComponent
     {
         queue = new LinkedList<Achievement>();
         this.setAchievementIconPos(AchievementList.beginNewWorld, 1, 0);
+        this.setAchievementIconPos(AchievementList.touchWater, 2, 0);
     }
     
     public AchievementRenderer setAchievementIconPos(Achievement a, int xIndex, int yIndex)

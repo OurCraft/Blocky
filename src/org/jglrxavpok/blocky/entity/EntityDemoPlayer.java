@@ -1,5 +1,6 @@
 package org.jglrxavpok.blocky.entity;
 
+import org.jglrxavpok.blocky.achievements.Achievement;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.inventory.ItemStack;
 import org.jglrxavpok.opengl.FontRenderer;
@@ -17,6 +18,8 @@ public class EntityDemoPlayer extends EntityPlayer
         super();
         inv.tryAdd(new ItemStack(Block.torch.getItem(), 1));
     }
+    
+    public void toggleAchievement(final Achievement achievement){}
     
     public void tick()
     {
