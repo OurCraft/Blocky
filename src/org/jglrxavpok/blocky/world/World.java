@@ -21,14 +21,12 @@ import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
-
+import org.apache.commons.codec.binary.Base64;
 import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.block.BlockInfo;
 import org.jglrxavpok.blocky.entity.Entity;
 import org.jglrxavpok.blocky.entity.EntityPlayer;
-import org.jglrxavpok.blocky.entity.EntityPlayerSP;
 import org.jglrxavpok.blocky.netty.NettyClientHandler;
 import org.jglrxavpok.blocky.netty.NettyCommons;
 import org.jglrxavpok.blocky.server.Packet;
@@ -145,7 +143,7 @@ public class World
 	                try
 	                {
     	                String entityClass = in.readUTF();
-    	                InputStream in1 = new ByteArrayInputStream(Base64.decode(in.readUTF()));
+    	                InputStream in1 = new ByteArrayInputStream(Base64.decodeBase64(in.readUTF()));
                         byte[] bytes = IO.read(in1);
                         in1.close();
                         TaggedStorageChunk chunk = BlockyMain.saveSystem.readChunk(bytes);
@@ -669,7 +667,7 @@ public class World
                 {
                     Entity e = entities.get(i);
                     output.writeUTF(e.getClass().getCanonicalName());
-                    output.writeUTF(Base64.encode(BlockyMain.saveSystem.writeChunk(e.writeTaggedStorageChunk(i))));
+                    output.writeUTF(new String(Base64.encodeBase64(BlockyMain.saveSystem.writeChunk(e.writeTaggedStorageChunk(i)))));
                 }
             }
             output.flush();

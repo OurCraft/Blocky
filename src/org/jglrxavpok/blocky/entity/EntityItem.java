@@ -6,7 +6,6 @@ import org.jglrxavpok.blocky.inventory.ItemStack;
 public class EntityItem extends Entity
 {
 
-
     public EntityItem()
     {
         w = 10;
