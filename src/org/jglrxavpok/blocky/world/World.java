@@ -70,6 +70,7 @@ public class World
     private ParticleSystem particles = new ParticleSystem(2000);
     private ArrayList<EntityPlayer> loadedPlayers = new ArrayList<EntityPlayer>();
     public int entityID;
+    public Vector2f spawnPoint = new Vector2f(0f, 0f);
 	
 	public static final World zeroBlocks = new World("zeroBlocks")
 	{

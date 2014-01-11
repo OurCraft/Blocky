@@ -35,30 +35,30 @@ public class EntityPlayerSP extends EntityPlayer
 	
     public boolean onDeath(DamageType type, float amount)
     {
-        UI.displayMenu(new UIGameOverMenu());
-        return super.onDeath(type, amount);
+        if(super.onDeath(type, amount))
+        {
+            UI.displayMenu(new UIGameOverMenu(world));
+            return true;
+        }
+        return false;
     }
+    
 	public void tick()
 	{
 		super.tick();
 		if(Keyboard.isKeyDown(Keyboard.KEY_T) && !tPressed)
 		{
 		    tPressed = true;
-		    if(NettyClientHandler.current != null)
-                try
-                {
-                    NettyCommons.sendPacket(new PacketChatContent("Dites sur Skype si vous voyez ce message"), NettyClientHandler.current.serverChannel);
-                    System.out.println("sent!");
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
+		    if(onDeath(DamageType.generic, 100))
+		    {
+		        die();
+		    }
 		}
 		if(!Keyboard.isKeyDown(Keyboard.KEY_T) && tPressed)
         {
             tPressed = false;
         }
+		
 	}
 	
 	public void incrementSelectedHotbar(float f)

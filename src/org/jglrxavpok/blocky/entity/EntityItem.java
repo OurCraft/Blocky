@@ -33,4 +33,6 @@ public class EntityItem extends Entity
     {
         inv.getStackIn(0).item.renderInventory(posx, posy, w, h);
     }
+    
+    public void dropItems(){}
 }
