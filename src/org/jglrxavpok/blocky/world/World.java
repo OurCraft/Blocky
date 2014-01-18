@@ -18,10 +18,12 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.codec.binary.Base64;
+import com.sun.org.apache.xml.internal.security.utils.Base64;
+
 import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.block.BlockInfo;
@@ -33,6 +35,7 @@ import org.jglrxavpok.blocky.server.Packet;
 import org.jglrxavpok.blocky.server.PacketBlockInfos;
 import org.jglrxavpok.blocky.server.PacketEntityUpdate;
 import org.jglrxavpok.blocky.server.PacketTime;
+import org.jglrxavpok.blocky.tileentity.TileEntity;
 import org.jglrxavpok.blocky.utils.AABB;
 import org.jglrxavpok.blocky.utils.IO;
 import org.jglrxavpok.blocky.utils.MathHelper;
@@ -64,11 +67,12 @@ public class World
     private File chunkFolder;
     private ArrayList<Integer> chunkAsked = new ArrayList<Integer>();
     public boolean handlingChanges;
-    public long time;
+    public long time = 0;
     private ParticleSystem particles = new ParticleSystem(2000);
     private ArrayList<EntityPlayer> loadedPlayers = new ArrayList<EntityPlayer>();
     public int entityID;
-    public Vector2f spawnPoint = new Vector2f(0f, 0f);
+    
+    public List<TileEntity> tileEntitys = new ArrayList<TileEntity>(); 
 	
 	public static final World zeroBlocks = new World("zeroBlocks")
 	{
@@ -143,7 +147,7 @@ public class World
 	                try
 	                {
     	                String entityClass = in.readUTF();
-    	                InputStream in1 = new ByteArrayInputStream(Base64.decodeBase64(in.readUTF()));
+    	                InputStream in1 = new ByteArrayInputStream(Base64.decode(in.readUTF()));
                         byte[] bytes = IO.read(in1);
                         in1.close();
                         TaggedStorageChunk chunk = BlockyMain.saveSystem.readChunk(bytes);
@@ -366,6 +370,8 @@ public class World
             if(chunk != null)
                 chunk.tick();
         }
+        
+        
         for(int i = 0;i<entities.size();i++)
         {
             Entity e = entities.get(i);
@@ -373,7 +379,7 @@ public class World
             {
                 e.tick();
             }
-        }
+        }        
 	}
 	
 	public void render()
@@ -667,7 +673,7 @@ public class World
                 {
                     Entity e = entities.get(i);
                     output.writeUTF(e.getClass().getCanonicalName());
-                    output.writeUTF(new String(Base64.encodeBase64(BlockyMain.saveSystem.writeChunk(e.writeTaggedStorageChunk(i)))));
+                    output.writeUTF(Base64.encode(BlockyMain.saveSystem.writeChunk(e.writeTaggedStorageChunk(i))));
                 }
             }
             output.flush();
@@ -812,5 +818,37 @@ public class World
         }
         list.add(new PacketTime(time));
         return list;
+    }
+    
+    public TileEntity getTileEntityByID(int ID)
+    {
+    	if(!this.tileEntitys.isEmpty())
+    	{
+    		for(int i = 0 ; i < this.tileEntitys.size() ; i++)
+    		{
+    			if(ID == this.tileEntitys.get(i).id)
+    			{
+    				return this.tileEntitys.get(i);
+    			}
+    		}
+    	}
+    	
+    	return null;
+    }
+    
+    public TileEntity getTileEntityAt(float x, float y)
+    {
+    	if(!this.tileEntitys.isEmpty())
+    	{
+    		for(int i = 0 ; i < this.tileEntitys.size() ; i++)
+    		{
+    			if(x == this.tileEntitys.get(i).posX && y == this.tileEntitys.get(i).posY)
+    			{
+    				return this.tileEntitys.get(i);
+    			}
+    		}
+    	}
+    	
+    	return null;
     }
 }

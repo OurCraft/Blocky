@@ -28,10 +28,10 @@ public class ItemBlock extends Item
 		Textures.bind("/assets/textures/terrain.png");
 		t.startDrawingQuads();
 		t.setColorEnabled(true);
-		float fX = width/Block.BLOCK_WIDTH;
-		float fY = h/Block.BLOCK_HEIGHT;
+		float fX = width / Block.BLOCK_WIDTH;
+		float fY = h / Block.BLOCK_HEIGHT;
 		GL11.glScalef(fX, fY, 0);
-		block.render(posX/fX, posY/fY, 0, 0, World.zeroBlocks);
+		block.render(posX / fX, posY / fY, 0, 0, World.zeroBlocks);
 		t.flush();
 		GL11.glPopMatrix();
 	}
@@ -47,8 +47,10 @@ public class ItemBlock extends Item
 	    if((lvl.getEntitiesInAABB(aabb, null).size() == 0 || !block.isSolid()) && Block.getBlock(lvl.getBlockAt(x, y)) != block)
 	    {
 	        lvl.setBlock(x,y,block.getBlockName());
+	        
 	        if(owner instanceof EntityPlayer)
 	        {
+	        	block.onBlockAdded(lvl, (EntityPlayer) owner, x, y);
 	            s.nbr--;
 	        }
 	    }

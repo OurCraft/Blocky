@@ -109,4 +109,16 @@ public class BlockDoor extends Block
         return false;
     }
 
+	@Override
+	public boolean isOpaqueCube() 
+	{
+		return false;
+	}
+
+	@Override
+	public float setBlockOpacity()
+	{
+		return 0.5f;
+	}
+
 }

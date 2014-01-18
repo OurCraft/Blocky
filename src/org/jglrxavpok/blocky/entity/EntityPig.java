@@ -9,31 +9,91 @@ import org.lwjgl.opengl.GL11;
 
 public class EntityPig extends EntityLiving
 {
-
+	int lastTickPosX;
+	int directionTimer = 0, maxDirectionTimes = 0;
+	boolean hasToMove = false;
+	int timerBlocked = 0;
+	
     public EntityPig()
     {
         w = 40;
         h = 20;
+        this.lastTickPosX = (int) this.x;
     }
     
     public void tick()
-    {
-        if(direction == 0)
+    {        
+        if(this.directionTimer >= this.maxDirectionTimes)
         {
-            vx = -1;
+        	this.hasToMove = !this.hasToMove;
+        	this.directionTimer = 0;
+        	this.maxDirectionTimes = 0;
         }
-        else if(direction == 1)
+        
+        if(this.hasToMove)
         {
-            vx = 1;
+        	if(this.maxDirectionTimes == 0)
+        	{
+        		this.maxDirectionTimes = rand.nextInt(300);
+        		
+        		if(rand.nextBoolean())
+        		{
+        			vx = -vx;
+        		}
+        	}
+        	
+        	this.directionTimer++;
+        	
+        	if(direction == 0)
+            {
+                vx = -1;
+            }
+            else if(direction == 1)
+            {
+                vx = 1;
+            }
+        	
+        	if(!canGoto(x + vx, y))
+            {
+            	this.jump();
+            	
+            	if(this.lastTickPosX == this.x && this.timerBlocked >= 20)
+            	{
+            		vx = -vx;
+            	}
+            }
         }
-        if(!canGoto(x+vx,y))
+        else if(!this.hasToMove)
         {
-            vx = -vx;
+        	if(this.maxDirectionTimes == 0)
+        	{
+        		this.maxDirectionTimes = rand.nextInt(300);
+        	}
+        	
+        	this.directionTimer++;
         }
+        
         super.tick();
+        
+        if(this.lastTickPosX == x)
+        {
+        	this.timerBlocked++;
+        }
+        else
+        {
+        	this.timerBlocked = 0;
+        }
+        
+        this.lastTickPosX = (int) this.x;
     }
     
-    public void render(float posX, float posY, float a)
+    private void jump() 
+    {
+    	if(!this.isInAir)
+    		this.vy = 5;
+	}
+
+	public void render(float posX, float posY, float a)
     {
         Tessellator t = Tessellator.instance;
         Textures.bind("/assets/textures/entities/pig.png");
@@ -48,15 +108,15 @@ public class EntityPig extends EntityLiving
         if(direction == 0)
         {
             t.addVertexWithUV(posX, posY, 0, 0, 0);
-            t.addVertexWithUV(posX+w, posY, 0, 1, 0);
-            t.addVertexWithUV(posX+w, posY+h, 0, 1,1);
-            t.addVertexWithUV(posX, posY+h, 0, 0, 1);
+            t.addVertexWithUV(posX + w, posY, 0, 1, 0);
+            t.addVertexWithUV(posX + w, posY + h, 0, 1, 1);
+            t.addVertexWithUV(posX, posY + h, 0, 0, 1);
         }
         else if(direction == 1)
         {
             t.addVertexWithUV(posX, posY, 0, 1, 0);
-            t.addVertexWithUV(posX+w, posY, 0, 0, 0);
-            t.addVertexWithUV(posX+w, posY+h, 0, 0,1);
+            t.addVertexWithUV(posX + w, posY, 0, 0, 0);
+            t.addVertexWithUV(posX + w, posY + h, 0, 0, 1);
             t.addVertexWithUV(posX, posY+h, 0, 1, 1);
         }
         t.flush();

@@ -58,6 +58,8 @@ public class BlockyMain implements Runnable
 	private static JFrame	mainFrame;
 	private static File	folder;
     public static String username;
+    
+    public static final boolean isDevMode = true;
 
 	public static void main(String[] args)
 	{
@@ -114,10 +116,17 @@ public class BlockyMain implements Runnable
 	}
 
 	private static void setupMainFrame()
-	{
-		mainFrame = new JFrame();
-		mainFrame.setIconImage(ImageUtils.getFromClasspath("/assets/textures/icon32.png"));
-	}
+	 {
+	  mainFrame = new JFrame();
+	  mainFrame.addWindowListener(new WindowAdapter()
+	  {
+	      public void windowClosing(WindowEvent event)
+	      {
+	          run = false;
+	      }
+	  });
+	  mainFrame.setIconImage(ImageUtils.getFromClasspath("/assets/textures/icon32.png"));
+	 }
 	
 	public static void console(String msg)
 	{

@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.jglrxavpok.blocky.utils.Fluid;
 import org.jglrxavpok.blocky.world.decorators.WorldDecorator;
+import org.jglrxavpok.blocky.world.decorators.WorldGenOre;
 import org.jglrxavpok.blocky.world.decorators.WorldLakes;
 import org.jglrxavpok.blocky.world.decorators.WorldTrees;
 
@@ -26,6 +27,9 @@ public class WorldGenerator
         decorators.add(new WorldLakes(Fluid.get("water"), 102, 103, 3, 8, 6, 4, "sand", true));
         decorators.add(new WorldLakes(Fluid.get("lava"), 6, 102, 3, 6, 2, 1, "rock", false));
         decorators.add(new WorldTrees(20));
+        decorators.add(new WorldGenOre("coal"));
+        decorators.add(new WorldGenOre("iron"));
+        decorators.add(new WorldGenOre("diamond"));
     }
 
     public void generateChunk(World lvl, int chunkID, WorldChunk chunk,

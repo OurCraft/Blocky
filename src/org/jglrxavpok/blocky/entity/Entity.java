@@ -240,7 +240,6 @@ public abstract class Entity implements GameObject
 		{
 			world.removeEntity(this);
 			alive = false;
-			dropItems();
 		}
 	}
 	
@@ -376,28 +375,5 @@ public abstract class Entity implements GameObject
         if(inv == null)
         return stack;
         return inv.tryAdd(stack);
-    }
-    
-    public void dropItems()
-    {
-        if(inv != null)
-        {
-            for(int i = 0;i<inv.getInventorySize();i++)
-            {
-                ItemStack stack = inv.getStackIn(i);
-                if(stack != null)
-                {
-                    for(int ii = 0;ii<stack.nbr;ii++)
-                    {
-                        ItemStack stack1 = new ItemStack(stack.item,1);
-                        EntityItem item = new EntityItem(stack1);
-                        item.move(x, y);
-                        item.vx = rand.nextFloat()*4f-2f;
-                        item.vy = rand.nextFloat()*2f;
-                        world.addEntity(item);
-                    }
-                }
-            }
-        }
     }
 }

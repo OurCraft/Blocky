@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.GameObject;
 import org.jglrxavpok.blocky.entity.Entity;
 import org.jglrxavpok.blocky.entity.EntityItem;
@@ -68,6 +69,18 @@ public abstract class Block implements GameObject
         {
             return false;
         }
+
+		@Override
+		public boolean isOpaqueCube() 
+		{
+			return false;
+		}
+
+		@Override
+		public float setBlockOpacity() 
+		{
+			return 0f;
+		}
 	};
 	public static Block outBlock = new Block("out")
 	{
@@ -93,8 +106,20 @@ public abstract class Block implements GameObject
         {
             return false;
         }
+        
+		@Override
+		public boolean isOpaqueCube() 
+		{
+			return false;
+		}
+
+		@Override
+		public float setBlockOpacity() 
+		{
+			return 0f;
+		}
 	};
-	public static Block air = new Block("air")
+	public static Block air = new Block("air", Float.POSITIVE_INFINITY)
 	{
 		public boolean isSolid()
 		{
@@ -116,7 +141,18 @@ public abstract class Block implements GameObject
         {
             return true;
         }
+        
+		@Override
+		public boolean isOpaqueCube() 
+		{
+			return false;
+		}
 
+		@Override
+		public float setBlockOpacity() 
+		{
+			return 0f;
+		}
 	};
 	public static Block rock = generateBlock("rock", true, 2.5f).setTextureFromTerrain(0, 0, 6, 6).setAverageColor(0x838383);
 	public static Block dirt = generateBlock("dirt", true, 1f).setTextureFromTerrain(6, 0, 6, 6).setAverageColor(0x7E3E3E);
@@ -124,12 +160,18 @@ public abstract class Block implements GameObject
 	public static Block bricks = generateBlock("bricks", true, 2.5f).setTextureFromTerrain(18, 0, 6, 6).setAverageColor(0x7D0000);
 	public static Block bedrock = generateBlock("bedrock", true, Float.POSITIVE_INFINITY).setTextureFromTerrain(24, 0, 6, 6).setAverageColor(0x222222);
 	public static Block log = generateBlock("log", true, 2f).setTextureFromTerrain(30, 0, 6, 6).setAverageColor(0x451C02);
-	public static Block leaves = generateBlock("leaves", true, 0.05f, true).setTextureFromTerrain(0, 6, 6, 6).setAverageColor(0x85A92A);
+	public static Block leaves = generateBlock("leaves", true, 0.05f, true, 0.1f).setTextureFromTerrain(0, 6, 6, 6).setAverageColor(0x85A92A);
     public static Block torch = new BlockTorch("torch").setResistance(0);
     public static Block planks = generateBlock("planks", true, 1.5f).setTextureFromTerrain(6, 6, 6, 6).setAverageColor(0xFFD800);
     public static Block sand = generateBlock("sand", true, 1.f).setTextureFromTerrain(12, 12, 6, 6).setAverageColor(0xFAE47A);
     public static final BlockDoor doorOpened = BlockDoor.opened; 
     public static final BlockDoor doorClosed = BlockDoor.closed; 
+    public static Block coal = generateBlock("coal", true, 2.5f).setTextureFromTerrain(0, 30, 6, 6).setAverageColor(0x838383);
+    public static Block iron = generateBlock("iron", true, 2.5f).setTextureFromTerrain(6, 30, 6, 6).setAverageColor(0x838383);
+    public static Block diamond = generateBlock("diamond", true, 2.5f).setTextureFromTerrain(12, 30, 6, 6).setAverageColor(0x838383);
+    
+    public static Block furnace = new BlockFurnace("furnace", false);
+    public static Block furnaceIdle = new BlockFurnace("furnaceIdle", true);
     
 	public Block(String name)
 	{
@@ -138,10 +180,18 @@ public abstract class Block implements GameObject
 		this.particleColors = new ArrayList<Integer>();
 	}
 	
+	public Block(String name, float resistance)
+	{
+		this.blockName = name;
+		blocks.put(blockName, this);
+		this.particleColors = new ArrayList<Integer>();
+		this.setResistance(resistance);
+	}
+	
 	
 	public Item getItem()
 	{
-	    Item item = Item.get("itemBlock."+getBlockName());
+	    Item item = Item.get("itemBlock." + getBlockName());
 	    if(item == null)
 	        item = new ItemBlock(this);
 	    return item;
@@ -282,6 +332,61 @@ public abstract class Block implements GameObject
                 {
                     return false;
                 }
+                
+        		@Override
+        		public boolean isOpaqueCube() 
+        		{
+        			return true;
+        		}
+
+        		@Override
+        		public float setBlockOpacity() 
+        		{
+        			return 0.75f;
+        		}
+            };
+            return result;
+        }
+        else
+            return getBlock(textName);
+    }
+	
+	public static Block generateBlock(String textName, final boolean solid, float resistance, final boolean letLight, final float lightOpacity)
+    {
+	    if(getBlock(textName) == nullBlock)
+        {
+            Block result = new Block(textName)
+            {
+                @Override
+                public boolean letLightGoThrough()
+                {
+                    return letLight;
+                }
+                
+                @Override
+                public boolean isSolid()
+                {
+                    return solid;
+                }
+
+                @Override
+                public boolean canBlockBeReplaced(int x, int y, World lvl,
+                        Block block)
+                {
+                    return false;
+                }
+                
+        		@Override
+        		public boolean isOpaqueCube() 
+        		{
+        			return false;
+        		}
+
+        		@Override
+        		public float setBlockOpacity() 
+        		{
+        			return lightOpacity;
+        		}
             };
             return result;
         }
@@ -314,6 +419,18 @@ public abstract class Block implements GameObject
                 {
                     return false;
                 }
+                
+        		@Override
+        		public boolean isOpaqueCube() 
+        		{
+        			return true;
+        		}
+
+        		@Override
+        		public float setBlockOpacity() 
+        		{
+        			return 0.75f;
+        		}
 			};
 			return result.setResistance(resistance);
 		}
@@ -396,6 +513,7 @@ public abstract class Block implements GameObject
 	public Block setResistance(float r)
 	{
 		resistance = r;
+		
 		return this;
 	}
 	
@@ -460,20 +578,27 @@ public abstract class Block implements GameObject
 
     public static void litWorld(int x, int y, int dist, World w)
     {
-        for(int xx = -dist/2;xx<=dist/2;xx++)
+        float val = 1f;
+        float block = 0f;
+        double dist1 = 0d;
+    	
+        for(int xx = -dist / 2 ; xx <= dist / 2 ; xx++)
         {
-            for(int yy = -dist/2;yy<=dist/2;yy++)
+            for(int yy = -dist / 2 ; yy <= dist / 2 ; yy++)
             {
-                double dist1 = (MathHelper.dist(x, y, 0, xx+x, yy+y, 0));
-                if((int)dist1 <= dist/2)
+            	block = Block.getBlock(w.getBlockAt(xx + x, yy + y)).getBlockOpacity();
+                dist1 = (MathHelper.dist(x, y, xx + x, yy + y));
+                
+                if((int) dist1 <= dist / 2)
                 {
-                    float val = 1f;
-                    val = (float) ((float) 1f-(dist1/(dist/2f)));
-                    if(val >= w.getLightValue(xx+x, yy+y))
-                        w.setLightValue(val, xx+x, yy+y);
+                    val = (float) ((float) 1f - (dist1 / (dist / 2f)));
+                    
+                    if(val - block / 2 >= w.getLightValue(xx + x, yy + y))
+                        w.setLightValue(val - block / 2, xx + x, yy + y);
                 }
             }   
         }
+        
         w.setLightValue(1f,x,y);
     }
     
@@ -521,5 +646,24 @@ public abstract class Block implements GameObject
     public ArrayList<Integer> getParticleColors()
     {
         return particleColors;
+    }
+    
+    public abstract boolean isOpaqueCube();
+    
+    public abstract float setBlockOpacity();
+    
+    private float getBlockOpacity()
+    {
+    	return this.isOpaqueCube() ? 0.7f : this.setBlockOpacity();
+    }
+    
+    public boolean onRightClick(World world, EntityPlayer player, int x, int y)
+    {
+    	return false;
+    }
+    
+    public void onBlockAdded(World world, EntityPlayer player, int x, int y)
+    {
+    	
     }
 }

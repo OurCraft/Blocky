@@ -2,7 +2,11 @@ package org.jglrxavpok.blocky.items;
 
 import java.util.HashMap;
 
+import org.jglrxavpok.blocky.BlockyMain;
+import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.entity.Entity;
+import org.jglrxavpok.blocky.entity.EntityPlayer;
+import org.jglrxavpok.blocky.inventory.BasicInventory;
 import org.jglrxavpok.blocky.inventory.ItemStack;
 import org.jglrxavpok.blocky.world.World;
 import org.jglrxavpok.opengl.Tessellator;
@@ -17,6 +21,9 @@ public class Item
     private static HashMap<String, Item> items = new HashMap<String, Item>();
     public static Item door = new ItemDoor().setTextureFromSheet(0, 0, 10, 10);
     public static ItemPickaxe steelPick = (ItemPickaxe) new ItemPickaxe("steelPickaxe").setTextureFromSheet(10,0,10,10);
+    public static Item coal = new Item("coal").setTextureFromSheet(20, 0, 10, 10);
+    public static Item ironIngot = new Item("ironIngot").setTextureFromSheet(40, 0, 10, 10);
+    public static Item diamond = new Item("diamond").setTextureFromSheet(30, 0, 10, 10);
 	public String	id;
     public float minU;
     public float minV;
@@ -106,7 +113,7 @@ public class Item
 
     public void update(Entity owner, float x, float y, World lvl)
     {
-        
+    	
     }
 
     public int getStrengthAgainstBlock(Entity owner, ItemStack itemStack, int tx, int ty, World lvl)

@@ -15,6 +15,22 @@ public class BasicInventory implements Inventory
 		this.size = size;
 	}
 	
+	public boolean containsItem(String s)
+	{
+		for(int i = 0 ; i < this.getInventorySize() ; i++)
+		{
+			if(this.getStackIn(i) != null)
+			{
+				if(this.getStackIn(i).item.id.equals(s))
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	@Override
 	public int getInventorySize()
 	{

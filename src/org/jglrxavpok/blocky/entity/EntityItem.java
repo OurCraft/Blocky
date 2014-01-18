@@ -6,6 +6,7 @@ import org.jglrxavpok.blocky.inventory.ItemStack;
 public class EntityItem extends Entity
 {
 
+
     public EntityItem()
     {
         w = 10;
@@ -32,6 +33,4 @@ public class EntityItem extends Entity
     {
         inv.getStackIn(0).item.renderInventory(posx, posy, w, h);
     }
-    
-    public void dropItems(){}
 }

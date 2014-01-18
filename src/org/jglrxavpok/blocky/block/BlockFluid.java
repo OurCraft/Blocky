@@ -207,5 +207,17 @@ public class BlockFluid extends Block
         }
         return true;
     }
+    
+    @Override
+	public boolean isOpaqueCube() 
+	{
+		return false;
+	}
+
+	@Override
+	public float setBlockOpacity()
+	{
+		return 0.5f;
+	}
 
 }

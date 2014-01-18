@@ -23,12 +23,14 @@ public class EntityPlayer extends EntityLiving
     protected float frame = 0;
     protected int direction = 1;
     protected float   invIndex = 0;
-    public String username = "Player_"+rand.nextInt(20000);
+    public String username = "Epharos";
     private ArrayList<Achievement> achievementGet = new ArrayList<Achievement>();
+    
+    public ItemStack selectedStack = null;
 
     public EntityPlayer()
     {
-        inv = new BasicInventory(30);
+        inv = new BasicInventory(40);
         maxPositiveVX = 3;
         maxNegativeVX = -3;
         decceleration= 0.25f;
@@ -56,9 +58,19 @@ public class EntityPlayer extends EntityLiving
         {
             this.toggleAchievement(AchievementList.touchWater);
         }
+        
+        
         if(getHeldItem() != null)
         {
             getHeldItem().update(this, x, y, world);
+        }
+        
+        if(this.inv.containsItem(Block.torch.getItem().id) && this.fluidIn == null)
+        {
+        	if(x >= 0)
+        		Block.torch.onWorldUpdate((int) (x / Block.BLOCK_WIDTH), (int) (y / Block.BLOCK_HEIGHT) + 1, world);
+        	else
+        		Block.torch.onWorldUpdate((int) (x / Block.BLOCK_WIDTH) - 1, (int) (y / Block.BLOCK_HEIGHT) + 1, world);
         }
     }
     
@@ -88,11 +100,11 @@ public class EntityPlayer extends EntityLiving
         }
         if(vx != 0f)
         {
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, Textures.getFromClasspath("/assets/textures/entities/blockyWalking.png"));
+        	GL11.glBindTexture(GL11.GL_TEXTURE_2D, Textures.getFromClasspath("/assets/textures/entities/" + (this.username.equals("Epharos") ? "epharosWalking" : "blockyWalking") + ".png"));
         }
         else
         {
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, Textures.getFromClasspath("/assets/textures/entities/blocky.png"));
+        	GL11.glBindTexture(GL11.GL_TEXTURE_2D, Textures.getFromClasspath("/assets/textures/entities/" + (this.username.equals("Epharos") ? "epharos" : "blocky") + ".png"));
         }
         Tessellator t = Tessellator.instance;
         float minU = 0;

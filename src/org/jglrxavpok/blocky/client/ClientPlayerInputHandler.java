@@ -95,7 +95,7 @@ public class ClientPlayerInputHandler implements InputProcessor
                 {
                     UI.onMouseEvent(BlockyMain.instance.getCursorX(), BlockyMain.instance.getCursorY(), 0, buttonPressed);
                 }
-                if(player.canReachBlock(tx, ty) && Block.getBlock(player.world.getBlockAt(tx, ty)).canBeDestroyedWith(player.getHeldItem(), player))
+                else if(player.canReachBlock(tx, ty) && Block.getBlock(player.world.getBlockAt(tx, ty)).canBeDestroyedWith(player.getHeldItem(), player) && UI.isMenuNull())
                 {
                     AABB selection = new AABB(tx*Block.BLOCK_WIDTH,ty*Block.BLOCK_HEIGHT,Block.BLOCK_WIDTH-1,Block.BLOCK_HEIGHT-1);
                     ArrayList<Entity> list = player.world.getEntitiesInAABB(selection, player);
@@ -133,6 +133,11 @@ public class ClientPlayerInputHandler implements InputProcessor
                 {
                     if(player.getHeldItem() != null)
                         player.getHeldItem().use(player, tx, ty, player.world);
+                }
+                
+                if(player.world.getBlockAt(tx, ty) != null)
+                {
+                	Block.getBlock(player.world.getBlockAt(tx, ty)).onRightClick(player.world, player, tx, ty);
                 }
             }
             

@@ -67,4 +67,13 @@ public class BlockTorch extends Block
         return block instanceof BlockFluid;
     }
 
+    public boolean isOpaqueCube()
+    {
+    	return false;
+    }
+    
+    public float setBlockOpacity()
+    {
+    	return 0f;
+    }
 }

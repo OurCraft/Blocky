@@ -4,7 +4,8 @@ import org.jglrxavpok.storage.TaggedStorageChunk;
 
 public interface Inventory
 {
-
+	public boolean containsItem(String s);
+	
 	public int getInventorySize();
 	
 	public ItemStack getStackIn(int slot);
