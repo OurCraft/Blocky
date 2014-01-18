@@ -49,7 +49,7 @@ public class BlockFurnace extends Block
     {
 		if(this.idle)
 		{
-	        if(rand.nextInt(20) == 1 && Block.getBlock(lvl.getBlockAt(x, y)) == this)
+	        if(rand.nextInt(5) == 1 && Block.getBlock(lvl.getBlockAt(x, y)) == this)
 	        {
 	            Particle p = new Particle();
 	            p.addKillerBlock(Block.getBlock("water_All"));

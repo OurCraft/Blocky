@@ -35,5 +35,10 @@ public class TileEntity
 		return false;
 	}
 	
+	public void onUpdate()
+	{
+		
+	}
+	
 	//ce commentaire ne sert à rien :)
 }
