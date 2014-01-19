@@ -86,9 +86,16 @@ public class UIWorldList extends UIBlockyMenu
         super.componentClicked(c);
         if(c instanceof UIWorldSlot)
         {
-            worldList.setSelected((UIWorldSlot)c);
-            playButton.enabled = true;
-            delete.enabled = true;
+            if(worldList.getSelected() == c)
+            {
+                componentClicked(playButton);
+            }
+            else
+            {
+                worldList.setSelected((UIWorldSlot)c);
+                playButton.enabled = true;
+                delete.enabled = true;
+            }
         }
         else if(c == playButton)
         {

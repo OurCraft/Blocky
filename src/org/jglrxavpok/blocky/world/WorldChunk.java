@@ -1,8 +1,5 @@
 package org.jglrxavpok.blocky.world;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.opengl.Tessellator;
@@ -23,7 +20,7 @@ public class WorldChunk
 	private int[][] attackValue;
     private String[][] lastAttackPlayerName;
     private int[][] blockChanges;
-    private Random rand = new Random();
+//    private Random rand = new Random();
  
 	public WorldChunk(World lvl, int chunkID)
 	{
@@ -117,16 +114,16 @@ public class WorldChunk
                 float posX = 0;
                 if(flag)
                 {
-                    posX = (((15-x)*Block.BLOCK_WIDTH+16f*chunkID*Block.BLOCK_WIDTH))+lvlox;
+                    posX = (((15-x)*Block.BLOCK_WIDTH+16f*(float)chunkID*Block.BLOCK_WIDTH))+lvlox;
                 }
                 else
                 {
-                    posX = ((x*Block.BLOCK_WIDTH+16f*chunkID*Block.BLOCK_WIDTH))+lvlox;
+                    posX = ((x*Block.BLOCK_WIDTH+16f*(float)chunkID*Block.BLOCK_WIDTH))+lvlox;
                 }
-                if(posX+Block.BLOCK_WIDTH < 0 || posX > BlockyMain.width)
+                if(posX+Block.BLOCK_WIDTH < 0 || posX > (float)BlockyMain.width)
                     continue;
                 float posY = y*Block.BLOCK_HEIGHT+lvloy;
-                if(posY+Block.BLOCK_HEIGHT < 0 || posY > BlockyMain.height)
+                if(posY+Block.BLOCK_HEIGHT < 0 || posY > (float)BlockyMain.height)
                     continue;
                 int rx1 = (chunkID < 0 ? 15-x : x);
                 if(Block.getBlock(blocks[rx1][y]) == Block.air)
@@ -182,11 +179,11 @@ public class WorldChunk
 				    float posX = 0;
 				    if(flag)
 				    {
-				        posX = (((15-x)*Block.BLOCK_WIDTH+16f*chunkID*Block.BLOCK_WIDTH))+lvlox;
+				        posX = (((float)(15-x)*Block.BLOCK_WIDTH+16f*(float)chunkID*Block.BLOCK_WIDTH))+lvlox;
 				    }
 				    else
 				    {
-				        posX = ((x*Block.BLOCK_WIDTH+16f*chunkID*Block.BLOCK_WIDTH))+lvlox;
+				        posX = ((x*Block.BLOCK_WIDTH+16f*(float)chunkID*Block.BLOCK_WIDTH))+lvlox;
 				    }
 				    if(posX+Block.BLOCK_WIDTH < 0 || posX > BlockyMain.width)
 				        continue;

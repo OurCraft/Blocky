@@ -40,16 +40,17 @@ public class WorldGenerator
         {
             for (int x = 0; x < 16; x++)
             {
+                int height = 100;
                 chunk.setBlock(x, 0, "bedrock");
-                for (int y = 1; y < 10; y++)
+                for (int y = 1; y < height; y++)
                 {
                     chunk.setBlock(x, y, "rock");
                 }
-                for (int y = 10; y < 12; y++)
+                for (int y = height; y < height+2; y++)
                 {
                     chunk.setBlock(x, y, "dirt");
                 }
-                chunk.setBlock(x, 12, "grass");
+                chunk.setBlock(x, height+2, "grass");
             }
         }
         else if(type == WorldType.NORMAL)

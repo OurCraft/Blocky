@@ -24,18 +24,10 @@ public class BlockDoor extends Block
         String current = getBlockName();
         if(player == null)
         {
-            if(this == opened)
-            {
-                System.out.println("Closed!");
-            }
             current = closed.getBlockName();
         }
         else
         {
-            if(this == closed)
-            {
-                System.out.println("Opened!");
-            }
             current = opened.getBlockName();
         }
             
@@ -103,22 +95,22 @@ public class BlockDoor extends Block
             item = new ItemDoor();
         return item;
     }
+    
     @Override
     public boolean canBlockBeReplaced(int x, int y, World lvl, Block block)
     {
         return false;
     }
 
-	@Override
-	public boolean isOpaqueCube() 
-	{
-		return false;
-	}
+    @Override
+    public boolean isOpaqueCube() 
+    {
+        return false;
+    }
 
-	@Override
-	public float setBlockOpacity()
-	{
-		return 0.5f;
-	}
-
+    @Override
+    public float setBlockOpacity()
+    {
+        return 0.5f;
+    }
 }

@@ -1,9 +1,8 @@
 package org.jglrxavpok.blocky.achievements;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import org.jglrxavpok.blocky.utils.NetworkUtils;
+import org.jglrxavpok.blocky.lexa.LexaManager;
 
 public class AchievementDataBase
 {
@@ -31,16 +30,9 @@ public class AchievementDataBase
         values.add(playerName);
         keys.add("achievement");
         values.add(a.getID());
-        try
-        {
-            String s = NetworkUtils.post("http://jglrxavpok.minecraftforgefrance.fr/blocky/achievements.php", keys, values);
-            if(s.contains("true"))
-                return true;
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        String result = LexaManager.doLexaRequest("achievements", keys, values);
+        if(result.contains("true"))
+            return true;
         return false;
     }
     
@@ -53,20 +45,13 @@ public class AchievementDataBase
         values.add("get");
         keys.add("username");
         values.add(playerName);
-        try
+        String result = LexaManager.doLexaRequest("achievements", keys, values);
+        String[] parts = result.split(":");
+        for(int i = 0;i<parts.length;i++)
         {
-            String result = NetworkUtils.post("http://jglrxavpok.minecraftforgefrance.fr/blocky/achievements.php", keys, values);
-            String[] parts = result.split(":");
-            for(int i = 0;i<parts.length;i++)
-            {
-                Achievement a = Achievement.getAchievementByID(parts[i]);
-                if(a != null)
-                    achievements.add(a);
-            }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
+            Achievement a = Achievement.getAchievementByID(parts[i]);
+            if(a != null)
+                achievements.add(a);
         }
         return achievements;
     }

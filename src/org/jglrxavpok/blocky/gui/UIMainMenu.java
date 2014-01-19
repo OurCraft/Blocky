@@ -31,7 +31,7 @@ public class UIMainMenu extends UIBlockyMenu
     public void initMenu()
     {
         playButton = new UIButton(this, w/2-75,h/4,150,30,"Play");
-        serverButton = new UIButton(this, w/2-75,h/4-50,150,30,"Connect to server");
+        serverButton = new UIButton(this, w/2-75,h/4-45,150,30,"Connect to server");
         quitButton = new UIButton(this, w/2-75,h/4-90,150,30,"Quit");
         comps.add(quitButton);
         comps.add(playButton);

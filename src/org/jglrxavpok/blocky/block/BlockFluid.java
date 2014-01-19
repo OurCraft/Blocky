@@ -79,14 +79,20 @@ public class BlockFluid extends Block
         if(getBlockName().equals(fluid.getName()+"_All"))
         {
             lvl.setBlock(x, y, fluidName+"_"+fluid.getMaxVolume());
+            return;
         }
-            
         if(volume > fluid.getMaxVolume())
             volume = fluid.getMaxVolume();
         int t = lvl.getLastBlockChange(x, y);
         int min = 1;
         if(fluid != null)
             min = fluid.getMinVolume();
+        
+        if(volume < min)
+        {
+            lvl.setBlock(x, y, "air");
+            return;
+        }
         Block bottomBlock = Block.getBlock(lvl.getBlockAt(x, y-1));
         if(bottomBlock instanceof BlockFluid)
         {
@@ -102,8 +108,8 @@ public class BlockFluid extends Block
                 {
                     lvl.setBlock(x, y-1, fluid.getName()+"_"+fluid.getMaxVolume());
                     int volume1 = fluid.getMaxVolume()-volume;
-                    if(volume1 > 0)
-                    lvl.setBlock(x, y, fluid.getName()+"_"+volume1);
+                    if(volume1 > min && volume1 <= volume)
+                        lvl.setBlock(x, y, fluid.getName()+"_"+volume1);
                     return;
 
                 }
@@ -112,69 +118,80 @@ public class BlockFluid extends Block
                     lvl.setBlock(x, y-1, fluid.getName()+"_"+(bVolume+volume));
                     lvl.setBlock(x, y, "air");
                     return;
-
                 }
             }
         }
         else if(bottomBlock.canBlockBeReplaced(x, y-1, lvl, this) || Block.air == bottomBlock)
         {
             lvl.setBlock(x, y, "air");
-            lvl.setBlock(x,y-1,this.getBlockName());
+            lvl.setBlock(x,y-1,fluidName+"_"+volume);
             return;
         }
 
         if((int)lvl.ticks-t >= fluid.getSpreadSpeed())
         {
-            int newVolume = volume-1;
-            if(newVolume >= min)
             {
                 Block leftBlock = Block.getBlock(lvl.getBlockAt(x-1, y));
                 Block rightBlock = Block.getBlock(lvl.getBlockAt(x+1, y));
                 {
-                    boolean flag = false;
-                    /*if(leftBlock instanceof BlockFluid)
+                    int currentVolume = volume;
+                    if(currentVolume > min)
                     {
-                        BlockFluid fluidLeft = (BlockFluid)leftBlock;
-                        if(fluidLeft.fluid == fluid)
+                        if(leftBlock instanceof BlockFluid)
                         {
-                            if(fluidLeft.volume < volume)
+                            BlockFluid fluidLeft = (BlockFluid)leftBlock;
+                            if(fluidLeft.fluid == fluid)
                             {
-                                flag = true;
-                                lvl.setBlock(x-1,y, fluidName+"_"+(fluidLeft.volume+1));
+                                if(fluidLeft.volume < currentVolume)
+                                {
+                                    lvl.setBlock(x-1,y, fluidName+"_"+(--currentVolume));
+                                }
                             }
                         }
-                    }
-                    else */if(leftBlock.canBlockBeReplaced(x-1, y, lvl, this))
-                    {
-                        flag = true;
-                        lvl.setBlock(x-1,y, fluidName+"_"+newVolume);
-                    }
-                    /*if(rightBlock instanceof BlockFluid)
-                    {
-                        BlockFluid fluidRight = (BlockFluid)rightBlock;
-                        if(fluidRight.fluid == fluid)
+                        if(leftBlock.canBlockBeReplaced(x-1, y, lvl, this))
                         {
-                            if(fluidRight.volume < volume)
+                            lvl.setBlock(x-1,y, fluidName+"_"+(--currentVolume));
+                        }
+                        
+                        if(rightBlock instanceof BlockFluid)
+                        {
+                            BlockFluid fluidRight = (BlockFluid)rightBlock;
+                            if(fluidRight.fluid == fluid)
                             {
-                                flag = true;
-                                lvl.setBlock(x+1,y, fluidName+"_"+(fluidRight.volume+1));
+                                if(fluidRight.volume < currentVolume)
+                                {
+                                    lvl.setBlock(x+1,y, fluidName+"_"+(--currentVolume));
+                                }
                             }
                         }
+                        if(rightBlock.canBlockBeReplaced(x+1, y, lvl, this))
+                        {
+                            lvl.setBlock(x+1,y, fluidName+"_"+(currentVolume--));
+                        }
+                        if(currentVolume < min)
+                        {
+                            lvl.setBlock(x,y, "air");
+                        }
+                        else
+                        {
+                            lvl.setBlock(x,y, fluidName+"_"+(currentVolume));
+                        }
                     }
-                    else */if(rightBlock.canBlockBeReplaced(x+1, y, lvl, this))
-                    {
-                        flag = true;
-                        lvl.setBlock(x+1,y, fluidName+"_"+newVolume);
-                    }
-                    if(flag)
-                        lvl.setBlock(x,y, fluidName+"_"+newVolume);
                 }
             }
         }
+        if(x == 250151 && y == 101)
+            System.err.println(volume);
     }
     
     public void render(float posX, float posY, int x, int y, World w, boolean selected)
     {
+        if(volume > fluid.getMaxVolume())
+            volume = fluid.getMaxVolume();
+        if(getBlockName().equals(fluid.getName()+"_All") || volume == Integer.MAX_VALUE)
+        {
+            w.setBlock(x, y, fluidName+"_"+fluid.getMaxVolume());
+        }
         Tessellator t = Tessellator.instance;
         Color c = new Color(fluid.getColor());
         float val = w.getLightValue(x, y);
@@ -185,10 +202,30 @@ public class BlockFluid extends Block
         else
             t.setColorRGBA((int)(((float)c.getRed())),(int)(((float)c.getGreen())),(int)(((float)c.getBlue())), (int)(fluid.getOpacity()*255f));
         float h = ((float)(volume)/(float)this.fluid.getMaxVolume())*Block.BLOCK_HEIGHT;
+        Block atLeft =  Block.getBlock(w.getBlockAt(x-1, y));
+        
+        float leftH = h;
+        float rightH = h;
+        if(atLeft instanceof BlockFluid)
+        {
+            if((((BlockFluid) atLeft).volume) > volume)
+            leftH = ((float)(((BlockFluid) atLeft).volume)/(float)((BlockFluid) atLeft).fluid.getMaxVolume())*Block.BLOCK_HEIGHT;
+        }
+        Block atRight =  Block.getBlock(w.getBlockAt(x+1, y));
+        if(atRight instanceof BlockFluid)
+        {
+            if((((BlockFluid) atRight).volume) > volume)
+            rightH = ((float)(((BlockFluid) atRight).volume)/(float)((BlockFluid) atRight).fluid.getMaxVolume())*Block.BLOCK_HEIGHT;
+        }
         t.addVertexWithUV(posX, posY, 0,minU,minV);
+        t.addVertexWithUV(posX+Block.BLOCK_WIDTH/2, posY, 0,maxU,minV);
+        t.addVertexWithUV(posX+Block.BLOCK_WIDTH/2, posY+h, 0,maxU,maxV);
+        t.addVertexWithUV(posX, posY+leftH, 0,minU,maxV);
+        
+        t.addVertexWithUV(posX+Block.BLOCK_WIDTH/2, posY, 0,minU,minV);
         t.addVertexWithUV(posX+Block.BLOCK_WIDTH, posY, 0,maxU,minV);
-        t.addVertexWithUV(posX+Block.BLOCK_WIDTH, posY+h, 0,maxU,maxV);
-        t.addVertexWithUV(posX, posY+h, 0,minU,maxV);
+        t.addVertexWithUV(posX+Block.BLOCK_WIDTH, posY+rightH, 0,maxU,maxV);
+        t.addVertexWithUV(posX+Block.BLOCK_WIDTH/2, posY+h, 0,minU,maxV);
         t.setColorRGBA_F(1,1,1,1);
     }
 
@@ -207,17 +244,16 @@ public class BlockFluid extends Block
         }
         return true;
     }
-    
+
     @Override
-	public boolean isOpaqueCube() 
-	{
-		return false;
-	}
+    public boolean isOpaqueCube() 
+    {
+        return false;
+    }
 
-	@Override
-	public float setBlockOpacity()
-	{
-		return 0.5f;
-	}
-
+    @Override
+    public float setBlockOpacity()
+    {
+        return 0.5f;
+    }
 }

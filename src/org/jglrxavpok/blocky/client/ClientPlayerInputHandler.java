@@ -133,11 +133,10 @@ public class ClientPlayerInputHandler implements InputProcessor
                 {
                     if(player.getHeldItem() != null)
                         player.getHeldItem().use(player, tx, ty, player.world);
-                }
-                
-                if(player.world.getBlockAt(tx, ty) != null)
-                {
-                	Block.getBlock(player.world.getBlockAt(tx, ty)).onRightClick(player.world, player, tx, ty);
+                    if(player.world.getBlockAt(tx, ty) != null)
+                    {
+                        Block.getBlock(player.world.getBlockAt(tx, ty)).onRightClick(player.world, player, tx, ty);
+                    }
                 }
             }
             

@@ -202,7 +202,7 @@ public class FontRenderer
 			index++;
 			if(c == ' ')
 			{
-				l+=font.getCharWidth(c)+font.getCharSpacing();
+				l+=font.getCharWidth(c)*scale+font.getCharSpacing()*scale;
 				continue;
 			}
 			if(toSkip > 0)

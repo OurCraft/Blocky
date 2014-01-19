@@ -10,6 +10,6 @@ public class MathHelper
 	
 	public static double dist(double startX, double startY, double x, double y)
 	{
-		return Math.sqrt(Math.pow(Math.max(startX, x)-Math.min(startX, x), 2)+Math.pow(Math.max(startY, y)-Math.min(startY, y), 2));
+	    return Math.sqrt(Math.pow(Math.max(startX, x)-Math.min(startX, x), 2)+Math.pow(Math.max(startY, y)-Math.min(startY, y), 2));
 	}
 }

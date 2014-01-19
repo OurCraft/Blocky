@@ -20,7 +20,7 @@ public class BlockLava extends BlockFluid
         {
             if(entity instanceof EntityLiving)
             {
-                ((EntityLiving) entity).attackEntity(DamageType.lava, 0.1f);
+                ((EntityLiving) entity).attackEntity(DamageType.lava, 5f);
             }
             else
             {

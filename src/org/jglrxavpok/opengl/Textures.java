@@ -20,7 +20,7 @@ public final class Textures
 
 	public static int get(BufferedImage img)
 	{
-		if(!imgs .containsKey(img))
+		if(!imgs.containsKey(img))
 		{
 			imgs.put(img, LWJGLHandler.loadTexture(img));
 		}

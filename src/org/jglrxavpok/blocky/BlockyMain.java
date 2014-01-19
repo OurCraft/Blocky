@@ -58,7 +58,7 @@ public class BlockyMain implements Runnable
 	private static JFrame	mainFrame;
 	private static File	folder;
     public static String username;
-    
+
     public static final boolean isDevMode = true;
 
 	public static void main(String[] args)
@@ -116,17 +116,17 @@ public class BlockyMain implements Runnable
 	}
 
 	private static void setupMainFrame()
-	 {
-	  mainFrame = new JFrame();
-	  mainFrame.addWindowListener(new WindowAdapter()
-	  {
-	      public void windowClosing(WindowEvent event)
-	      {
-	          run = false;
-	      }
-	  });
-	  mainFrame.setIconImage(ImageUtils.getFromClasspath("/assets/textures/icon32.png"));
-	 }
+	{
+		mainFrame = new JFrame();
+		mainFrame.addWindowListener(new WindowAdapter()
+		{
+		    public void windowClosing(WindowEvent event)
+		    {
+		        run = false;
+		    }
+		});
+		mainFrame.setIconImage(ImageUtils.getFromClasspath("/assets/textures/icon32.png"));
+	}
 	
 	public static void console(String msg)
 	{
@@ -217,7 +217,7 @@ public class BlockyMain implements Runnable
 			GL11.glLoadIdentity();
 			GL11.glMatrixMode(GL_PROJECTION);
 			GL11.glLoadIdentity();
-			GLU.gluOrtho2D(0, width,  0,height);
+			GLU.gluOrtho2D(0, width, 0, height);
 			Mouse.create();
 	    	Keyboard.create();
 			Fluid.load();
@@ -225,13 +225,15 @@ public class BlockyMain implements Runnable
 	    	Textures.get(ImageUtils.toBufferedImage(FileSystemView.getFileSystemView().getSystemIcon(new File(System.getProperty("user.home")))));
 	    	SoundManager.instance.equals(SoundManager.instance); // Instantiation of SoundManager
 	    	UI.displayMenu(new UIMainMenu());
+	    	
 	    	while(run && !Display.isCloseRequested())
 	    	{
 	    		updateLoop();
 	    		renderLoop();
 	    	}
 	    	mainFrame.setVisible(false);
-	    	Display.setFullscreen(false);
+	    	if(Display.isFullscreen())
+	    	    Display.setFullscreen(false);
 	    	Display.destroy();
 	    	mainFrame.dispose();
 	    	System.exit(0);
@@ -249,6 +251,8 @@ public class BlockyMain implements Runnable
 
 	private void renderLoop()
 	{
+	    if(this.hasControllerPlugged())
+	        Mouse.setCursorPosition(cursorX, cursorY);
 		Dimension newDim = newCanvasSize.getAndSet(null);
         if(Display.isFullscreen() && !Display.isActive())
             try
@@ -279,11 +283,14 @@ public class BlockyMain implements Runnable
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_2D);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
+
 		// Transparent Textures
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.01f);
+		
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
 
 		GL11.glClearColor(this.backgroundRed, this.backgroundGreen, this.backgroundBlue, 1);
 

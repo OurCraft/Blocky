@@ -2,11 +2,7 @@ package org.jglrxavpok.blocky.items;
 
 import java.util.HashMap;
 
-import org.jglrxavpok.blocky.BlockyMain;
-import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.entity.Entity;
-import org.jglrxavpok.blocky.entity.EntityPlayer;
-import org.jglrxavpok.blocky.inventory.BasicInventory;
 import org.jglrxavpok.blocky.inventory.ItemStack;
 import org.jglrxavpok.blocky.world.World;
 import org.jglrxavpok.opengl.Tessellator;
@@ -113,7 +109,7 @@ public class Item
 
     public void update(Entity owner, float x, float y, World lvl)
     {
-    	
+        
     }
 
     public int getStrengthAgainstBlock(Entity owner, ItemStack itemStack, int tx, int ty, World lvl)

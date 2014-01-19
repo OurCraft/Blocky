@@ -15,6 +15,7 @@ import org.jglrxavpok.blocky.world.WorldInfos;
 import org.jglrxavpok.opengl.FontRenderer;
 import org.jglrxavpok.opengl.Tessellator;
 import org.jglrxavpok.opengl.Textures;
+import org.lwjgl.util.vector.Vector2f;
 
 public class UIWorldSlot extends UISlot
 {
@@ -37,6 +38,12 @@ public class UIWorldSlot extends UISlot
             infos.worldTime = input.readLong();
             infos.lastModified = input.readLong();
             infos.worldFolder = folder;
+            infos.spawnPoint = new Vector2f(0,0);
+            if(input.available() > 0)
+            {
+                infos.spawnPoint.x = input.readFloat();
+                infos.spawnPoint.y = input.readFloat();
+            }
             input.close();
             File saveImg = new File(folder, "save.png");
             if(saveImg.exists())

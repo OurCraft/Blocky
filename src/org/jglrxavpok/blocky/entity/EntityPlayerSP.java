@@ -1,15 +1,9 @@
 package org.jglrxavpok.blocky.entity;
 
-import java.io.IOException;
-
 import org.jglrxavpok.blocky.BlockyMain;
-import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.gui.UIGameOverMenu;
 import org.jglrxavpok.blocky.input.PlayerInputHandler;
 import org.jglrxavpok.blocky.inventory.ItemStack;
-import org.jglrxavpok.blocky.netty.NettyClientHandler;
-import org.jglrxavpok.blocky.netty.NettyCommons;
-import org.jglrxavpok.blocky.server.PacketChatContent;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.utils.DamageType;
 import org.jglrxavpok.blocky.utils.HUDComponent;
@@ -34,33 +28,33 @@ public class EntityPlayerSP extends EntityPlayer
 		BlockyMain.instance.addInputProcessor(new PlayerInputHandler(this));
 	}
 	
+    
     public boolean onDeath(DamageType type, float amount)
     {
-        UI.displayMenu(new UIGameOverMenu());
-        return super.onDeath(type, amount);
+        if(super.onDeath(type, amount))
+        {
+            UI.displayMenu(new UIGameOverMenu(world));
+            return true;
+        }
+        return false;
     }
+    
 	public void tick()
 	{
-		super.tick();		
-		
+		super.tick();
 		if(Keyboard.isKeyDown(Keyboard.KEY_T) && !tPressed)
 		{
 		    tPressed = true;
-		    if(NettyClientHandler.current != null)
-                try
-                {
-                    NettyCommons.sendPacket(new PacketChatContent("Dites sur Skype si vous voyez ce message"), NettyClientHandler.current.serverChannel);
-                    System.out.println("sent!");
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
+		    if(onDeath(DamageType.generic, 100))
+		    {
+		        die();
+		    }
 		}
 		if(!Keyboard.isKeyDown(Keyboard.KEY_T) && tPressed)
         {
             tPressed = false;
         }
+		
 	}
 	
 	public void incrementSelectedHotbar(float f)
@@ -75,12 +69,6 @@ public class EntityPlayerSP extends EntityPlayer
             invIndex = 0;
         }
     }
-	
-	
-	public void setSelectedHotBat(int i)
-	{
-		this.invIndex = (float) i;
-	}
 	
 	public static class PlayerHUDComponent implements HUDComponent
 	{
@@ -218,7 +206,14 @@ public class EntityPlayerSP extends EntityPlayer
 		public void update()
 		{
 		    if(Keyboard.isKeyDown(Keyboard.KEY_H))
-		    player.attackEntity(null, -1f);
+		        player.attackEntity(null, -1f);
+		    if(player.alive == false)
+		        BlockyMain.instance.removeHUDComponent(this);
 		}
+	}
+	
+	public void setSelectedHotBat(int i)
+	{
+	    this.invIndex = (float) i;
 	}
 }

@@ -8,8 +8,9 @@ public class TileEntity
 	public World theWorld;
 	public int id;
 	
-	public TileEntity()
+	public TileEntity(World w)
 	{
+	    theWorld = w;
 		this.setID();
 	}
 	
@@ -27,9 +28,9 @@ public class TileEntity
 	
 	public boolean isIDAlreadyUsed(int ID)
 	{
-		if(!this.theWorld.tileEntitys.isEmpty())
-			for(int i = 0 ; i < this.theWorld.tileEntitys.size() ; i++)
-				if(this.theWorld.tileEntitys.get(i).id == ID)
+		if(!this.theWorld.tileEntities.isEmpty())
+			for(int i = 0 ; i < this.theWorld.tileEntities.size() ; i++)
+				if(this.theWorld.tileEntities.get(i).id == ID)
 					return true;
 		
 		return false;

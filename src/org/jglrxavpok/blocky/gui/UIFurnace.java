@@ -4,7 +4,6 @@ import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.entity.EntityPlayer;
 import org.jglrxavpok.blocky.inventory.ItemStack;
 import org.jglrxavpok.blocky.tileentity.TileEntityFurnace;
-import org.jglrxavpok.blocky.ui.UIInventorySlot;
 import org.jglrxavpok.blocky.ui.UIMenu;
 import org.jglrxavpok.opengl.FontRenderer;
 import org.lwjgl.input.Mouse;
@@ -150,9 +149,9 @@ public class UIFurnace extends UIMenu
 					{
 						if(slots[i].stack != null)
 						{
-							ItemStack toPlayer = ItemStack.copy(slots[i].stack);
+							ItemStack toPlayer = ItemStack.copyTo(slots[i].stack);
 							toPlayer.nbr /= 2;
-							ItemStack toSlot = ItemStack.copy(slots[i].stack);
+							ItemStack toSlot = ItemStack.copyTo(slots[i].stack);
 							toSlot.nbr -= toPlayer.nbr;
 							this.player.selectedStack = toPlayer;
 							slots[i].stack = toSlot;
@@ -168,7 +167,7 @@ public class UIFurnace extends UIMenu
 					{
 						if(slots[i].stack == null)
 						{
-							ItemStack toSlot = ItemStack.copy(player.selectedStack);
+							ItemStack toSlot = ItemStack.copyTo(player.selectedStack);
 							toSlot.nbr = 1;
 							player.selectedStack.nbr--;
 							slots[i].stack = toSlot;

@@ -1,5 +1,7 @@
 package org.jglrxavpok.blocky.world;
 
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -22,8 +24,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
-
+import org.apache.commons.codec.binary.Base64;
 import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.block.BlockInfo;
@@ -67,12 +68,13 @@ public class World
     private File chunkFolder;
     private ArrayList<Integer> chunkAsked = new ArrayList<Integer>();
     public boolean handlingChanges;
-    public long time = 0;
+    public long time;
     private ParticleSystem particles = new ParticleSystem(2000);
     private ArrayList<EntityPlayer> loadedPlayers = new ArrayList<EntityPlayer>();
     public int entityID;
-    
-    public List<TileEntity> tileEntitys = new ArrayList<TileEntity>(); 
+    public Vector2f spawnPoint = new Vector2f(0f, 0f);
+    public List<TileEntity> tileEntities = new ArrayList<TileEntity>(); 
+    private final static int sunTexID = Textures.getFromClasspath("/assets/textures/world/sun.png");
 	
 	public static final World zeroBlocks = new World("zeroBlocks")
 	{
@@ -122,6 +124,8 @@ public class World
 	    this.time = infos.worldTime;
 	    if(infos.worldFolder != null)
 	        this.setChunkFolder(infos.worldFolder);
+	    if(infos.spawnPoint != null)
+	        this.spawnPoint = infos.spawnPoint;
 	    chunksList = new HashMap<Integer, WorldChunk>();
     }
 	
@@ -147,7 +151,7 @@ public class World
 	                try
 	                {
     	                String entityClass = in.readUTF();
-    	                InputStream in1 = new ByteArrayInputStream(Base64.decode(in.readUTF()));
+    	                InputStream in1 = new ByteArrayInputStream(Base64.decodeBase64(in.readUTF()));
                         byte[] bytes = IO.read(in1);
                         in1.close();
                         TaggedStorageChunk chunk = BlockyMain.saveSystem.readChunk(bytes);
@@ -217,7 +221,6 @@ public class World
 				x = 15-x;
 			}
 		}
-
 		return chunk.getBlock(x,y);
 	}
 	
@@ -357,6 +360,8 @@ public class World
 	    if(worldType != WorldType.CLIENT)
         time+=1;
 		
+	    time = 14000;
+	    
 		ticks+=tickSpeed;
 		this.particles.tickAll(this);
         
@@ -370,8 +375,6 @@ public class World
             if(chunk != null)
                 chunk.tick();
         }
-        
-        
         for(int i = 0;i<entities.size();i++)
         {
             Entity e = entities.get(i);
@@ -379,7 +382,7 @@ public class World
             {
                 e.tick();
             }
-        }        
+        }
 	}
 	
 	public void render()
@@ -390,26 +393,28 @@ public class World
         if(b >0.75f)
             b = 0.75f;
 	    BlockyMain.instance.setBackgroundColor(0,0,b);
-	    GL11.glPushMatrix();
         float sunAngle = (float)time/(18000f)*90f;
-        float size = 128;
+        float size = 128*2;
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glPushMatrix();
         GL11.glColor3f(1f, 1f, 0);
         GL11.glTranslatef(BlockyMain.width/2-size/2, lvloy+Block.BLOCK_HEIGHT*90f, 0);
         GL11.glRotatef(sunAngle,0,0,1);
         GL11.glTranslatef(600, 0, 0);
         GL11.glRotatef(-sunAngle,0,0,1);
-        Textures.render(Textures.getFromClasspath("/assets/textures/world/sun.png"), 0, 0, size, size);
+        Textures.render(sunTexID , 0, 0, size, size);
 
         GL11.glColor3f(1f, 1f, 1f);
         GL11.glRotatef(sunAngle,0,0,1);
-
         GL11.glTranslatef(-1200, 0, 0);
         GL11.glRotatef(-sunAngle,0,0,1);
 
-        Textures.render(Textures.getFromClasspath("/assets/textures/world/sun.png"), 0, 0, size, size);
+        Textures.render(sunTexID, 0, 0, size, size);
 
         GL11.glColor3f(1,1,1);
+        
         GL11.glPopMatrix();
+        GL11.glBlendFunc(GL11.GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 		if(centerOfTheWorld != null)
 		{
 			lvlox = -((centerOfTheWorld.x+(float)centerOfTheWorld.w/2f)-(float)BlockyMain.width/2f);
@@ -433,8 +438,8 @@ public class World
 			WorldChunk chunk = getChunkByID(index, true);
 			if(chunk != null)
 			{
-			    chunk.render(lvlox, lvloy);
-			    chunk.renderAttackValues(lvlox, lvloy);
+			    chunk.render(Math.round(lvlox), Math.round(lvloy));
+			    chunk.renderAttackValues(Math.round(lvlox), Math.round(lvloy));
 			}
 		}
 		Tessellator.instance.flush();
@@ -453,10 +458,10 @@ public class World
         int my = BlockyMain.instance.getCursorY();
 		int tx = (int)((float)(mx-lvlox)/Block.BLOCK_WIDTH);
 		int ty = (int)((float)(my-lvloy)/Block.BLOCK_HEIGHT);
-
-		float posX = tx*Block.BLOCK_WIDTH+lvlox;
-		float posY = ty*Block.BLOCK_HEIGHT+lvloy;
-		Block.drawSelectBox(posX,posY,tx,ty,this);
+//
+//		float posX = tx*Block.BLOCK_WIDTH+lvlox;
+//		float posY = ty*Block.BLOCK_HEIGHT+lvloy;
+//		Block.drawSelectBox(posX,posY,tx,ty,this);
 		FontRenderer.drawString(tx+";"+ty+" : "+getBlockAt(tx,ty), 0, 0, 0xFFFFFF);
 		FontRenderer.drawString(""+time, 0, 20, 0xFFFFFF);
 	}
@@ -617,6 +622,8 @@ public class World
 	    output.writeInt(worldType.ordinal());
 	    output.writeLong(time);
 	    output.writeLong(System.currentTimeMillis());
+	    output.writeFloat(spawnPoint.x);
+	    output.writeFloat(spawnPoint.y);
 	    output.close();
 	    
         int imgW = (int) (BlockyMain.width/Block.BLOCK_WIDTH);
@@ -673,7 +680,7 @@ public class World
                 {
                     Entity e = entities.get(i);
                     output.writeUTF(e.getClass().getCanonicalName());
-                    output.writeUTF(Base64.encode(BlockyMain.saveSystem.writeChunk(e.writeTaggedStorageChunk(i))));
+                    output.writeUTF(new String(Base64.encodeBase64(BlockyMain.saveSystem.writeChunk(e.writeTaggedStorageChunk(i)))));
                 }
             }
             output.flush();
@@ -822,33 +829,33 @@ public class World
     
     public TileEntity getTileEntityByID(int ID)
     {
-    	if(!this.tileEntitys.isEmpty())
-    	{
-    		for(int i = 0 ; i < this.tileEntitys.size() ; i++)
-    		{
-    			if(ID == this.tileEntitys.get(i).id)
-    			{
-    				return this.tileEntitys.get(i);
-    			}
-    		}
-    	}
-    	
-    	return null;
+        if(!this.tileEntities.isEmpty())
+        {
+            for(int i = 0 ; i < this.tileEntities.size() ; i++)
+            {
+                if(ID == this.tileEntities.get(i).id)
+                {
+                    return this.tileEntities.get(i);
+                }
+            }
+        }
+        
+        return null;
     }
     
     public TileEntity getTileEntityAt(float x, float y)
     {
-    	if(!this.tileEntitys.isEmpty())
-    	{
-    		for(int i = 0 ; i < this.tileEntitys.size() ; i++)
-    		{
-    			if(x == this.tileEntitys.get(i).posX && y == this.tileEntitys.get(i).posY)
-    			{
-    				return this.tileEntitys.get(i);
-    			}
-    		}
-    	}
-    	
-    	return null;
+        if(!this.tileEntities.isEmpty())
+        {
+            for(int i = 0 ; i < this.tileEntities.size() ; i++)
+            {
+                if(x == this.tileEntities.get(i).posX && y == this.tileEntities.get(i).posY)
+                {
+                    return this.tileEntities.get(i);
+                }
+            }
+        }
+        
+        return null;
     }
 }

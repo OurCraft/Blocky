@@ -55,9 +55,10 @@ public class UIWorldCreationMenu extends UIBlockyMenu implements TextChangeListe
                 new File(BlockyMain.getFolder(), "saves/").mkdirs();
             File savesFolder = new File(BlockyMain.getFolder(), "saves");
             level.setChunkFolder(new File(savesFolder,getCorrectWorldFileName(savesFolder,worldName.getText())));
+            level.spawnPoint.set(250000*Block.BLOCK_WIDTH, 120*Block.BLOCK_HEIGHT);
             EntityPlayerSP p = (EntityPlayerSP) new EntityPlayerSP().move(250000*Block.BLOCK_WIDTH, 120*Block.BLOCK_HEIGHT);
             level.centerOfTheWorld = p;
-            Inventory inv = p .inv;
+            Inventory inv = p.inv;
             inv.tryAdd(new ItemStack(Item.steelPick, 1));
             inv.tryAdd(new ItemStack(Block.rock.getItem(), 20));
             inv.tryAdd(new ItemStack(Block.grass.getItem(), 20));
@@ -70,6 +71,7 @@ public class UIWorldCreationMenu extends UIBlockyMenu implements TextChangeListe
             inv.tryAdd(new ItemStack(Block.getBlock("water_2").getItem(), 20));
 
             level.addEntity(p);
+//            level.worldType = WorldType.FLAT;
             BlockyMain.instance.loadLevel(level);
             UI.displayMenu(null);
             p.toggleAchievement(AchievementList.beginNewWorld);

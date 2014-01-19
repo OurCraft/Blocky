@@ -266,6 +266,7 @@ public class LWJGLHandler
         	return -1;
         }
 	}
+	
 	public static int loadTexture(BufferedImage img) 
 	{
 		int[] pixels = img.getRGB(0, 0, img.getWidth(), img.getHeight(), null, 0, img.getWidth());

@@ -6,7 +6,6 @@ import org.jglrxavpok.blocky.inventory.ItemStack;
 public class EntityItem extends Entity
 {
 
-
     public EntityItem()
     {
         w = 10;
@@ -22,6 +21,8 @@ public class EntityItem extends Entity
     
     public void onCollide(Entity e)
     {
+        if(inv.getStackIn(0) == null || inv.getStackIn(0).item == null)
+            die();
         if(e instanceof EntityPlayer)
         {
             if(e.addToInventory(inv.getStackIn(0)) == null)
@@ -29,8 +30,17 @@ public class EntityItem extends Entity
         }
     }
     
+    public void tick()
+    {
+        if(inv.getStackIn(0) == null || inv.getStackIn(0).item == null)
+            die();
+        super.tick();
+    }
+    
     public void render(float posx, float posy, float a)
     {
         inv.getStackIn(0).item.renderInventory(posx, posy, w, h);
     }
+    
+    public void dropItems(){}
 }

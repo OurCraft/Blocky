@@ -31,6 +31,8 @@ public class Fluid
             public void register()
             {
                 this.volumes.add(new BlockLava(this, Integer.MAX_VALUE));
+                this.volumes.add(new BlockLava(this, 0));
+                this.volumes.add(new BlockLava(this, -1));
                 for(int i = this.minVolume;i<=this.maxVolume;i++)
                 {
                     volumes.add(new BlockLava(this, i));
@@ -104,6 +106,8 @@ public class Fluid
     public void register()
     {
         volumes.add(new BlockFluid(this, Integer.MAX_VALUE));
+        this.volumes.add(new BlockFluid(this, 0));
+        this.volumes.add(new BlockFluid(this, -1));
         for(int i = minVolume;i<=maxVolume;i++)
         {
             volumes.add(new BlockFluid(this, i));

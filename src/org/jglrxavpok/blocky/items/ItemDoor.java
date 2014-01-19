@@ -29,11 +29,11 @@ public class ItemDoor extends Item
                 lvl.setBlock(x,y+1,BlockDoor.closed.getBlockName());
                 if(owner instanceof EntityPlayer)
                 {
+                    Block.doorClosed.onBlockAdded(lvl, (EntityPlayer) owner, x, y);
                     s.nbr--;
                 }
             }
         }
-        
     }
 
 }

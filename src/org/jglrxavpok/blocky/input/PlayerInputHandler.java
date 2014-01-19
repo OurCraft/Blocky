@@ -34,6 +34,18 @@ public class PlayerInputHandler implements InputProcessor
         {
             return;
         }
+        if(key == Keyboard.KEY_Q)
+        {
+            player.vx-=1f;
+        }
+        if(key == Keyboard.KEY_D)
+        {
+            player.vx+=1f;
+        }
+        if(key == Keyboard.KEY_SPACE)
+        {
+            player.jump();
+        }
         
         if(key == Keyboard.KEY_Q)
         {
@@ -50,52 +62,53 @@ public class PlayerInputHandler implements InputProcessor
         
         if(this.getIntForKey(key) <= 9 && this.getIntForKey(key) >= 0)
         {
-        	player.setSelectedHotBat(this.getIntForKey(key));
+            player.setSelectedHotBat(this.getIntForKey(key));
         }
         
+        if(released && UI.isMenuNull())
         if(key == Keyboard.KEY_E)
         {
-        	UI.displayMenu(new UIInventory(player));
+            UI.displayMenu(new UIInventory(player));
         }
     }
     
     public int getIntForKey(int key)
     {
-    	switch(key)
-    	{
-    	case Keyboard.KEY_0 :
-    		return 9;
-    		
-    	case Keyboard.KEY_1 :
-    		return 0;
-    		
-    	case Keyboard.KEY_2 :
-    		return 1;
-    		
-    	case Keyboard.KEY_3 :
-    		return 2;
-    		
-    	case Keyboard.KEY_4 :
-    		return 3;
-    		
-    	case Keyboard.KEY_5 :
-    		return 4;
-    		
-    	case Keyboard.KEY_6 :
-    		return 5;
-    		
-    	case Keyboard.KEY_7 :
-    		return 6;
-    		
-    	case Keyboard.KEY_8 :
-    		return 7;
-    		
-    	case Keyboard.KEY_9 :
-    		return 8;
-    		
-    	default :
-    		return -1;
-    	}
+        switch(key)
+        {
+        case Keyboard.KEY_0 :
+            return 9;
+            
+        case Keyboard.KEY_1 :
+            return 0;
+            
+        case Keyboard.KEY_2 :
+            return 1;
+            
+        case Keyboard.KEY_3 :
+            return 2;
+            
+        case Keyboard.KEY_4 :
+            return 3;
+            
+        case Keyboard.KEY_5 :
+            return 4;
+            
+        case Keyboard.KEY_6 :
+            return 5;
+            
+        case Keyboard.KEY_7 :
+            return 6;
+            
+        case Keyboard.KEY_8 :
+            return 7;
+            
+        case Keyboard.KEY_9 :
+            return 8;
+            
+        default :
+            return -1;
+        }
     }
 
     @Override
@@ -178,6 +191,10 @@ public class PlayerInputHandler implements InputProcessor
                 {
                     if(player.getHeldItem() != null)
                         player.getHeldItem().use(player, tx, ty, player.world);
+                    if(player.world.getBlockAt(tx, ty) != null)
+                    {
+                        Block.getBlock(player.world.getBlockAt(tx, ty)).onRightClick(player.world, player, tx, ty);
+                    }
                 }
             }
             
@@ -257,7 +274,7 @@ public class PlayerInputHandler implements InputProcessor
             if(Mouse.isButtonDown(0))
             {
                 
-                if(player.canReachBlock(tx, ty) && Block.getBlock(player.world.getBlockAt(tx, ty)).canBeDestroyedWith(player.getHeldItem(), player))
+                if(player.canReachBlock(tx, ty) && Block.getBlock(player.world.getBlockAt(tx, ty)).canBeDestroyedWith(player.getHeldItem(), player) && UI.isMenuNull())
                 {
                     AABB selection = new AABB(tx*Block.BLOCK_WIDTH,ty*Block.BLOCK_HEIGHT,Block.BLOCK_WIDTH,Block.BLOCK_HEIGHT);
                     ArrayList<Entity> list = player.world.getEntitiesInAABB(selection, player);
@@ -295,7 +312,12 @@ public class PlayerInputHandler implements InputProcessor
                 {
                     if(player.getHeldItem() != null)
                         player.getHeldItem().use(player, tx, ty, player.world);
+                    if(player.world.getBlockAt(tx, ty) != null)
+                    {
+                        Block.getBlock(player.world.getBlockAt(tx, ty)).onRightClick(player.world, player, tx, ty);
+                    }
                 }
+                
             }
         }
     }

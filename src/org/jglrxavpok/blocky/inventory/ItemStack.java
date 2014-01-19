@@ -20,6 +20,17 @@ public class ItemStack
 	{
 	}
 	
+	public boolean equals(Object o)
+	{
+	    if(o instanceof ItemStack)
+	    {
+	        if(item == null)
+	            return ((ItemStack) o).item == null;
+	        return ((ItemStack) o).item == item && ((ItemStack)o).nbr == nbr;
+	    }
+	    return false;
+	}
+	
 	public void use(Entity owner, int x, int y, World lvl)
 	{
 	    if(item != null)
@@ -48,19 +59,21 @@ public class ItemStack
     
     public static boolean areItemStacksEquals(ItemStack is, ItemStack is1)
     {
-    	return is.item.id.equals(is1.item.id);
+        if(is.item != null && is1.item != null)
+        return is.item.id.equals(is1.item.id);
+        return is.item == null && is1.item == null;
     }
     
     public String toString()
     {
-    	return "ID : " + this.item.id + " ; quantité : " + this.nbr;
+        return "ID : " + this.item.id + " ; quantité : " + this.nbr;
     }
     
-    public static ItemStack copy(ItemStack is)
+    public static ItemStack copyTo(ItemStack is)
     {
-    	ItemStack i = new ItemStack();
-    	i.item = is.item;
-    	i.nbr = is.nbr;
-    	return i;
+        ItemStack i = new ItemStack();
+        i.item = is.item;
+        i.nbr = is.nbr;
+        return i;
     }
 }

@@ -62,6 +62,7 @@ public class EntityPig extends EntityLiving
             		vx = -vx;
             	}
             }
+        	
         }
         else if(!this.hasToMove)
         {
@@ -90,7 +91,7 @@ public class EntityPig extends EntityLiving
     private void jump() 
     {
     	if(!this.isInAir)
-    		this.vy = 5;
+    		this.vy = 4;
 	}
 
 	public void render(float posX, float posY, float a)

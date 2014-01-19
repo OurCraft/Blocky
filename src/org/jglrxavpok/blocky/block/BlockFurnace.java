@@ -81,18 +81,19 @@ public class BlockFurnace extends Block
        super.onBlockDestroyedByPlayer(lastAttackPlayerName, rx, y, lvl);
        
        if(lvl.getTileEntityAt(rx, y) != null)
-    	   lvl.tileEntitys.remove(lvl.getTileEntityAt(rx, y));
+    	   lvl.tileEntities.remove(lvl.getTileEntityAt(rx, y));
        
        return true;
     }
 	
 	public void onBlockAdded(World world, EntityPlayer player, int x, int y)
     {
-    	world.tileEntitys.add(this.createTileEntity(world));
+    	world.tileEntities.add(this.createTileEntity(world));
     }
 
 	public TileEntity createTileEntity(World world)
 	{
-		return new TileEntity();
+	    TileEntity e = new TileEntity(world);
+		return e;
 	}
 }
