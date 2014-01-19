@@ -150,6 +150,7 @@ public class EntityPlayerSP extends EntityPlayer
             float heartContentMaxV = 1f;
             for(int i = 0;i<20;i++)
             {
+                t.setColorRGBA_F(1,1,1,1);
                 if(player.lastLifeAmount != player.life)
                 {
                     if(player.lastLifeAmount < player.life)
@@ -200,6 +201,7 @@ public class EntityPlayerSP extends EntityPlayer
             t.flush();
             w=32;
             h=32;
+            
 		}
 
 		@Override

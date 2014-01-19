@@ -4,8 +4,8 @@ package org.jglrxavpok.blocky.lexa;
 public class SkinObject
 {
 
-    public int headColor = 0xFFFF9B;
-    public int handsColor = 0xFFFF9B;
+    public int headColor = 0xFFFFBE;
+    public int handsColor = 0xFFFFBE;
     public int bodyColor = 0x4800FF;
     public int legsColor = 0x404040;
     public int feetColor = 0x000000;

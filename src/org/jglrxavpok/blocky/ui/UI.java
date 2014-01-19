@@ -6,7 +6,7 @@ public class UI
 {
 
     public static UIMenu newMenu;
-    private static UIMenu menu;
+    public static UIMenu menu;
     public static float TEMPLATE_WIDTH = 200;
     public static float TEMPLATE_HEIGHT = 300;
     private static float uiheight;
@@ -17,6 +17,8 @@ public class UI
     public static void displayMenu(UIMenu menu)
     {
         newMenu = menu;
+        if(UI.menu != null)
+            UI.menu.onMenuClose();
     }
 
     public static void render()
@@ -82,7 +84,9 @@ public class UI
             menu.initMenu();
         }
         else
+        {
             menu = null;
+        }
     }
     
     public static void lazyDrawAll()

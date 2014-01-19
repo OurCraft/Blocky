@@ -11,7 +11,6 @@ public class ClientInput implements InputProcessor
     @Override
     public void onKeyEvent(char c, int key, boolean released)
     {
-        // TODO Auto-generated method stub
         
     }
 
@@ -47,6 +46,10 @@ public class ClientInput implements InputProcessor
             }
             if(buttonIndex.equals("1"))
             {
+                if(!UI.isMenuNull())
+                {
+                    UI.onMouseEvent(BlockyMain.instance.getCursorX(), BlockyMain.instance.getCursorY(), 1, buttonPressed);
+                }
             }
             
         }

@@ -39,6 +39,7 @@ public class EntityItem extends Entity
     
     public void render(float posx, float posy, float a)
     {
+        if(inv !=null && inv.getStackIn(0) != null && inv.getStackIn(0).item != null)
         inv.getStackIn(0).item.renderInventory(posx, posy, w, h);
     }
     

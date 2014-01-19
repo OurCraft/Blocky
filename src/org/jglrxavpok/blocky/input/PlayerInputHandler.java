@@ -21,6 +21,7 @@ public class PlayerInputHandler implements InputProcessor
 {
 
     private EntityPlayerSP player;
+    private boolean menuButton;
 
     public PlayerInputHandler(EntityPlayerSP player)
     {
@@ -149,10 +150,6 @@ public class PlayerInputHandler implements InputProcessor
             int ty = (int)((float)(my-player.world.lvloy)/Block.BLOCK_HEIGHT);
             if(buttonIndex.equals("0"))
             {
-                if(!UI.isMenuNull())
-                {
-                    UI.onMouseEvent(BlockyMain.instance.getCursorX(), BlockyMain.instance.getCursorY(), 0, buttonPressed);
-                }
                 if(player.canReachBlock(tx, ty) && Block.getBlock(player.world.getBlockAt(tx, ty)).canBeDestroyedWith(player.getHeldItem(), player) && UI.isMenuNull())
                 {
                     AABB selection = new AABB(tx*Block.BLOCK_WIDTH,ty*Block.BLOCK_HEIGHT,Block.BLOCK_WIDTH-1,Block.BLOCK_HEIGHT-1);
@@ -198,9 +195,30 @@ public class PlayerInputHandler implements InputProcessor
                 }
             }
             
-            if(buttonIndex.equals("8"))
-                UI.displayMenu(new UIPauseMenu());
+            if(UI.isMenuNull())
+            {
+                if(buttonIndex.equals("8") && !menuButton)
+                {
+                    UI.displayMenu(new UIPauseMenu());
+                    menuButton = true;
+                }
+                else if(buttonIndex.equals("9") && !menuButton)
+                {
+                    UI.displayMenu(new UIInventory(player));
+                    menuButton = true;
+                }
+            }
+            else
+            {
+                if(buttonIndex.equals("8") || buttonIndex.equals("9") && !menuButton)
+                {
+                    menuButton = true;
+                    UI.displayMenu(null);
+                }
+            }
         }
+        else
+            menuButton = false;
     }
 
     @Override
@@ -308,7 +326,7 @@ public class PlayerInputHandler implements InputProcessor
             }
             else if(Mouse.isButtonDown(1))
             {
-                if(player.canReachBlock(tx, ty) && !Block.getBlock(this.player.world.getBlockAt(tx, ty)).isSolid())
+                if(player.canReachBlock(tx, ty))
                 {
                     if(player.getHeldItem() != null)
                         player.getHeldItem().use(player, tx, ty, player.world);

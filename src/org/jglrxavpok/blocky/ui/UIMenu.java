@@ -81,4 +81,6 @@ public class UIMenu extends UIComponentBase implements ActionListener
     {
         return true;
     }
+
+    public void onMenuClose(){}
 }

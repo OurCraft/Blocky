@@ -11,6 +11,11 @@ public class ItemPickaxe extends Item
     {
         super(id);
     }
+
+    public int getMaxInStack()
+    {
+        return 1;
+    }
     
     public int getStrengthAgainstBlock(Entity owner, ItemStack itemStack, int tx, int ty, World w)
     {

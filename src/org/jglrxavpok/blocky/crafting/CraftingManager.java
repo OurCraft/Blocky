@@ -25,6 +25,11 @@ public class CraftingManager
                     new ItemStack(Block.rock.getItem(),8)
                 },
                 new ItemStack(Block.furnace.getItem(),1));
+        addCraft(new ItemStack[]
+                {
+                    new ItemStack(Block.planks.getItem(),4)
+                },
+                new ItemStack(Block.craftingTable.getItem(),1));
     }
     
     public void addCraft(ItemStack[] input, ItemStack output)

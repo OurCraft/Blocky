@@ -182,6 +182,7 @@ public abstract class Block implements GameObject
     
     public static Block furnace = new BlockFurnace("furnace", false);
     public static Block furnaceIdle = new BlockFurnace("furnaceIdle", true);
+    public static Block craftingTable = new BlockCraftingTable("craftingTable");
     
 	public Block(String name)
 	{
@@ -351,7 +352,7 @@ public abstract class Block implements GameObject
                 @Override
                 public float setBlockOpacity() 
                 {
-                    return 0.75f;
+                    return 1f;
                 }
             };
             return result;

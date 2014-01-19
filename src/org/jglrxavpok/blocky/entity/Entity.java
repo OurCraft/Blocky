@@ -403,6 +403,8 @@ public abstract class Entity implements GameObject
     
     public void dropStack(ItemStack stack)
     {
+        if(stack == null)
+            return;
         float itemVX = (direction == 0 ? -1f : 1f) *rand.nextInt(5)+1f;
         EntityItem item = new EntityItem(stack);
         item.move(x+w/2, y+h/2);
