@@ -56,7 +56,7 @@ public class TileEntityFurnace extends TileEntity
 		{
 			if(this.out != null)
 			{
-				if((ItemStack.areItemStacksEquals((ItemStack) this.in, (ItemStack) this.out)))
+				if(ItemStack.areItemStacksEquals(this.out, FurnaceManager.instance().getFurnaceRecipeByIn(this.in).out) && this.out.nbr < this.out.item.getMaxInStack())
 				{
 					if(this.getBurnTimeByStack(this.fire) > 0)
 					{
@@ -104,7 +104,11 @@ public class TileEntityFurnace extends TileEntity
 				{
 					this.in.nbr--;
 					this.cookedTime = 0;
-					this.out = FurnaceManager.instance().getFurnaceRecipeByIn(this.in).out;
+					
+					if(this.out == null)
+						this.out = FurnaceManager.instance().getFurnaceRecipeByIn(this.in).out;
+					else
+						this.out.nbr++;
 					
 					if(this.in.nbr <= 0)
 					{

@@ -107,7 +107,7 @@ public class UIFurnace extends UIMenu
         	}
 		}
 		
-		FontRenderer.drawString("Burn Time : " + this.tile.burnTime, mx - FontRenderer.getWidth("Burn Time : " + this.tile.burnTime) + 32, my, 0xFFFFFF);
+		FontRenderer.drawString("Burn Time : " + this.tile.burnTime + " ; CookedTime : " + this.tile.cookedTime, mx - FontRenderer.getWidth("Burn Time : " + this.tile.burnTime + " ; CookedTime : " + this.tile.cookedTime) + 32, my, 0xFFFFFF);
 	
 		Tessellator t = Tessellator.instance;
         Textures.bind(0);
@@ -188,6 +188,10 @@ public class UIFurnace extends UIMenu
 	public void update(int mx, int my, boolean[] buttonsPressed)
 	{
 		super.update(mx, my, buttonsPressed);
+		
+		this.slots[40].setStack((ItemStack) tile.in);
+		this.slots[41].setStack((ItemStack) tile.out);
+		this.slots[42].setStack((ItemStack) tile.fire);
 		
 		if(Mouse.isButtonDown(0) && this.timer + 200L < System.currentTimeMillis()) //lors du clic gauche
 		{
