@@ -117,7 +117,7 @@ public class TileEntityFurnace extends TileEntity
 	
 	public TaggedStorageChunk save(int nbr)
 	{
-		TaggedStorageChunk chunk = new TaggedStorageChunk("TileEntity_" + this.getClass().getCanonicalName() + "_" + nbr);
+		TaggedStorageChunk chunk = super.save(nbr);
 		chunk.setInteger("cookedTime", this.cookedTime);
 		chunk.setInteger("burnTime", this.burnTime);
 		
@@ -128,7 +128,7 @@ public class TileEntityFurnace extends TileEntity
 		chunk.setInteger("innbr", this.in.nbr);
 		chunk.setInteger("outnbr", this.out.nbr);
 		chunk.setInteger("firenbr", this.fire.nbr);
-		return super.save(nbr);
+		return chunk;
 	}
 	
 	public void load(TaggedStorageChunk chunk)
