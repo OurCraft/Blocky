@@ -206,6 +206,45 @@ public class World
 	            }
 	        }
 	    }
+	    
+	    File tileFile = new File(chunkFolder, "tileEntities.data");
+	    if(tileFile.exists())
+	    {
+	        try
+	        {
+	            DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(tileFile)));
+	            int size = in.readInt();
+	            for(int i = 0;i<size;i++)
+	            {
+	                try
+	                {
+    	                String entityClass = in.readUTF();
+    	                InputStream in1 = new ByteArrayInputStream(Base64.decodeBase64(in.readUTF()));
+                        byte[] bytes = IO.read(in1);
+                        in1.close();
+                        TaggedStorageChunk chunk = BlockyMain.saveSystem.readChunk(bytes);
+                        TileEntity e = (TileEntity) Class.forName(entityClass).newInstance();
+                        e.load(chunk);
+                        this.tileEntities.add(e);
+	                }
+	                catch(Exception e)
+	                {
+	                    if(e instanceof EOFException)
+	                    {
+	                        
+	                    }
+	                    else
+	                        e.printStackTrace();
+	                }
+	            }
+	            in.close();
+
+	        }
+	        catch(Exception e)
+	        {
+	            e.printStackTrace();
+	        }
+	    }
 	}
 	
 	public String getBlockAt(int x, int y)
@@ -375,6 +414,7 @@ public class World
             if(chunk != null)
                 chunk.tick();
         }
+        
         for(int i = 0;i<entities.size();i++)
         {
             Entity e = entities.get(i);
@@ -382,6 +422,19 @@ public class World
             {
                 e.tick();
             }
+        }
+        
+        if(!this.tileEntities.isEmpty())
+        {
+        	for(int i = 0 ; i < this.tileEntities.size() ; i++)
+	        {
+	            TileEntity e = this.tileEntities.get(i);
+	            
+	            if(e != null)
+	            {
+	                e.onUpdate();
+	            }
+	        }
         }
 	}
 	
@@ -686,6 +739,34 @@ public class World
             output.flush();
             output.close();
 	    }
+	    
+	    if(!tileEntities.isEmpty())
+	    {
+	    	File entitiesFile = new File(folder, "tileEntities.data");
+            entitiesFile.createNewFile();
+            output = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(entitiesFile)));
+            output.writeInt(entities.size());
+            
+            for(int i = 0 ; i < tileEntities.size() ; i++)
+            {
+            	File tileFile = new File(folder, "tile/" + tileEntities.get(i).id + ".data");
+                    
+            	if(!tileFile.getParentFile().exists())
+            	{
+            		tileFile.getParentFile().mkdirs();
+            	}
+                    
+            	tileFile.createNewFile();
+            	OutputStream output1 = new BufferedOutputStream(new FileOutputStream(tileFile));
+            	output1.write(BlockyMain.saveSystem.writeChunk(tileEntities.get(i).save(i)));
+            	output1.flush();
+            	output1.close();
+            }
+            
+            output.flush();
+            output.close();
+	    }
+	    	
 	}
 
     public boolean canBlockSeeTheSky(int x, int y)

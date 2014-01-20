@@ -25,7 +25,7 @@ public class EntityPlayer extends EntityLiving
 
     protected float frame = 0;
     public float   invIndex = 0;
-    public String username = "Player_"+rand.nextInt(20000);
+    public String username = "Epharos";
     private ArrayList<Achievement> achievementGet = new ArrayList<Achievement>();
     private SkinObject skin;
     
