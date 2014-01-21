@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import org.jglrxavpok.blocky.entity.EntityPlayer;
+import org.jglrxavpok.blocky.gui.UIFurnace;
 import org.jglrxavpok.blocky.tileentity.TileEntity;
+import org.jglrxavpok.blocky.tileentity.TileEntityFurnace;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.world.Particle;
 import org.jglrxavpok.blocky.world.World;
@@ -64,16 +66,22 @@ public class BlockFurnace extends Block
 	        int power = (int) (Math.sin(lvl.ticks / 20f) * 0.01f + 15f);
 	        Block.litWorld(x, y, power, lvl);
 		}
+		
+		if(lvl.getTileEntityAt(x, y) != null)
+			if(((TileEntityFurnace) lvl.getTileEntityAt(x, y)).burnTime > 0)
+			{
+				lvl.setBlock(x, y, Block.furnaceIdle.getBlockName());
+			}
+			else
+			{
+				lvl.setBlock(x, y, Block.furnace.getBlockName());
+			}
     }
 	
 	public boolean onRightClick(World world, EntityPlayer player, int x, int y)
     {
-		if(UI.isMenuNull())
-		{
-			//open gui
-		}
-		
-    	return false;
+		UI.displayMenu(new UIFurnace(player, (TileEntityFurnace) world.getTileEntityAt(x, y), world));
+		return true;
     }
 	
 	public boolean onBlockDestroyedByPlayer(String lastAttackPlayerName, int rx, int y, World lvl)
@@ -88,12 +96,13 @@ public class BlockFurnace extends Block
 	
 	public void onBlockAdded(World world, EntityPlayer player, int x, int y)
     {
-    	world.tileEntities.add(this.createTileEntity(world));
+		if(world.getTileEntityAt(x, y) == null)
+			world.tileEntities.add(this.createTileEntity(world, (float) x, (float) y));
     }
 
-	public TileEntity createTileEntity(World world)
+	public TileEntity createTileEntity(World world, float x, float y)
 	{
-	    TileEntity e = new TileEntity(world);
+	    TileEntity e = new TileEntityFurnace(world).setPos(x, y);
 		return e;
 	}
 }

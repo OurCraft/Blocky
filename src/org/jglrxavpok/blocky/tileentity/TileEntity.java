@@ -1,6 +1,7 @@
 package org.jglrxavpok.blocky.tileentity;
 
 import org.jglrxavpok.blocky.world.World;
+import org.jglrxavpok.storage.TaggedStorageChunk;
 
 public class TileEntity 
 {
@@ -12,6 +13,13 @@ public class TileEntity
 	{
 	    theWorld = w;
 		this.setID();
+	}
+	
+	public TileEntity setPos(float x, float y)
+	{
+		this.posX = x;
+		this.posY = y;
+		return this;
 	}
 	
 	public void setID()
@@ -26,6 +34,7 @@ public class TileEntity
 		this.id = theFinalID;
 	}
 	
+	@SuppressWarnings(value = { "static-access" })
 	public boolean isIDAlreadyUsed(int ID)
 	{
 		if(!this.theWorld.tileEntities.isEmpty())
@@ -39,6 +48,22 @@ public class TileEntity
 	public void onUpdate()
 	{
 		
+	}
+	
+	public TaggedStorageChunk save(int nbr)
+	{
+		TaggedStorageChunk chunk = new TaggedStorageChunk("TileEntity_" + this.getClass().getCanonicalName() + "_" + nbr);
+		chunk.setFloat("posX", this.posX);
+		chunk.setFloat("posY", this.posY);
+		chunk.setInteger("id", this.id);
+		return chunk;
+	}
+	
+	public void load(TaggedStorageChunk chunk)
+	{
+		this.id = chunk.getInteger("id");
+		this.posX = chunk.getFloat("posX");
+		this.posY = chunk.getFloat("posY");
 	}
 	
 	//ce commentaire ne sert à rien :)
