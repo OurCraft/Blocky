@@ -24,7 +24,6 @@ import javax.swing.filechooser.FileSystemView;
 import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier;
 import net.java.games.input.Controller;
-import net.java.games.input.Controller.Type;
 import net.java.games.input.ControllerEnvironment;
 
 import org.jglrxavpok.blocky.achievements.AchievementRenderer;
