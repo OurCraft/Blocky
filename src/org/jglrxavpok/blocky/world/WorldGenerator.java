@@ -27,9 +27,9 @@ public class WorldGenerator
         decorators.add(new WorldLakes(Fluid.get("water"), 102, 103, 3, 8, 6, 4, "sand", true));
         decorators.add(new WorldLakes(Fluid.get("lava"), 6, 102, 3, 6, 2, 1, "rock", false));
         decorators.add(new WorldTrees(20));
-        decorators.add(new WorldGenOre("coal"));
-        decorators.add(new WorldGenOre("iron"));
-        decorators.add(new WorldGenOre("diamond"));
+        decorators.add(new WorldGenOre("coal", 15, 12, 0, 128));
+        decorators.add(new WorldGenOre("iron", 9, 6, 0, 128));
+        decorators.add(new WorldGenOre("diamond", 2, 2, 0, 16));
     }
 
     public void generateChunk(World lvl, int chunkID, WorldChunk chunk,

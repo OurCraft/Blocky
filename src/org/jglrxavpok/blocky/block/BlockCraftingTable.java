@@ -29,7 +29,7 @@ public class BlockCraftingTable extends Block
     @Override
     public boolean canBlockBeReplaced(int x, int y, World lvl, Block block)
     {
-        return true;
+        return false;
     }
 
     @Override
