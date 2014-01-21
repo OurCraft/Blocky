@@ -2,6 +2,7 @@ package org.jglrxavpok.blocky.gui;
 
 import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.crafting.FurnaceManager;
+import org.jglrxavpok.blocky.crafting.FurnaceRecipe;
 import org.jglrxavpok.blocky.entity.EntityPlayer;
 import org.jglrxavpok.blocky.inventory.ItemStack;
 import org.jglrxavpok.blocky.tileentity.TileEntityFurnace;
@@ -168,7 +169,11 @@ public class UIFurnace extends UIMenu
         
         float coeff = 0;
         if(this.tile.in != null)
-        	coeff = this.tile.cookedTime / FurnaceManager.instance().getFurnaceRecipeByIn(this.tile.in).burnTime;
+        {
+            FurnaceRecipe r = FurnaceManager.instance().getFurnaceRecipeByIn(this.tile.in);
+            if(r != null)
+        	coeff = this.tile.cookedTime / r.burnTime;
+        }
         
         minU = 30 / 128f;
         maxU = 30 + coeff / 128f;

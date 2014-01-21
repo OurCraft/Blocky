@@ -9,9 +9,9 @@ import org.jglrxavpok.storage.TaggedStorageChunk;
 
 public class TileEntityFurnace extends TileEntity 
 {
-	public TileEntityFurnace()
+    public TileEntityFurnace(World w)
     {
-        super();
+        super(w);
     }
 
     public ItemStack in, out, fire;

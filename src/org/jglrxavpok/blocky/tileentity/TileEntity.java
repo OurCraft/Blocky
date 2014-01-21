@@ -10,9 +10,9 @@ public class TileEntity
 	public World theWorld;
 	public int id;
 	
-	public TileEntity()
+	public TileEntity(World w)
 	{
-	    theWorld = BlockyMain.instance.getLevel();
+	    theWorld = w;
 		this.setID();
 	}
 	

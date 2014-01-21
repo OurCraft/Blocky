@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -223,11 +224,12 @@ public class World
                         byte[] bytes = IO.read(in1);
                         in1.close();
                         TaggedStorageChunk chunk = BlockyMain.saveSystem.readChunk(bytes);
-                        TileEntity e = (TileEntity) Class.forName(tileEntityClass).newInstance();
+                        Class<?> c = Class.forName(tileEntityClass);
+                        Constructor<?> construct = c.getDeclaredConstructor(World.class);
+                        TileEntity e = null;
+                        e = (TileEntity) construct.newInstance(this);
                         e.load(chunk);
                         this.tileEntities.add(e);
-                        BlockyMain.console("Coucou je viens de charger une TileEntity " + tileEntityClass + " - " + e.id + "(" + e.posX + ";" + e.posY + ")");
-                        // ceci est un commentaire qui me permettra de faire un push :)
 	                }
 	                catch(Exception e)
 	                {
