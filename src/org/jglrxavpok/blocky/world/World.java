@@ -227,6 +227,7 @@ public class World
                         e.load(chunk);
                         this.tileEntities.add(e);
                         BlockyMain.console("Coucou je viens de charger une TileEntity " + tileEntityClass + " - " + e.id + "(" + e.posX + ";" + e.posY + ")");
+                        // ceci est un commentaire qui me permettra de faire un push :)
 	                }
 	                catch(Exception e)
 	                {
