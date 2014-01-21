@@ -156,36 +156,40 @@ public class UIFurnace extends UIMenu
 		Textures.bind("/assets/textures/ui/furnaceCookTime.png");
 		
 		t.startDrawingQuads();
-		float minU = 0 / 128f;
-        float maxU = 30;
-        float minV = 96f / 128f;
-        float maxV = 128f / 128f;
+		float minU = 0f;
+        float maxU = 0.5f;
+        float minV = 0f;
+        float maxV = 1f;
+        float h1 = 40;
+        float w1 = 30;
+
         float x1 = BlockyMain.width / 2 - 16 - (32 * 4) - 12 + 5 * 32 + 5 + 3;
         float y1 = BlockyMain.height / 2 + 32 + 3;
         t.addVertexWithUV(x1, y1, 0, minU, minV);
-        t.addVertexWithUV(x1 + w, y1, 0, maxU, minV);
-        t.addVertexWithUV(x1 + w, y1 + h, 0, maxU, maxV);
-        t.addVertexWithUV(x1, y1 + h, 0, minU, maxV);
+        t.addVertexWithUV(x1 + w1, y1, 0, maxU, minV);
+        t.addVertexWithUV(x1 + w1, y1 + h1, 0, maxU, maxV);
+        t.addVertexWithUV(x1, y1 + h1, 0, minU, maxV);
         
         float coeff = 0;
         if(this.tile.in != null)
         {
             FurnaceRecipe r = FurnaceManager.instance().getFurnaceRecipeByIn(this.tile.in);
             if(r != null)
-        	coeff = this.tile.cookedTime / r.burnTime;
+            {
+                coeff = ((float)this.tile.cookedTime / (float)r.burnTime);
+                if(coeff != 0.f)
+                {
+                    minU = 0.5f;
+                    maxU = (coeff)*0.5f+0.5f;
+                    minV = 0f;
+                    maxV = 1f;
+                    t.addVertexWithUV(x1, y1, 0, minU, minV);
+                    t.addVertexWithUV(x1 + w1*(coeff), y1, 0, maxU, minV);
+                    t.addVertexWithUV(x1 + w1*(coeff), y1 + h1, 0, maxU, maxV);
+                    t.addVertexWithUV(x1, y1 + h1, 0, minU, maxV);
+                }
+            }
         }
-        
-        minU = 30 / 128f;
-        maxU = 30 + coeff / 128f;
-        minV = 96f / 128f;
-        maxV = 128f / 128f;
-        x1 = BlockyMain.width / 2 - 16 - (32 * 4) - 12 + 5 * 32 + 5 + 3;
-        y1 = BlockyMain.height / 2 + 32 + 3;
-        t.addVertexWithUV(x1, y1, 0, minU, minV);
-        t.addVertexWithUV(x1 + w, y1, 0, maxU, minV);
-        t.addVertexWithUV(x1 + w, y1 + h, 0, maxU, maxV);
-        t.addVertexWithUV(x1, y1 + h, 0, minU, maxV);
-        
         
         t.flush();
 	}

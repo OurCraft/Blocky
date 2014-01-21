@@ -20,6 +20,8 @@ public class TileEntityFurnace extends TileEntity
 	
 	public int getBurnTimeByStack(ItemStack i)
 	{
+	    if(i == null || i.item == null)
+	        return -1;
 		if(i.item.id.equals(Block.planks.getItem().id))
 		{
 			return 600;
@@ -37,7 +39,7 @@ public class TileEntityFurnace extends TileEntity
 			return 200;
 		}
 		
-		return 0;
+		return -1;
 	}
 	
 	public void onUpdate()
