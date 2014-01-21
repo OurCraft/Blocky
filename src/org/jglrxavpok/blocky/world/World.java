@@ -218,14 +218,15 @@ public class World
 	            {
 	                try
 	                {
-    	                String entityClass = in.readUTF();
+    	                String tileEntityClass = in.readUTF();
     	                InputStream in1 = new ByteArrayInputStream(Base64.decodeBase64(in.readUTF()));
                         byte[] bytes = IO.read(in1);
                         in1.close();
                         TaggedStorageChunk chunk = BlockyMain.saveSystem.readChunk(bytes);
-                        TileEntity e = (TileEntity) Class.forName(entityClass).newInstance();
+                        TileEntity e = (TileEntity) Class.forName(tileEntityClass).newInstance();
                         e.load(chunk);
                         this.tileEntities.add(e);
+                        BlockyMain.console("Coucou je viens de charger une TileEntity " + tileEntityClass + " - " + e.id + "(" + e.posX + ";" + e.posY + ")");
 	                }
 	                catch(Exception e)
 	                {
@@ -742,25 +743,19 @@ public class World
 	    
 	    if(!tileEntities.isEmpty())
 	    {
-	    	File entitiesFile = new File(folder, "tileEntities.data");
-            entitiesFile.createNewFile();
-            output = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(entitiesFile)));
-            output.writeInt(entities.size());
+	    	File tileEntitiesFile = new File(folder, "tileEntities.data");
+            tileEntitiesFile.createNewFile();
+            output = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(tileEntitiesFile)));
+            output.writeInt(tileEntities.size());
             
             for(int i = 0 ; i < tileEntities.size() ; i++)
             {
-            	File tileFile = new File(folder, "tile/" + tileEntities.get(i).id + ".data");
-                    
-            	if(!tileFile.getParentFile().exists())
-            	{
-            		tileFile.getParentFile().mkdirs();
-            	}
-                    
-            	tileFile.createNewFile();
-            	OutputStream output1 = new BufferedOutputStream(new FileOutputStream(tileFile));
-            	output1.write(BlockyMain.saveSystem.writeChunk(tileEntities.get(i).save(i)));
-            	output1.flush();
-            	output1.close();
+            	TileEntity e = this.tileEntities.get(i);
+            	
+            	output.writeUTF(e.getClass().getCanonicalName());
+            	output.writeUTF(new String(Base64.encodeBase64(BlockyMain.saveSystem.writeChunk(e.save(i)))));
+            	
+            	BlockyMain.console("Coucou je viens de save une TileEntity " + e.getClass().getCanonicalName() + " - " + e.id + "(" + e.posX + ";" + e.posY + ")");
             }
             
             output.flush();

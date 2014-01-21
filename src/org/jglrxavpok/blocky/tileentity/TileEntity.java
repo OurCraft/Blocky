@@ -1,5 +1,6 @@
 package org.jglrxavpok.blocky.tileentity;
 
+import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.world.World;
 import org.jglrxavpok.storage.TaggedStorageChunk;
 
@@ -9,9 +10,9 @@ public class TileEntity
 	public World theWorld;
 	public int id;
 	
-	public TileEntity(World w)
+	public TileEntity()
 	{
-	    theWorld = w;
+	    theWorld = BlockyMain.instance.getLevel();
 		this.setID();
 	}
 	
@@ -34,7 +35,6 @@ public class TileEntity
 		this.id = theFinalID;
 	}
 	
-	@SuppressWarnings(value = { "static-access" })
 	public boolean isIDAlreadyUsed(int ID)
 	{
 		if(!this.theWorld.tileEntities.isEmpty())
@@ -62,9 +62,6 @@ public class TileEntity
 	public void load(TaggedStorageChunk chunk)
 	{
 		this.id = chunk.getInteger("id");
-		this.posX = chunk.getFloat("posX");
-		this.posY = chunk.getFloat("posY");
+		this.setPos(chunk.getFloat("posX"), chunk.getFloat("posY"));
 	}
-	
-	//ce commentaire ne sert à rien :)
 }

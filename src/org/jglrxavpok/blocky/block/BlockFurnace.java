@@ -97,12 +97,12 @@ public class BlockFurnace extends Block
 	public void onBlockAdded(World world, EntityPlayer player, int x, int y)
     {
 		if(world.getTileEntityAt(x, y) == null)
-			world.tileEntities.add(this.createTileEntity(world, (float) x, (float) y));
+			world.tileEntities.add(this.createTileEntity((float) x, (float) y));
     }
 
-	public TileEntity createTileEntity(World world, float x, float y)
+	public TileEntity createTileEntity(float x, float y)
 	{
-	    TileEntity e = new TileEntityFurnace(world).setPos(x, y);
+	    TileEntity e = new TileEntityFurnace().setPos(x, y);
 		return e;
 	}
 }

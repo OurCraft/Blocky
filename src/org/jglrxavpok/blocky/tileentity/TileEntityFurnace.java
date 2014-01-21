@@ -9,9 +9,9 @@ import org.jglrxavpok.storage.TaggedStorageChunk;
 
 public class TileEntityFurnace extends TileEntity 
 {
-	public TileEntityFurnace(World w)
+	public TileEntityFurnace()
     {
-        super(w);
+        super();
     }
 
     public ItemStack in, out, fire;
@@ -125,13 +125,24 @@ public class TileEntityFurnace extends TileEntity
 		chunk.setInteger("cookedTime", this.cookedTime);
 		chunk.setInteger("burnTime", this.burnTime);
 		
-		chunk.setString("inID", this.in.item.id);
-		chunk.setString("outID", this.out.item.id);
-		chunk.setString("fireID", this.fire.item.id);
+		if(this.in != null)
+		{
+			chunk.setString("inID", this.in.item.id);
+			chunk.setInteger("innbr", this.in.nbr);
+		}
 		
-		chunk.setInteger("innbr", this.in.nbr);
-		chunk.setInteger("outnbr", this.out.nbr);
-		chunk.setInteger("firenbr", this.fire.nbr);
+		if(this.out != null)
+		{
+			chunk.setString("outID", this.out.item.id);
+			chunk.setInteger("outnbr", this.out.nbr);
+		}
+		
+		if(this.fire != null)
+		{
+			chunk.setString("fireID", this.fire.item.id);
+			chunk.setInteger("firenbr", this.fire.nbr);
+		}
+		
 		return chunk;
 	}
 	
@@ -140,9 +151,20 @@ public class TileEntityFurnace extends TileEntity
 		this.cookedTime = chunk.getInteger("cookedTime");
 		this.burnTime = chunk.getInteger("burnTime");
 		
-		this.in = new ItemStack(Item.get(chunk.getString("inID")), chunk.getInteger("innbr"));
-		this.out = new ItemStack(Item.get(chunk.getString("outID")), chunk.getInteger("outnbr"));
-		this.fire = new ItemStack(Item.get(chunk.getString("fireID")), chunk.getInteger("firenbr"));
+		if(chunk.hasTag("inID") && chunk.hasTag("innbr"))
+		{
+			this.in = new ItemStack(Item.get(chunk.getString("inID")), chunk.getInteger("innbr"));
+		}
+		
+		if(chunk.hasTag("outID") && chunk.hasTag("outnbr"))
+		{
+			this.out = new ItemStack(Item.get(chunk.getString("outID")), chunk.getInteger("outnbr"));
+		}
+		
+		if(chunk.hasTag("fireID") && chunk.hasTag("firenbr"))
+		{
+			this.fire = new ItemStack(Item.get(chunk.getString("fireID")), chunk.getInteger("firenbr"));
+		}
 		
 		super.load(chunk);
 	}
