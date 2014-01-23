@@ -78,7 +78,7 @@ public abstract class Block implements GameObject
         @Override
         public float setBlockOpacity() 
         {
-            return 0f;
+            return 1f;
         }
 	};
 	public static Block outBlock = new Block("out")
@@ -115,7 +115,7 @@ public abstract class Block implements GameObject
         @Override
         public float setBlockOpacity() 
         {
-            return 0f;
+            return 1f;
         }
 	};
 	public static Block air = new Block("air")
@@ -137,6 +137,11 @@ public abstract class Block implements GameObject
 
 		public void render(float posX, float posY, int x, int y, World lvl, boolean selected)
 		{
+		}
+		
+		public void update(int x, int y, World w)
+		{
+		    super.update(x,y,w);
 		}
 		
 		@Override
@@ -216,8 +221,8 @@ public abstract class Block implements GameObject
 	{
 		Tessellator t = Tessellator.instance;
 		float val = lvl.getLightValue(x, y);
-		if(val < 0.01f)
-            val = 0.01f;
+		if(val < 0.015f)
+            val = 0.015f;
 		t.setColorRGBA_F(val,val,val,1f);
 		t.addVertexWithUV(posX, posY, 0, minU, minV);
 		t.addVertexWithUV(posX+BLOCK_WIDTH, posY, 0, maxU, minV);
@@ -255,54 +260,115 @@ public abstract class Block implements GameObject
 	public void update(int x, int y, World lvl)
 	{
 	    float val = 0;
-	    float time = lvl.time;
-	    if(time < 0 )
-	        time = 0;
-	    float timeValue = (float)time/(18000f);
-	    if(timeValue > 1.0f)
-	    {
-	        timeValue = 1f-(timeValue-1f);
-	        if(timeValue < 0.0f)
-	            timeValue = 0;
-	    }
-	    if((int)lvl.ticks-lvl.getLastLightChange(x,y) > 2)
+        float time = lvl.time;
+        if(time < 0 )
+            time = 0;
+        float timeValue = (float)time/(18000f);
+        if(timeValue > 1.0f)
         {
-            if(lvl.canBlockSeeTheSky(x,y))
-            {
-                val = 1f;
-            }
-            else if(lvl.canBlockSeeTheSky(x,y+1))
-            {
-                val = 0.5f;
-            }
-            val*=timeValue;
-            if(val > 1f)
-                val = 1f;
-            lvl.setLightValue(val,x,y);
-
+            timeValue = 1f-(timeValue-1f);
+            if(timeValue < 0.0f)
+                timeValue = 0;
         }
-	    else
-	    {
-	        boolean flag = true;
-    	    if(lvl.canBlockSeeTheSky(x,y))
-    	    {
-    	        val = 1f;
-    	    }
-    	    else if(lvl.canBlockSeeTheSky(x,y+1) && 0.5f >= lvl.getLightValue(x, y))
-            {
-    	        val = 0.5f;
-            }
-    	    else
-    	        flag = false;
-    	    if(flag)
-    	    {
-    	        val*=timeValue;
-    	        lvl.setLightValue(val,x,y);
-    	    }
-	    }
+        if(lvl.canBlockSeeTheSky(x,y))
+        {
+            val = 1f;
+        }
+        else if(lvl.canBlockSeeTheSky(x,y+1))
+        {
+            val = 0.666f;
+        }
+        else if(lvl.canBlockSeeTheSky(x,y+1))
+        {
+            val = 0.333f;
+        }
+        val*=timeValue;
+        if(val > 1f)
+            val = 1f;
+        lvl.setLightValue(val,x,y);
 	}
 	
-	public void onWorldUpdate(int x, int y, World lvl){}
+	public void onWorldUpdate(int x, int y, World lvl)
+	{
+	    float val = 0;
+        float time = lvl.time;
+        if(time < 0 )
+            time = 0;
+        float timeValue = (float)time/(18000f);
+        if(timeValue > 1.0f)
+        {
+            timeValue = 1f-(timeValue-1f);
+            if(timeValue < 0.0f)
+                timeValue = 0;
+        }
+        if(lvl.canBlockSeeTheSky(x,y))
+        {
+            val = 1f;
+        }
+        else if(lvl.canBlockSeeTheSky(x,y+1))
+        {
+            val = 0.666f;
+        }
+        else if(lvl.canBlockSeeTheSky(x,y+1))
+        {
+            val = 0.333f;
+        }
+        else
+            val = 0;
+        val*=timeValue;
+        if(val > 1f)
+            val = 1f;
+        lvl.setLightValue(val,x,y);
+	    Block left = Block.getBlock(lvl.getBlockAt(x-1, y));
+	    Block right = Block.getBlock(lvl.getBlockAt(x+1, y));
+	    Block top = Block.getBlock(lvl.getBlockAt(x, y+1));
+	    Block bottom = Block.getBlock(lvl.getBlockAt(x, y-1));
+	    if(left.setBlockOpacity() == 1f
+	    && right.setBlockOpacity() == 1f
+	    && top.setBlockOpacity() == 1f
+	    && bottom.setBlockOpacity() == 1f)
+	    {
+	        
+	    }
+	    else
+	    {
+	        if(lvl.getLightValue(x-1,y) > lvl.getLightValue(x, y))
+	        {
+	            lvl.setLightValue(lvl.getLightValue(x-1,y)-0.1f-this.setBlockOpacity()/10f, x, y);
+	        }
+	        else if(lvl.getLightValue(x+1,y) > lvl.getLightValue(x, y))
+            {
+                lvl.setLightValue(lvl.getLightValue(x+1,y)-0.1f-this.setBlockOpacity()/10f, x, y);
+            }
+	        else if(lvl.getLightValue(x,y+1) > lvl.getLightValue(x, y))
+            {
+                lvl.setLightValue(lvl.getLightValue(x,y+1)-0.1f-this.setBlockOpacity()/10f, x, y);
+            }
+	        else if(lvl.getLightValue(x,y-1) > lvl.getLightValue(x, y))
+            {
+                lvl.setLightValue(lvl.getLightValue(x,y-1)-0.1f-this.setBlockOpacity()/10f, x, y);
+            }
+	        
+//	        if(lvl.canBlockSeeTheSky(x, y-1))
+//	        {
+//	            lvl.setLightValue(1, x, y);
+//	        }
+//	        else if(lvl.canBlockSeeTheSky(x, y+1))
+//            {
+//                lvl.setLightValue(1, x, y);
+//            }
+//	        else if(lvl.canBlockSeeTheSky(x-1, y))
+//            {
+//                lvl.setLightValue(1, x, y);
+//            }
+//	        else if(lvl.canBlockSeeTheSky(x+1, y))
+//            {
+//                lvl.setLightValue(1, x, y);
+//            }
+//	        else
+//               lvl.setLightValue(0, x, y);
+	    }
+	}
 	
 	public abstract boolean isSolid();
 
@@ -439,7 +505,7 @@ public abstract class Block implements GameObject
                 @Override
                 public float setBlockOpacity()
                 {
-                    return 0.75f;
+                    return 1;
                 }
 			};
 			return result.setResistance(resistance);
@@ -598,12 +664,20 @@ public abstract class Block implements GameObject
                 block = Block.getBlock(w.getBlockAt(xx + x, yy + y)).getBlockOpacity();
                 dist1 = (MathHelper.dist(x, y, xx + x, yy + y));
                 
+                if(Block.getBlock(w.getBlockAt(xx+x+1,yy+y)).setBlockOpacity() == 1f
+                && Block.getBlock(w.getBlockAt(xx+x-1,yy+y)).setBlockOpacity() == 1f
+                && Block.getBlock(w.getBlockAt(xx+x,yy+y-1)).setBlockOpacity() == 1f
+                && Block.getBlock(w.getBlockAt(xx+x,yy+y+1)).setBlockOpacity() == 1f)
+                {
+                    
+                }
+                else
                 if((int) dist1 <= dist / 2)
                 {
                     val = (float) ((float) 1f - (dist1 / (dist / 2f)));
                     
-                    if(val - block / 2 >= w.getLightValue(xx + x, yy + y))
-                        w.setLightValue(val - block / 2, xx + x, yy + y);
+                    if(val >= w.getLightValue(xx + x, yy + y))
+                        w.setLightValue(val, xx + x, yy + y);
                 }
             }   
         }

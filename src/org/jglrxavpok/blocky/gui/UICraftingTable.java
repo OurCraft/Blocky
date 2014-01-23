@@ -174,7 +174,7 @@ public class UICraftingTable extends UIContainer
                 {
                     player.dropStack(slots[46].stack);
                 }
-                slots[46].stack = c.getOutput();
+                slots[46].stack = c.getOutput().clone();
             }
             else
             {

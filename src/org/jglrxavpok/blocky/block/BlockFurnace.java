@@ -1,7 +1,6 @@
 package org.jglrxavpok.blocky.block;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
 import org.jglrxavpok.blocky.entity.EntityPlayer;
 import org.jglrxavpok.blocky.gui.UIFurnace;
@@ -86,12 +85,10 @@ public class BlockFurnace extends Block
 	
 	public boolean onBlockDestroyedByPlayer(String lastAttackPlayerName, int rx, int y, World lvl)
     {
-       super.onBlockDestroyedByPlayer(lastAttackPlayerName, rx, y, lvl);
-       
        if(lvl.getTileEntityAt(rx, y) != null)
     	   lvl.tileEntities.remove(lvl.getTileEntityAt(rx, y));
        
-       return true;
+       return super.onBlockDestroyedByPlayer(lastAttackPlayerName, rx, y, lvl);
     }
 	
 	public void onBlockAdded(World world, EntityPlayer player, int x, int y)

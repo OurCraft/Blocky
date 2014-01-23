@@ -27,6 +27,11 @@ public class CraftingManager
                 new ItemStack(Block.furnace.getItem(),1));
         addCraft(new ItemStack[]
                 {
+                    new ItemStack(Block.log.getItem(),1)
+                },
+                new ItemStack(Block.planks.getItem(),1));
+        addCraft(new ItemStack[]
+                {
                     new ItemStack(Block.planks.getItem(),4)
                 },
                 new ItemStack(Block.craftingTable.getItem(),1));
@@ -64,7 +69,6 @@ public class CraftingManager
         ItemStack[] input = new ItemStack[]
                 {
                 new ItemStack(Block.planks.getItem(), 2), new ItemStack(Block.rock.getItem(), 1)
-//                new ItemStack(),new ItemStack(),new ItemStack()
                 };
         ArrayList<Craft> crafts = cm.getResults(input);
         System.out.println("Crafts possibles");

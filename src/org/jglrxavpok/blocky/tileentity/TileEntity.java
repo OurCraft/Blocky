@@ -1,6 +1,5 @@
 package org.jglrxavpok.blocky.tileentity;
 
-import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.world.World;
 import org.jglrxavpok.storage.TaggedStorageChunk;
 

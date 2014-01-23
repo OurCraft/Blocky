@@ -404,7 +404,6 @@ public class World
         time+=1;
 		
 	    time = 14000;
-	    
 		ticks+=tickSpeed;
 		this.particles.tickAll(this);
         
@@ -758,7 +757,7 @@ public class World
             	output.writeUTF(e.getClass().getCanonicalName());
             	output.writeUTF(new String(Base64.encodeBase64(BlockyMain.saveSystem.writeChunk(e.save(i)))));
             	
-            	BlockyMain.console("Coucou je viens de save une TileEntity " + e.getClass().getCanonicalName() + " - " + e.id + "(" + e.posX + ";" + e.posY + ")");
+//            	BlockyMain.console("Coucou je viens de save une TileEntity " + e.getClass().getCanonicalName() + " - " + e.id + "(" + e.posX + ";" + e.posY + ")");
             }
             
             output.flush();

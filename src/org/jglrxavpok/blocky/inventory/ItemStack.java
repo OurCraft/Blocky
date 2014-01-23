@@ -20,6 +20,11 @@ public class ItemStack
 	{
 	}
 	
+	public ItemStack clone()
+	{
+	    return new ItemStack(item,nbr);
+	}
+	
 	public boolean equals(Object o)
 	{
 	    if(o instanceof ItemStack)
