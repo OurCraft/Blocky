@@ -24,8 +24,6 @@ public class TileEntityChest extends TileEntity
 		Random rand = new Random();
 		EntityItem item = null;
 		
-		BlockyMain.console("TileEntityChest starts droping");
-		
 		for(int i = 0 ; i < chestInventory.getInventorySize() ; i++)
 		{
 			ItemStack stack = chestInventory.getStackIn(i);
@@ -33,22 +31,14 @@ public class TileEntityChest extends TileEntity
 			if(stack != null)
 			{
 				item = new EntityItem(ItemStack.copyTo(stack));
-				item.move(posX * Block.BLOCK_WIDTH + Block.BLOCK_WIDTH / 2 - item.w / 2 + rand.nextInt(4) - 2, posY * Block.BLOCK_HEIGHT + Block.BLOCK_HEIGHT / 2 - item.h / 2 + rand.nextInt(1) + 2);
+				item.move(posX * Block.BLOCK_WIDTH + Block.BLOCK_WIDTH / 2 - item.w / 2 + rand.nextInt(30) - 15, posY * Block.BLOCK_HEIGHT + Block.BLOCK_HEIGHT / 2 - item.h / 2 + rand.nextInt(10) + 5);
 		        item.vy = 1.5f;
 		        item.gravityEfficienty = 0.5f;
 		        
 				this.theWorld.addEntity(item);
 				
-				if(this.theWorld.getEntityByID(item.entityID) != null)
-					BlockyMain.console("My entity exists");
-					
-				BlockyMain.console("Drop chest item " + ItemStack.copyTo(stack) + " at [" + item.x + " ; " + item.y + "]");
 			}
 		}
-		
-		BlockyMain.console("TileEntityChest stops droping");
-		
-		//coucou ce commentaire ne sert à rien et doit être supprimé dès qu'il est vu :3
 	}
 	
 	public TaggedStorageChunk save(int nbr)

@@ -26,12 +26,6 @@ public class CraftingManager
                     new ItemStack(Block.rock.getItem(),8)
                 },
                 new ItemStack(Block.furnace.getItem(),1));
-        
-        addCraft(new ItemStack[]
-                {
-                    new ItemStack(Block.log.getItem(),1)
-                },
-                new ItemStack(Block.planks.getItem(),1));
         addCraft(new ItemStack[]
                 {
                     new ItemStack(Block.planks.getItem(),4)
@@ -41,7 +35,7 @@ public class CraftingManager
         addCraft(new ItemStack[]
         		{
         			new ItemStack(Block.log.getItem(), 1)
-        		}, new ItemStack(Block.planks.getItem(), 8));
+        		}, new ItemStack(Block.planks.getItem(), 2));
         
         addCraft(new ItemStack[]
         		{
@@ -50,8 +44,8 @@ public class CraftingManager
         
         addCraft(new ItemStack[]
         		{
-        			new ItemStack(Block.planks.getItem(), 6),
-        			new ItemStack(Block.glass.getItem(), 2)
+        			new ItemStack(Block.planks.getItem(), 3),
+        			new ItemStack(Block.glass.getItem(), 1)
         		}, new ItemStack(Item.door, 1));
     }
     
