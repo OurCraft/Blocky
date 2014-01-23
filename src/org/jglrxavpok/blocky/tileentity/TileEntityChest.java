@@ -3,6 +3,7 @@ package org.jglrxavpok.blocky.tileentity;
 import java.util.Random;
 
 import org.jglrxavpok.blocky.BlockyMain;
+import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.entity.EntityItem;
 import org.jglrxavpok.blocky.inventory.BasicInventory;
 import org.jglrxavpok.blocky.inventory.ItemStack;
@@ -32,9 +33,10 @@ public class TileEntityChest extends TileEntity
 			if(stack != null)
 			{
 				item = new EntityItem(ItemStack.copyTo(stack));
-				item.move(this.posX, this.posY);
-				item.x += rand.nextInt(4) - 2;
-				item.y += rand.nextInt(2);
+				item.move(posX * Block.BLOCK_WIDTH + Block.BLOCK_WIDTH / 2 - item.w / 2 + rand.nextInt(4) - 2, posY * Block.BLOCK_HEIGHT + Block.BLOCK_HEIGHT / 2 - item.h / 2 + rand.nextInt(1) + 2);
+		        item.vy = 1.5f;
+		        item.gravityEfficienty = 0.5f;
+		        
 				this.theWorld.addEntity(item);
 				
 				if(this.theWorld.getEntityByID(item.entityID) != null)
@@ -45,6 +47,8 @@ public class TileEntityChest extends TileEntity
 		}
 		
 		BlockyMain.console("TileEntityChest stops droping");
+		
+		//coucou ce commentaire ne sert à rien et doit être supprimé dès qu'il est vu :3
 	}
 	
 	public TaggedStorageChunk save(int nbr)
