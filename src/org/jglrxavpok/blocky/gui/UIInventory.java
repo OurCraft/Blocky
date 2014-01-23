@@ -126,7 +126,7 @@ public class UIInventory extends UIContainer
                 {
                     player.dropStack(slots[43].stack);
                 }
-                slots[43].stack = c.getOutput();
+                slots[43].stack = c.getOutput().clone();
             }
             else
             {

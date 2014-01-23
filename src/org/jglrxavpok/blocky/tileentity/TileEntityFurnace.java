@@ -108,7 +108,7 @@ public class TileEntityFurnace extends TileEntity
 					this.cookedTime = 0;
 					
 					if(this.out == null)
-						this.out = FurnaceManager.instance().getFurnaceRecipeByIn(this.in).out;
+						this.out = (ItemStack)FurnaceManager.instance().getFurnaceRecipeByIn(this.in).out.clone();
 					else
 						this.out.nbr++;
 					

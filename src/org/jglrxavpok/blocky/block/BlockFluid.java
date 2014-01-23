@@ -54,6 +54,7 @@ public class BlockFluid extends Block
     
     public void onWorldUpdate(int x, int y, World w)
     {
+        super.onWorldUpdate(x, y, w);
         if(fluid.getLightingPower() > 0)
         {
             Block.litWorld(x, y, fluid.getLightingPower(), w);
