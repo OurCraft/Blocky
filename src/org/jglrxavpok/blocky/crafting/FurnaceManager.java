@@ -16,6 +16,7 @@ public class FurnaceManager
 	{
 		this.addFurnaceRecipe(new ItemStack(Block.iron.getItem(), 1), new ItemStack(Item.ironIngot, 1), 700);
 		this.addFurnaceRecipe(new ItemStack(Block.log.getItem(), 1), new ItemStack(Item.coal, 1), 500);
+		this.addFurnaceRecipe(new ItemStack(Block.sand.getItem(), 1), new ItemStack(Block.glass.getItem(), 1), 400);
 	}
 	
 	public void addFurnaceRecipe(ItemStack in, ItemStack out, int time)

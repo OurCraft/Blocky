@@ -17,19 +17,37 @@ public class CraftingManager
         addCraft(new ItemStack[]
                 {
                     new ItemStack(Block.planks.getItem(),2),
-                    new ItemStack(Block.rock.getItem(),1)
+                    new ItemStack(Item.ironIngot,1)
                 },
                 new ItemStack(Item.steelPick,1));
+        
         addCraft(new ItemStack[]
                 {
                     new ItemStack(Block.rock.getItem(),8)
                 },
                 new ItemStack(Block.furnace.getItem(),1));
+        
         addCraft(new ItemStack[]
                 {
                     new ItemStack(Block.planks.getItem(),4)
                 },
                 new ItemStack(Block.craftingTable.getItem(),1));
+        
+        addCraft(new ItemStack[]
+        		{
+        			new ItemStack(Block.log.getItem(), 1)
+        		}, new ItemStack(Block.planks.getItem(), 8));
+        
+        addCraft(new ItemStack[]
+        		{
+        			new ItemStack(Block.planks.getItem(), 8)
+        		}, new ItemStack(Block.chest.getItem(), 1));
+        
+        addCraft(new ItemStack[]
+        		{
+        			new ItemStack(Block.planks.getItem(), 6),
+        			new ItemStack(Block.glass.getItem(), 2)
+        		}, new ItemStack(Item.door, 1));
     }
     
     public void addCraft(ItemStack[] input, ItemStack output)

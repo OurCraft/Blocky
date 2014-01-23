@@ -183,6 +183,9 @@ public abstract class Block implements GameObject
     public static Block furnace = new BlockFurnace("furnace", false);
     public static Block furnaceIdle = new BlockFurnace("furnaceIdle", true);
     public static Block craftingTable = new BlockCraftingTable("craftingTable");
+    public static Block chest = new BlockChest("chest");
+    
+    public static Block glass = generateBlock("glass", true, 0.1f, true, 0f).setTextureFromTerrain(12, 18, 6, 6).setAverageColor(0x000000);
     
 	public Block(String name)
 	{
@@ -672,5 +675,10 @@ public abstract class Block implements GameObject
     public void onBlockAdded(World world, EntityPlayer player, int x, int y)
     {
         
+    }
+    
+    public boolean canBlockBePlaced(World world, int x, int y)
+    {
+    	return true;
     }
 }

@@ -129,7 +129,7 @@ public class ClientPlayerInputHandler implements InputProcessor
             }
             if(buttonIndex.equals("1"))
             {
-                if(player.canReachBlock(tx, ty) && !Block.getBlock(this.player.world.getBlockAt(tx, ty)).isSolid())
+                if(player.canReachBlock(tx, ty) && !Block.getBlock(this.player.world.getBlockAt(tx, ty)).isSolid() && Block.getBlock(this.player.world.getBlockAt(tx, ty)).canBlockBePlaced(this.player.world, tx, ty))
                 {
                     if(player.getHeldItem() != null)
                         player.getHeldItem().use(player, tx, ty, player.world);
