@@ -44,11 +44,17 @@ public class BlockGrass extends Block
 	    
 	    if(lvl.getBlockAt(x, y + 1).equals("snow"))
 	    {
-	    	lvl.setBlock(x, y, Block.grassSnow.getBlockName());
+	    	if(!lvl.getBlockAt(x, y).equals("grassSnow"))
+	    	{
+	    		lvl.setBlock(x, y, Block.grassSnow.getBlockName());
+	    	}
 	    }
 	    else
 	    {
-	    	lvl.setBlock(x, y, Block.grass.getBlockName());
+	    	if(!lvl.getBlockAt(x, y).equals("grass"))
+	    	{
+	    		lvl.setBlock(x, y, Block.grass.getBlockName());
+	    	}
 	    }
 	}
 	

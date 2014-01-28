@@ -14,7 +14,6 @@ public class WorldGenCactus extends WorldDecorator
 			if(rand.nextInt(16) == 8)
 			{
 				w.setBlock(x + chunk.chunkID * 16, chunk.getMaxHeight(x) + 1, "cactus");
-				w.setBlock(x + chunk.chunkID * 16, chunk.getMaxHeight(x) + 2, "cactus");
 			}
 		}
 	}

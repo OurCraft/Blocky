@@ -72,6 +72,10 @@ public class WorldGenerator
         		
                 for (WorldDecorator d : b.decorator)
                     d.decorateChunk(chunk, lvl, rand);
+                
+                new WorldGenOre("coal", 15, 12, 0, 128).decorateChunk(chunk, lvl, rand);;
+                new WorldGenOre("iron", 9, 6, 0, 128).decorateChunk(chunk, lvl, rand);;
+                new WorldGenOre("diamond", 2, 2, 0, 16).decorateChunk(chunk, lvl, rand);;
         	}            
         }
         lvl.handlingChanges = false;

@@ -9,11 +9,12 @@ public class WorldGenPlant extends WorldDecorator
 {
 	public void decorateChunk(WorldChunk chunk, World w, Random rand) 
 	{
-		int randInt = rand.nextInt(10);
+		int randInt = 0;
 		int theTop = 0;
 		
 		for(int i = 0 ; i < 16 ; i++)
 		{
+			randInt = rand.nextInt(10);
 			theTop = chunk.getMaxHeight(i) + 1;
 			
 			if(w.getBlockAt(16 * chunk.chunkID + i, theTop).equals("air"))
