@@ -171,7 +171,8 @@ public abstract class Block implements GameObject
 	};
 	public static Block rock = generateBlock("rock", true, 2.5f).setTextureFromTerrain(0, 0, 6, 6).setAverageColor(0x838383);
 	public static Block dirt = generateBlock("dirt", true, 1f).setTextureFromTerrain(6, 0, 6, 6).setAverageColor(0x7E3E3E);
-	public static Block grass = generateBlock("grass", true, 1.1f).setTextureFromTerrain(12, 0, 6, 6).setAverageColor(0x5C8506);
+	public static Block grass = new BlockGrass("grass", false).setResistance(1.1f).setAverageColor(0x5C8506);
+	public static Block grassSnow = new BlockGrass("grassSnow", true).setResistance(1.1f).setAverageColor(0x5C8506);
 	public static Block bricks = generateBlock("bricks", true, 2.5f).setTextureFromTerrain(18, 0, 6, 6).setAverageColor(0x7D0000);
 	public static Block bedrock = generateBlock("bedrock", true, Float.POSITIVE_INFINITY).setTextureFromTerrain(24, 0, 6, 6).setAverageColor(0x222222);
 	public static Block log = generateBlock("log", true, 2f).setTextureFromTerrain(30, 0, 6, 6).setAverageColor(0x451C02);
@@ -191,6 +192,15 @@ public abstract class Block implements GameObject
     public static Block chest = new BlockChest("chest");
     
     public static Block glass = generateBlock("glass", true, 0.1f, true, 0f).setTextureFromTerrain(12, 18, 6, 6).setAverageColor(0x000000);
+    public static Block snow = generateBlock("snow", false, 0, true, 0f).setTextureFromTerrain(18, 18, 6, 6).setAverageColor(0x000000);
+    public static Block cactus = new BlockCactus("cactus").setTextureFromTerrain(6, 36, 6, 6).setAverageColor(0x5C8506);
+    
+    public static Block logDark = generateBlock("logDark", true, 2f).setTextureFromTerrain(30, 18, 6, 6).setAverageColor(0x451C02);
+    public static Block leavesDark = generateBlock("leavesDark", true, 0.05f, true, 0.1f).setTextureFromTerrain(30, 30, 6, 6);
+    
+    public static Block herb = generateBlock("herb", false, 0).setTextureFromTerrain(0, 36, 6, 6);
+    public static Block flowerRed = generateBlock("flowerRed", false, 0).setTextureFromTerrain(12, 36, 6, 6);
+    public static Block flowerWhite = generateBlock("flowerWhite", false, 0).setTextureFromTerrain(18, 36, 6, 6);
     
 	public Block(String name)
 	{
@@ -577,14 +587,12 @@ public abstract class Block implements GameObject
     public static void litWorld(int x, int y, int dist, World w)
     {
         float val = 1f;
-        float block = 0f;
         double dist1 = 0d;
         
         for(int xx = -dist / 2 ; xx <= dist / 2 ; xx++)
         {
             for(int yy = -dist / 2 ; yy <= dist / 2 ; yy++)
             {
-                block = Block.getBlock(w.getBlockAt(xx + x, yy + y)).getBlockOpacity();
                 dist1 = (MathHelper.dist(x, y, xx + x, yy + y));
                 
                 if(Block.getBlock(w.getBlockAt(xx+x+1,yy+y)).setBlockOpacity() == 1f
@@ -592,12 +600,12 @@ public abstract class Block implements GameObject
                 && Block.getBlock(w.getBlockAt(xx+x,yy+y-1)).setBlockOpacity() == 1f
                 && Block.getBlock(w.getBlockAt(xx+x,yy+y+1)).setBlockOpacity() == 1f)
                 {
-                    
+                	
                 }
                 else
                 if((int) dist1 <= dist / 2)
                 {
-                    val = (float) ((float) 1f - (dist1 / (dist / 2f)));
+                    val = (float) ((float) 1f - (dist1 / (dist / 2f))) - (w.isRaining ? 0.25f : 0f);
                     
                     if(val >= w.getLightValue(xx + x, yy + y))
                         w.setLightValue(val, xx + x, yy + y);

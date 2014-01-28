@@ -11,10 +11,17 @@ public class WorldTrees extends WorldDecorator
 {
 
     private int rarity;
+    private boolean isDarkWood = false;
 
     public WorldTrees(int rarity)
     {
         this.rarity = rarity;
+    }
+    
+    public WorldTrees(int rarity, boolean wood)
+    {
+    	this(rarity);
+    	this.isDarkWood = wood;
     }
     
     @Override
@@ -32,15 +39,68 @@ public class WorldTrees extends WorldDecorator
                      && Block.getBlock(chunk.getBlock(x, height+1)) == Block.air
                      && Block.getBlock(chunk.getBlock(x, height)) == Block.air)
                 {
-                    w.setBlock(x+chunk.chunkID*16, height, "log");
-                    w.setBlock(x+chunk.chunkID*16, height+1, "log");
-                    w.setBlock(x+chunk.chunkID*16, height+2, "leaves");
-                    w.setBlock(x-1+chunk.chunkID*16, height+2, "leaves");
-                    w.setBlock(x+1+chunk.chunkID*16, height+2, "leaves");
-                    w.setBlock(x+chunk.chunkID*16, height+3, "leaves");
-                    w.setBlock(x+1+chunk.chunkID*16, height+3, "leaves");
-                    w.setBlock(x-1+chunk.chunkID*16, height+3, "leaves");
-                    w.setBlock(x+chunk.chunkID*16, height+4, "leaves");
+                	if(!this.isDarkWood)
+                	{
+	                    w.setBlock(x+chunk.chunkID*16, height, "log");
+	                    w.setBlock(x+chunk.chunkID*16, height+1, "log");
+	                    w.setBlock(x+chunk.chunkID*16, height+2, "leaves");
+	                    w.setBlock(x-1+chunk.chunkID*16, height+2, "leaves");
+	                    w.setBlock(x+1+chunk.chunkID*16, height+2, "leaves");
+	                    w.setBlock(x+chunk.chunkID*16, height+3, "leaves");
+	                    w.setBlock(x+1+chunk.chunkID*16, height+3, "leaves");
+	                    w.setBlock(x-1+chunk.chunkID*16, height+3, "leaves");
+	                    w.setBlock(x+chunk.chunkID*16, height+4, "leaves");
+                	}
+                	else
+                	{
+                		int randInt = rand.nextInt(3);
+                		
+                		if(randInt == 0)
+                		{
+	                		w.setBlock(x + chunk.chunkID * 16, height, "logDark");
+	                		w.setBlock(x + chunk.chunkID * 16, height + 1, "logDark");
+	                		
+	                		w.setBlock(x + chunk.chunkID * 16 - 2, height + 2, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16 - 1, height + 2, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16, height + 2, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16 + 1, height + 2, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16 + 2, height + 2, "leavesDark");
+	                		
+	                		w.setBlock(x + chunk.chunkID * 16 - 1, height + 3, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16, height + 3, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16 + 1, height + 3, "leavesDark");
+	                		
+	                		w.setBlock(x + chunk.chunkID * 16, height + 4, "leavesDark");
+                		}
+                		else if(randInt == 1)
+                		{
+                			w.setBlock(x + chunk.chunkID * 16, height, "logDark");
+	                		
+	                		w.setBlock(x + chunk.chunkID * 16 - 2, height + 1, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16 - 1, height + 1, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16, height + 1, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16 + 1, height + 1, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16 + 2, height + 1, "leavesDark");
+	                		
+	                		w.setBlock(x + chunk.chunkID * 16 - 1, height + 2, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16, height + 2, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16 + 1, height + 2, "leavesDark");
+	                		
+	                		w.setBlock(x + chunk.chunkID * 16, height + 3, "leavesDark");
+                		}
+                		else
+                		{
+                			w.setBlock(x + chunk.chunkID * 16, height, "logDark");
+	                		
+	                		w.setBlock(x + chunk.chunkID * 16 - 1, height + 1, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16, height + 1, "leavesDark");
+	                		w.setBlock(x + chunk.chunkID * 16 + 1, height + 1, "leavesDark");
+	                		
+	                		w.setBlock(x + chunk.chunkID * 16, height + 2, "leavesDark");
+	                		
+                		}
+                		
+                	}
                     
                     EntityPig testPig = new EntityPig();
                     testPig.move((x+chunk.chunkID*16)*Block.BLOCK_WIDTH, (height+5)*Block.BLOCK_HEIGHT);

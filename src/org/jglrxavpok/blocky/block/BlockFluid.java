@@ -181,8 +181,6 @@ public class BlockFluid extends Block
                 }
             }
         }
-        if(x == 250151 && y == 101)
-            System.err.println(volume);
     }
     
     public void render(float posX, float posY, int x, int y, World w, boolean selected)

@@ -67,7 +67,7 @@ public class UIWorldCreationMenu extends UIBlockyMenu implements TextChangeListe
             inv.tryAdd(new ItemStack(Block.leaves.getItem(), 20));
             inv.tryAdd(new ItemStack(Block.torch.getItem(), 20));
             inv.tryAdd(new ItemStack(Block.planks.getItem(), 20));
-            inv.tryAdd(new ItemStack(Item.door, 20));
+            inv.tryAdd(new ItemStack(Block.snow.getItem(), 20));
             inv.tryAdd(new ItemStack(Block.getBlock("water_2").getItem(), 20));
 
             level.addEntity(p);

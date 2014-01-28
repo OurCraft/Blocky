@@ -61,6 +61,11 @@ public class UIInventorySlot extends UIComponentBase
         	{
         		FontRenderer.drawString(stack.nbr + "", x - FontRenderer.getWidth("" + stack.nbr) + 32, y, 0xFFFFFF);
         	}
+        	
+        	if(this.isMouseOver(mx, my))
+        	{
+        		FontRenderer.drawString(stack.item.id + "", mx - FontRenderer.getWidth("" + stack.item.id) / 2, my + 10, 0xFFFFFF);
+        	}
         }
 	}
 	

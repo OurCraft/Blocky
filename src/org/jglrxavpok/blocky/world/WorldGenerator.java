@@ -3,6 +3,7 @@ package org.jglrxavpok.blocky.world;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.jglrxavpok.blocky.biomes.Biome;
 import org.jglrxavpok.blocky.utils.Fluid;
 import org.jglrxavpok.blocky.world.decorators.WorldDecorator;
 import org.jglrxavpok.blocky.world.decorators.WorldGenOre;
@@ -55,22 +56,23 @@ public class WorldGenerator
         }
         else if(type == WorldType.NORMAL)
         {
-            for (int x = 0; x < 16; x++)
-            {
-                int height = (int) ((Math.sin(x * (rand.nextInt(12) + 3))) * (rand.nextFloat() * 2f)) + 100;
-                for (int y = 1; y < height; y++)
-                {
-                    chunk.setBlock(x, y, "rock");
-                }
-                for (int y = height; y < height + 2; y++)
-                {
-                    chunk.setBlock(x, y, "dirt");
-                }
-                chunk.setBlock(x, height + 2, "grass");
-                chunk.setBlock(x, 0, "bedrock");
-            }
-            for (WorldDecorator d : decorators)
-                d.decorateChunk(chunk, lvl, rand);
+        	Biome b = World.lastBiome;
+        	if(World.lastBiome == null || rand.nextInt(10) == 3)
+        	{
+	        	b = !Biome.biomeList.isEmpty() ? Biome.biomeList.get(rand.nextInt(Biome.biomeList.size())) : null;
+	        	World.lastBiome = b;
+        	}
+        	
+        	if(b != null)
+        	{
+        		for(int i = 0 ; i < 16 ; i++)
+        		{
+        			b.generate(0, i, (int) ((Math.sin(i * (rand.nextInt(12) + 3))) * (rand.nextFloat() * 2f)) + 100, chunk);
+        		}
+        		
+                for (WorldDecorator d : b.decorator)
+                    d.decorateChunk(chunk, lvl, rand);
+        	}            
         }
         lvl.handlingChanges = false;
     }

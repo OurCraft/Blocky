@@ -33,11 +33,19 @@ public class Particle
      */
     public float maxNegativeVY = -16f;
     
+    boolean killOnCollide = false;
+    
     public Particle()
     {
         pos = new Vector2f();
         vel = new Vector2f();
         life = 10;
+    }
+    
+    public Particle(boolean killOnCollide)
+    {
+        this();
+        this.killOnCollide = killOnCollide;
     }
     
     public void tick(World w)
@@ -89,6 +97,26 @@ public class Particle
             vel.x = 0;
         
         life--;
+        
+        
+        if(this.killOnCollide)
+        {
+        	float x = pos.x;
+            float y = pos.y;
+            
+            int gridX = (int) ((x)/Block.BLOCK_WIDTH);
+            if(gridX < -1)
+                gridX -= 1;
+            int gridY = (int) ((y)/Block.BLOCK_HEIGHT);
+            Block t = Block.getBlock(w.getBlockAt(gridX, gridY));
+            
+            this.life = Integer.MAX_VALUE;
+            
+            if(t.getCollisionBox(gridX, gridY).collide(this.aabb.set(x, y, 1, 1)))
+            {
+            	this.life = -1;
+            }
+        }
     }
     
     public void addKillerBlock(Block b)

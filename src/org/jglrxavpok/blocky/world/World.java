@@ -27,6 +27,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
 import org.jglrxavpok.blocky.BlockyMain;
+import org.jglrxavpok.blocky.biomes.Biome;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.block.BlockInfo;
 import org.jglrxavpok.blocky.entity.Entity;
@@ -76,6 +77,8 @@ public class World
     public Vector2f spawnPoint = new Vector2f(0f, 0f);
     public List<TileEntity> tileEntities = new ArrayList<TileEntity>(); 
     private final static int sunTexID = Textures.getFromClasspath("/assets/textures/world/sun.png");
+    public static Biome lastBiome = null;
+    public boolean isRaining = false;
 	
 	public static final World zeroBlocks = new World("zeroBlocks")
 	{
@@ -301,7 +304,7 @@ public class World
                 x = 15-x;
             }
         }
-        return chunk.getLightValue(x,y);
+        return chunk.getLightValue(x,y) - (this.isRaining ? 0.25f : 0f);
 	}
 	
 	/**
@@ -443,34 +446,44 @@ public class World
 	
 	public void render()
 	{
-        float b = (float)time/(18000f);
-        if(b > 1.0f)
-            b = 1f-(b-1f);
-        if(b >0.75f)
-            b = 0.75f;
-	    BlockyMain.instance.setBackgroundColor(0,0,b);
-        float sunAngle = (float)time/(18000f)*90f;
-        float size = 128*2;
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glPushMatrix();
-        GL11.glColor3f(1f, 1f, 0);
-        GL11.glTranslatef(BlockyMain.width/2-size/2, lvloy+Block.BLOCK_HEIGHT*90f, 0);
-        GL11.glRotatef(sunAngle,0,0,1);
-        GL11.glTranslatef(600, 0, 0);
-        GL11.glRotatef(-sunAngle,0,0,1);
-        Textures.render(sunTexID , 0, 0, size, size);
+		if(!this.isRaining)
+		{
+	        float b = (float)time/(18000f);
+	        if(b > 1.0f)
+	            b = 1f-(b-1f);
+	        if(b >0.75f)
+	            b = 0.75f;
+	        float r = (float)time/(57000f);
+	        float g = (float)time/(57000f);
+		    BlockyMain.instance.setBackgroundColor(r, g, b);
+		    float sunAngle = (float)time/(18000f)*90f;
+	        float size = 128*2;
+	        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	        GL11.glPushMatrix();
+	        GL11.glColor3f(1f, 1f, 0);
+	        GL11.glTranslatef(BlockyMain.width/2-size/2, lvloy+Block.BLOCK_HEIGHT*90f, 0);
+	        GL11.glRotatef(sunAngle,0,0,1);
+	        GL11.glTranslatef(600, 0, 0);
+	        GL11.glRotatef(-sunAngle,0,0,1);
+	        Textures.render(sunTexID , 0, 0, size, size);
 
-        GL11.glColor3f(1f, 1f, 1f);
-        GL11.glRotatef(sunAngle,0,0,1);
-        GL11.glTranslatef(-1200, 0, 0);
-        GL11.glRotatef(-sunAngle,0,0,1);
+	        GL11.glColor3f(1f, 1f, 1f);
+	        GL11.glRotatef(sunAngle,0,0,1);
+	        GL11.glTranslatef(-1200, 0, 0);
+	        GL11.glRotatef(-sunAngle,0,0,1);
 
-        Textures.render(sunTexID, 0, 0, size, size);
+	        Textures.render(sunTexID, 0, 0, size, size);
 
-        GL11.glColor3f(1,1,1);
+	        GL11.glColor3f(1,1,1);
+	        
+	        GL11.glPopMatrix();
+	        GL11.glBlendFunc(GL11.GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		}
+		else
+		{
+			BlockyMain.instance.setBackgroundColor(0.25f, 0.5f, 0.5f);
+		}
         
-        GL11.glPopMatrix();
-        GL11.glBlendFunc(GL11.GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 		if(centerOfTheWorld != null)
 		{
 			lvlox = -((centerOfTheWorld.x+(float)centerOfTheWorld.w/2f)-(float)BlockyMain.width/2f);
