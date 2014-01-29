@@ -33,7 +33,7 @@ public class Particle
      */
     public float maxNegativeVY = -16f;
     
-    boolean killOnCollide = false;
+    public float gravityEfficient = 1.0f;
     
     public Particle()
     {
@@ -42,18 +42,17 @@ public class Particle
         life = 10;
     }
     
-    public Particle(boolean killOnCollide)
+    public Particle setGravity(float g)
     {
-        this();
-        this.killOnCollide = killOnCollide;
+    	this.gravityEfficient = g;
+    	return this;
     }
     
     public void tick(World w)
     {
         if(life <= 0)
             return;
-        vel.x += w.gravity.x*2;
-        vel.y += w.gravity.y*2;
+        
         if(vel.x > this.maxPositiveVX)
         {
             vel.x = this.maxPositiveVX;
@@ -70,6 +69,10 @@ public class Particle
         {
             vel.y = this.maxNegativeVY;
         }
+        
+        vel.x += w.gravity.x*2;
+        vel.y += w.gravity.y*2;
+        
         if(canGo(pos.x+vel.x, pos.y, w))
         {
             pos.x+=vel.x;
@@ -79,9 +82,9 @@ public class Particle
             vel.x = vel.x*-.5f;
         }
         
-        if(canGo(pos.x, pos.y+vel.y, w))
+        if(canGo(pos.x, pos.y + vel.y / this.gravityEfficient, w))
         {
-            pos.y+=vel.y;
+            pos.y += vel.y / this.gravityEfficient;
         }
         else
         {
@@ -97,26 +100,6 @@ public class Particle
             vel.x = 0;
         
         life--;
-        
-        
-        if(this.killOnCollide)
-        {
-        	float x = pos.x;
-            float y = pos.y;
-            
-            int gridX = (int) ((x)/Block.BLOCK_WIDTH);
-            if(gridX < -1)
-                gridX -= 1;
-            int gridY = (int) ((y)/Block.BLOCK_HEIGHT);
-            Block t = Block.getBlock(w.getBlockAt(gridX, gridY));
-            
-            this.life = Integer.MAX_VALUE;
-            
-            if(t.getCollisionBox(gridX, gridY).collide(this.aabb.set(x, y, 1, 1)))
-            {
-            	this.life = -1;
-            }
-        }
     }
     
     public void addKillerBlock(Block b)

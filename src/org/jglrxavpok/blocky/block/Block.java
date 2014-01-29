@@ -32,7 +32,7 @@ public abstract class Block implements GameObject
 	public static final float TERRAIN_IMG_WIDTH = 36;
 	public static final float TERRAIN_IMG_HEIGHT = 72;
 	private String	blockName = "null";
-	private static final HashMap<String, Block> blocks = new HashMap<String, Block>();
+	public static final HashMap<String, Block> blocks = new HashMap<String, Block>();
 	public float minU = 0;
 	public float minV = 0;
 	public float maxU = 1f;
@@ -299,6 +299,14 @@ public abstract class Block implements GameObject
         if(val > 1f)
             val = 1f;
         lvl.setLightValue(val,x,y);
+        
+        if(lvl.isRaining && lvl.getBiomeAt(x, y).biomeId.equals("snow") && rand.nextInt(400) == 200)
+	    {
+	    	if(lvl.getBlockAt(x, y + 1).equals("air"))
+	    	{
+	    		lvl.setBlock(x, y + 1, "snow");
+	    	}
+	    }
 	}
 	
 	public void onWorldUpdate(int x, int y, World lvl){}
@@ -613,7 +621,7 @@ public abstract class Block implements GameObject
             }   
         }
         
-        w.setLightValue(1f,x,y);
+        w.setLightValue(1f - (w.isRaining ? 0.25f : 0f), x, y);
     }
     
     public static void loadAll()

@@ -19,9 +19,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -381,7 +383,7 @@ public class World
     			    else
     			    {
     			        if(BlockyMain.isDevMode)
-    			        BlockyMain.console("File \""+f.getName()+"\"doesn't exist");
+    			        	BlockyMain.console("File \""+f.getName()+"\"doesn't exist");
     			    }
     			}
     			if(!flag)
@@ -454,6 +456,45 @@ public class World
 	            }
 	        }
         }
+        
+        if(this.isRaining)
+        {
+        	Collection<WorldChunk> chunkList = this.chunksList.values();
+        	
+        	for(WorldChunk chunk : chunkList)
+        	{
+        		if(!chunk.biomeID.equals("snow"))
+        		{
+        			Random rand = new Random();
+        			if(rand.nextBoolean())
+        			{
+        				Particle p = new Particle();
+        				p.setLife(200);
+        				
+        				p.setColor(Color.blue.getRGB());
+        				p.setVelocity(rand.nextFloat() * 5 - 2.5f, 4f);
+        				p.setPos(chunk.chunkID * 16 * Block.BLOCK_WIDTH + Block.BLOCK_WIDTH / 2 + rand.nextInt(16) * Block.BLOCK_WIDTH, 150 * Block.BLOCK_HEIGHT);
+        				
+        				this.spawnParticle(p);
+        			}
+        		}
+        		else
+        		{
+        			Random rand = new Random();
+        			if(rand.nextBoolean())
+        			{
+        				Particle p = new Particle().setGravity(3.5f);
+        				p.setLife(500);
+        				
+        				p.setColor(Color.white.getRGB());
+        				p.setVelocity(rand.nextFloat() * 5 - 2.5f, 16f);
+        				p.setPos(chunk.chunkID * 16 * Block.BLOCK_WIDTH + Block.BLOCK_WIDTH / 2 + rand.nextInt(16) * Block.BLOCK_WIDTH, 150 * Block.BLOCK_HEIGHT);
+        				
+        				this.spawnParticle(p);
+        			}
+        		}
+        	}
+        }
 	}
 	
 	public void render()
@@ -503,7 +544,7 @@ public class World
 		}
 		else
 		{
-			BlockyMain.instance.setBackgroundColor(0.25f, 0.5f, 0.5f);
+			BlockyMain.instance.setBackgroundColor(0.35f, 0.35f, 0.35f);
 		}
         
 		if(centerOfTheWorld != null)

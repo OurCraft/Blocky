@@ -44,7 +44,6 @@ public class Biome
 	
 	public Biome addToWorldDecorator(WorldDecorator ... world)
 	{
-		
 		for(int i = 0 ; i < world.length ; i++)
 		{
 			this.decorator.add(world[i]);
