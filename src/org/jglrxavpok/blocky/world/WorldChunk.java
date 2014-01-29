@@ -1,6 +1,7 @@
 package org.jglrxavpok.blocky.world;
 
 import org.jglrxavpok.blocky.BlockyMain;
+import org.jglrxavpok.blocky.biomes.Biome;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.opengl.Tessellator;
 import org.jglrxavpok.storage.TaggedStorageChunk;
@@ -21,6 +22,7 @@ public class WorldChunk
     private String[][] lastAttackPlayerName;
     private int[][] blockChanges;
 //    private Random rand = new Random();
+    public String biomeID;
  
 	public WorldChunk(World lvl, int chunkID)
 	{
@@ -267,6 +269,7 @@ public class WorldChunk
             }
             chunk.setString("column "+x, column);
         }
+        chunk.setString("biome", biomeID);
         return chunk;
     }
 
@@ -294,6 +297,7 @@ public class WorldChunk
                 }
             }
         }
+        biomeID = chunk.getString("biome");
         lvl.handlingChanges = false;
     }
 

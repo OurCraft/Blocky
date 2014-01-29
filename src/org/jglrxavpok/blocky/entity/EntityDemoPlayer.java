@@ -69,6 +69,9 @@ public class EntityDemoPlayer extends EntityPlayer
             helpMode = true;
     }
     
+    public void postWorldRender(float posX, float posY)
+    {}
+    
     public void render(float posX, float posY, float alpha)
     {
         super.render(posX, posY, alpha);

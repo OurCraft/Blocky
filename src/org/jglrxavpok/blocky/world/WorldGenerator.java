@@ -56,12 +56,13 @@ public class WorldGenerator
         }
         else if(type == WorldType.NORMAL)
         {
-        	Biome b = World.lastBiome;
-        	if(World.lastBiome == null || rand.nextInt(10) == 3)
+        	Biome b = lvl.lastBiome;
+        	if(lvl.lastBiome == null || rand.nextInt(10) == 3)
         	{
 	        	b = !Biome.biomeList.isEmpty() ? Biome.biomeList.get(rand.nextInt(Biome.biomeList.size())) : null;
-	        	World.lastBiome = b;
+	        	lvl.lastBiome = b;
         	}
+        	chunk.biomeID = b.biomeId;
         	
         	if(b != null)
         	{

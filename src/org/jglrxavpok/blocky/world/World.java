@@ -77,7 +77,7 @@ public class World
     public Vector2f spawnPoint = new Vector2f(0f, 0f);
     public List<TileEntity> tileEntities = new ArrayList<TileEntity>(); 
     private final static int sunTexID = Textures.getFromClasspath("/assets/textures/world/sun.png");
-    public static Biome lastBiome = null;
+    public Biome lastBiome = null;
     public boolean isRaining = false;
 	
 	public static final World zeroBlocks = new World("zeroBlocks")
@@ -138,6 +138,16 @@ public class World
 		this.lvlName = name;
 		chunksList = new HashMap<Integer, WorldChunk>();
 		this.worldType = WorldType.NORMAL;
+	}
+	
+	public Biome getBiomeAt(int x, int y)
+	{
+	    WorldChunk chunk = this.getChunkAt(x, y, false);
+	    if(chunk != null)
+	    {
+	        return Biome.getBiomeByID(chunk.biomeID);
+	    }
+	    return Biome.getBiomeByID(null);
 	}
 	
     public void setChunkFolder(File folder)
@@ -359,7 +369,8 @@ public class World
         			        in.close();
         			        TaggedStorageChunk storageChunk = BlockyMain.saveSystem.readChunk(bytes);
         			        chunk.readStorageChunk(storageChunk);
-        			        System.out.println("Getting chunk infos from files");
+        			        if(BlockyMain.isDevMode)
+                                BlockyMain.console("Getting chunk infos from files");
         			        flag = true;
     			        }
     			        catch(Exception e)
@@ -369,7 +380,8 @@ public class World
     			    }
     			    else
     			    {
-    			        System.err.println("File \""+f.getName()+"\"doesn't exist");
+    			        if(BlockyMain.isDevMode)
+    			        BlockyMain.console("File \""+f.getName()+"\"doesn't exist");
     			    }
     			}
     			if(!flag)
@@ -453,14 +465,24 @@ public class World
 	            b = 1f-(b-1f);
 	        if(b >0.75f)
 	            b = 0.75f;
-	        float r = (float)time/(57000f);
-	        float g = (float)time/(57000f);
+            float r = (float)time/(18000f);
+            if(r > 1.0f)
+                r = 1f-(r-1f);
+            if(r > 0.75f)
+                r = 0.15f;
+            float g = (float)time/(18000f);
+            if(g > 1.0f)
+                g = 1f-(g-1f);
+            if(g >0.75f)
+                g = 0.15f;
+            r*=0.15f;
+            g*=0.15f;
 		    BlockyMain.instance.setBackgroundColor(r, g, b);
 		    float sunAngle = (float)time/(18000f)*90f;
 	        float size = 128*2;
-	        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	        GL11.glPushMatrix();
-	        GL11.glColor3f(1f, 1f, 0);
+	        GL11.glColor3f(1f, 0.95f, 0f);
 	        GL11.glTranslatef(BlockyMain.width/2-size/2, lvloy+Block.BLOCK_HEIGHT*90f, 0);
 	        GL11.glRotatef(sunAngle,0,0,1);
 	        GL11.glTranslatef(600, 0, 0);
@@ -531,8 +553,11 @@ public class World
 //		float posX = tx*Block.BLOCK_WIDTH+lvlox;
 //		float posY = ty*Block.BLOCK_HEIGHT+lvloy;
 //		Block.drawSelectBox(posX,posY,tx,ty,this);
-		FontRenderer.drawString(tx+";"+ty+" : "+getBlockAt(tx,ty), 0, 0, 0xFFFFFF);
-		FontRenderer.drawString(""+time, 0, 20, 0xFFFFFF);
+		if(BlockyMain.isDevMode)
+		{
+    		FontRenderer.drawString(tx+";"+ty+" : "+getBlockAt(tx,ty)+" ; biome: "+getBiomeAt(tx,ty).biomeId, 0, 0, 0xFFFFFF);
+    		FontRenderer.drawString(""+time, 0, 20, 0xFFFFFF);
+		}
 	}
 	
 	public WorldChunk getChunkByID(int index, boolean generate)

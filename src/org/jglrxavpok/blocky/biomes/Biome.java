@@ -88,4 +88,14 @@ public class Biome
 	{
 		
 	}
+
+    public static Biome getBiomeByID(String biomeID)
+    {
+        for(Biome b : biomeList)
+        {
+            if(b.biomeId.equals(biomeID))
+                return b;
+        }
+        return forest;
+    }
 }
