@@ -383,7 +383,7 @@ public class World
     			    else
     			    {
     			        if(BlockyMain.isDevMode)
-    			        	BlockyMain.console("File \""+f.getName()+"\"doesn't exist");
+    			        	BlockyMain.console("File \""+f.getName()+"\" doesn't exist");
     			    }
     			}
     			if(!flag)
@@ -499,6 +499,16 @@ public class World
 	
 	public void render()
 	{
+	    float voidFactor = 1;
+	    if(this.centerOfTheWorld != null)
+	    {
+	        if(centerOfTheWorld.y < 100f*Block.BLOCK_HEIGHT)
+	        {
+	            voidFactor = ((this.centerOfTheWorld.y)/(100f*Block.BLOCK_HEIGHT));
+	            if(voidFactor < 0f)
+	                voidFactor = 0f;
+	        }
+	    }
 		if(!this.isRaining)
 		{
 	        float b = (float)time/(18000f);
@@ -518,6 +528,9 @@ public class World
                 g = 0.15f;
             r*=0.15f;
             g*=0.15f;
+            r*=voidFactor;
+            g*=voidFactor;
+            b*=voidFactor;
 		    BlockyMain.instance.setBackgroundColor(r, g, b);
 		    float sunAngle = (float)time/(18000f)*90f;
 	        float size = 128*2;
