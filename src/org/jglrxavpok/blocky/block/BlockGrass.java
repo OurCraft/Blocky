@@ -1,5 +1,7 @@
 package org.jglrxavpok.blocky.block;
 
+import org.jglrxavpok.blocky.entity.EntityItem;
+import org.jglrxavpok.blocky.inventory.ItemStack;
 import org.jglrxavpok.blocky.world.World;
 
 public class BlockGrass extends Block 
@@ -31,6 +33,15 @@ public class BlockGrass extends Block
 	public boolean isOpaqueCube() 
 	{
 		return true;
+	}
+	
+	public void dropItems(World w, int x, int y)
+	{
+        EntityItem item = new EntityItem(new ItemStack(Block.dirt.getItem(), 1));
+        item.move(x*Block.BLOCK_WIDTH+Block.BLOCK_WIDTH/2-item.w/2, y*Block.BLOCK_HEIGHT+Block.BLOCK_HEIGHT/2-item.h/2);
+        item.vy = 1.5f;
+        item.gravityEfficienty = 0.5f;
+        w.addEntity(item);
 	}
 
 	public float setBlockOpacity() 

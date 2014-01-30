@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/netty-3.8.0.Final/jar/netty-3.8.0.Final.jar"/>
 	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/netty-3.8.0.Final/jar/netty-3.8.0.Final-sources.jar"/>
 	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/LWJGL 2.9/lwjgl_natives.zip"/>
+	<classpathentry kind="lib" path="kryonet-2.21-all.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

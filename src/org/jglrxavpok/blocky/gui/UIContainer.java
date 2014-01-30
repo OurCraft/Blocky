@@ -198,13 +198,13 @@ public class UIContainer extends UIMenu implements SlotListener
 
     }
     
-    public void render(int mx, int my, boolean buttons[])
+    public void renderOverlay(int mx, int my, boolean buttons[])
     {
-        super.render(mx, my, buttons);
+        super.renderOverlay(mx, my, buttons);
         for(int i = 0 ; i < this.slots.length ; i++)
         {
             if(slots[i] != null)
-            this.slots[i].render(mx, my, buttons);
+            this.slots[i].renderOverlay(mx, my, buttons);
         }
         
         
@@ -216,6 +216,16 @@ public class UIContainer extends UIMenu implements SlotListener
             {
                 FontRenderer.drawString(player.selectedStack.nbr + "", mx-10 - FontRenderer.getWidth("" + player.selectedStack.nbr) + 27, my-5-10, 0xFFFFFF);
             }
+        }
+    }
+    
+    public void render(int mx, int my, boolean buttons[])
+    {
+        super.render(mx, my, buttons);
+        for(int i = 0 ; i < this.slots.length ; i++)
+        {
+            if(slots[i] != null)
+            this.slots[i].render(mx, my, buttons);
         }
     }
 

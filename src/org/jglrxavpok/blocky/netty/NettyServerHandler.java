@@ -1,8 +1,5 @@
 package org.jglrxavpok.blocky.netty;
 
-import static org.jglrxavpok.blocky.BlockyMainServer.clients;
-import static org.jglrxavpok.blocky.BlockyMainServer.level;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -23,11 +20,13 @@ import org.jglrxavpok.blocky.server.PacketBlockInfos;
 import org.jglrxavpok.blocky.server.PacketChatContent;
 import org.jglrxavpok.blocky.server.PacketPlayer;
 import org.jglrxavpok.blocky.server.PacketServerInfos;
+import org.jglrxavpok.blocky.world.World;
 
 public class NettyServerHandler extends SimpleChannelHandler
 {
 
     private String serverName;
+    private World level;
     
     public NettyServerHandler(String serverName)
     {
@@ -73,9 +72,6 @@ public class NettyServerHandler extends SimpleChannelHandler
             else
                 e1.printStackTrace();
         }
-        if(flag)
-            if(!clients.contains(e.getChannel()))
-                clients.add(e.getChannel());
     }
 
     private void dispatchPacket(Packet packetReceived, Channel client)
@@ -172,18 +168,18 @@ public class NettyServerHandler extends SimpleChannelHandler
 
     private void sendPacketToAllExcept(Packet packetReceived, Channel client)
     {
-        for(int i = 0;i<clients.size();i++)
-        {
-            if(!clients.get(i).equals(client))
-                try
-                {
-                    NettyCommons.sendPacket(packetReceived, clients.get(i));
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-        }
+//        for(int i = 0;i<clients.size();i++)
+//        {
+//            if(!clients.get(i).equals(client))
+//                try
+//                {
+//                    NettyCommons.sendPacket(packetReceived, clients.get(i));
+//                }
+//                catch (IOException e)
+//                {
+//                    e.printStackTrace();
+//                }
+//        }
     }
 
     @Override

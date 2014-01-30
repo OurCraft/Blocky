@@ -23,6 +23,7 @@ public class BlockSnow extends Block
 	{
 		return true;
 	}
+	
 	public boolean isOpaqueCube() 
 	{
 		return false;

@@ -114,19 +114,19 @@ public class UIFurnace extends UIMenu
         Textures.bind(0);
         t.startDrawingQuads();
         t.setColorRGBA_F(1,1,1, 1);
-        t.addVertex(BlockyMain.width / 2 - (128) - 36, BlockyMain.height / 2+60 + 78, 0);
+        t.addVertex(BlockyMain.width / 2 - (128) - 36, BlockyMain.height / 2+60 + 39, 0);
         t.setColorRGBA_F(0.5f,0.5f,0.5f, 1);
-        t.addVertex(BlockyMain.width / 2 - (32 * 4) - 12 + 10 * 32 + 13+2, BlockyMain.height / 2+60 + 78, 0);
-        t.addVertex(BlockyMain.width / 2 - (32 * 4) - 12 + 10 * 32 + 13+2, BlockyMain.height / 2+60 + 78-2, 0);
+        t.addVertex(BlockyMain.width / 2 - (32 * 4) - 12 + 10 * 32 + 13+2, BlockyMain.height / 2+60 + 39, 0);
+        t.addVertex(BlockyMain.width / 2 - (32 * 4) - 12 + 10 * 32 + 13+2, BlockyMain.height / 2+60 + 39-2, 0);
         t.setColorRGBA_F(1,1,1, 1);
-        t.addVertex(BlockyMain.width / 2 - (128) - 36, BlockyMain.height / 2+60 + 78-2, 0);
+        t.addVertex(BlockyMain.width / 2 - (128) - 36, BlockyMain.height / 2+60 + 39-2, 0);
 
         t.setColorRGBA_F(0.5f,0.5f,0.5f, 1);
         t.addVertex(BlockyMain.width / 2 - (128) - 36, BlockyMain.height / 2 - 75 - 52-12, 0);
         t.addVertex(BlockyMain.width / 2 - (128) - 36+2, BlockyMain.height / 2 - 75 - 52-12, 0);
         t.setColorRGBA_F(1,1,1, 1);
-        t.addVertex(BlockyMain.width / 2 - (128) - 36+2, BlockyMain.height / 2+60 + 78, 0);
-        t.addVertex(BlockyMain.width / 2 - (128) - 36, BlockyMain.height / 2+60 + 78, 0);
+        t.addVertex(BlockyMain.width / 2 - (128) - 36+2, BlockyMain.height / 2+60 + 39, 0);
+        t.addVertex(BlockyMain.width / 2 - (128) - 36, BlockyMain.height / 2+60 + 39, 0);
         
         
         t.setColorRGBA_F(0.5f,0.5f,0.5f, 1);
@@ -142,8 +142,8 @@ public class UIFurnace extends UIMenu
         t.addVertex(BlockyMain.width / 2 - (32 * 4) - 12 + 10 * 32 + 13+2, BlockyMain.height / 2 - 75 - 52-12, 0);
         t.setColorRGBA_F(0.5f,0.5f,0.5f, 1);
 
-        t.addVertex(BlockyMain.width / 2 - (32 * 4) - 12 + 10 * 32 + 13+2, BlockyMain.height / 2+60 + 78, 0);
-        t.addVertex(BlockyMain.width / 2 - (32 * 4) - 12 + 10 * 32 + 13, BlockyMain.height / 2+60 + 78, 0);
+        t.addVertex(BlockyMain.width / 2 - (32 * 4) - 12 + 10 * 32 + 13+2, BlockyMain.height / 2+60 + 39, 0);
+        t.addVertex(BlockyMain.width / 2 - (32 * 4) - 12 + 10 * 32 + 13, BlockyMain.height / 2+60 + 39, 0);
         t.flush();
         t.setColorRGBA_F(1,1,1, 1);
         super.render(mx, my, buttonsPressed);
@@ -151,7 +151,7 @@ public class UIFurnace extends UIMenu
         FontRenderer.drawShadowedString("Inventory", BlockyMain.width / 2 - 16 - (32 * 4) - 12 + 3, BlockyMain.height / 2 + 32-50 + 3+32+3, 0xFFFFFF);
         FontRenderer.drawShadowedString("Hotbar", BlockyMain.width / 2 - 16 - (32 * 4) - 12 + 3, BlockyMain.height / 2 - 32-32+13-50, 0xFFFFFF);
         
-        FontRenderer.drawShadowedString("Furnace", BlockyMain.width / 2 - (128) - 36, BlockyMain.height / 2 + 32 - 50 + 3 + 32 + 3 + 32 + 3 + 32, 0xFFFFFF);
+        FontRenderer.drawShadowedString("Furnace", BlockyMain.width / 2 - (128) - 36, BlockyMain.height / 2 + 32 - 50 + 3 + 32 + 3 + 32 + 3 + 32 + 15, 0xFFFFFF);
 		
 		Textures.bind("/assets/textures/ui/furnaceCookTime.png");
 		

@@ -271,7 +271,7 @@ public abstract class Entity implements GameObject
 				    gridX -= 1;
 				int gridY = (int) ((y1+posY)/Block.BLOCK_HEIGHT);
 				Block t = Block.getBlock(world.getBlockAt(gridX, gridY));
-				if(t.isSolid())
+				if(t.isSolid() && t.getCollisionBox(gridX, gridY).collide(this.clipAABB().setX(posX).setY(posY)))
 					return false;
 			}
 		}

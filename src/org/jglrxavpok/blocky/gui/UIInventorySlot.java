@@ -36,6 +36,15 @@ public class UIInventorySlot extends UIComponentBase
         
     }
 	
+	public void renderOverlay(int mx, int my, boolean[] buttons)
+	{
+        if(this.isMouseOver(mx, my))
+        {
+            if(stack != null && stack.item != null)
+            FontRenderer.drawString(stack.item.id + "", mx - FontRenderer.getWidth("" + stack.item.id) / 2, my + 10, 0xFFFFFF);
+        }
+	}
+	
 	public void render(int mx, int my, boolean[] buttonsPressed)
 	{
 		Tessellator t = Tessellator.instance;
@@ -60,11 +69,6 @@ public class UIInventorySlot extends UIComponentBase
         	if(stack.nbr > 1)
         	{
         		FontRenderer.drawString(stack.nbr + "", x - FontRenderer.getWidth("" + stack.nbr) + 32, y, 0xFFFFFF);
-        	}
-        	
-        	if(this.isMouseOver(mx, my))
-        	{
-        		FontRenderer.drawString(stack.item.id + "", mx - FontRenderer.getWidth("" + stack.item.id) / 2, my + 10, 0xFFFFFF);
         	}
         }
 	}

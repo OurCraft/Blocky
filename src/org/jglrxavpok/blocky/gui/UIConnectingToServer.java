@@ -1,15 +1,8 @@
 package org.jglrxavpok.blocky.gui;
 
-import java.net.InetSocketAddress;
-import java.util.concurrent.Executors;
+import com.esotericsoftware.kryonet.Client;
 
-import org.jboss.netty.bootstrap.ClientBootstrap;
-import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.ChannelPipeline;
-import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.jboss.netty.channel.Channels;
-import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
-import org.jglrxavpok.blocky.netty.NettyClientHandler;
+import org.jglrxavpok.blocky.client.ClientNetworkListener;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.ui.UIButton;
 import org.jglrxavpok.blocky.ui.UIComponentBase;
@@ -56,18 +49,10 @@ public class UIConnectingToServer extends UIBlockyMenu
                 }
                 try
                 {
-                    ChannelFactory factory = new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
-                    ClientBootstrap bootstrap = new ClientBootstrap(factory);
-                    bootstrap.setPipelineFactory(new ChannelPipelineFactory() 
-                    {
-                        public ChannelPipeline getPipeline() 
-                        {
-                            return Channels.pipeline(new NettyClientHandler(false));
-                        }
-                    });
-                    bootstrap.setOption("tcpNoDelay", true);
-                    bootstrap.setOption("keepAlive", true);
-                    bootstrap.connect(new InetSocketAddress(serverAddress, serverPort));
+                    Client client = new Client();
+                    client.start();
+                    client.addListener(new ClientNetworkListener());
+                    client.connect(8001, serverAddress, serverPort);
                 }
                 catch (Exception e)
                 {
