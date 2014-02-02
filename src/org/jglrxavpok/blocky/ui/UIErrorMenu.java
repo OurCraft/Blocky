@@ -1,7 +1,7 @@
 package org.jglrxavpok.blocky.ui;
 
-import org.jglrxavpok.blocky.utils.TextFormatting;
 import org.jglrxavpok.opengl.FontRenderer;
+import org.jglrxavpok.opengl.TextFormatting;
 import org.jglrxavpok.opengl.Textures;
 import org.lwjgl.opengl.GL11;
 

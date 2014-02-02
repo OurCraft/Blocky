@@ -694,15 +694,15 @@ public class World
 		if(this.worldType == WorldType.CLIENT && !handlingChanges)
         {
 		    PacketBlockInfos p =new PacketBlockInfos(new BlockInfo(x,y,BlockInfo.ID, block));
-            if(NettyClientHandler.current != null)
-                try
-                {
-                    NettyCommons.sendPacket(p, NettyClientHandler.current.serverChannel);
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
+//            if(NettyClientHandler.current != null)
+//                try
+//                {
+//                    NettyCommons.sendPacket(p, NettyClientHandler.current.serverChannel);
+//                }
+//                catch (IOException e)
+//                {
+//                    e.printStackTrace();
+//                }
         }
 		if(x != 0)
 		{
@@ -910,15 +910,15 @@ public class World
        
         if(this.worldType == WorldType.CLIENT && !handlingChanges)
         {
-            if(NettyClientHandler.current != null)
-                try
-                {
-                    NettyCommons.sendPacket(new PacketBlockInfos(new BlockInfo(x,y,BlockInfo.ATTACK_VALUE, value+"\001"+player)), NettyClientHandler.current.serverChannel);
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
+//            if(NettyClientHandler.current != null)
+//                try
+//                {
+//                    NettyCommons.sendPacket(new PacketBlockInfos(new BlockInfo(x,y,BlockInfo.ATTACK_VALUE, value+"\001"+player)), NettyClientHandler.current.serverChannel);
+//                }
+//                catch (IOException e)
+//                {
+//                    e.printStackTrace();
+//                }
         }
         if(x != 0)
         {

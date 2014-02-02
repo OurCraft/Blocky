@@ -3,7 +3,6 @@ package org.jglrxavpok.opengl;
 import java.util.Random;
 
 import org.jglrxavpok.blocky.utils.Lang;
-import org.jglrxavpok.blocky.utils.TextFormatting;
 import org.lwjgl.opengl.GL11;
 
 public class FontRenderer
@@ -71,37 +70,60 @@ public class FontRenderer
 				toSkip--;
 				continue;
 			}
+			if(c == '\\')
+			{
+			    if(index-1 >= 0)
+			    {
+			        if(chars[index-1] != '\\')
+			        {
+			            continue;
+			        }
+			    }
+			    else
+			        continue;
+			}
 			if(c == '§')
 			{
 				if(index+1 < chars.length)
 				{
-					String formatting = ""+c+chars[index+1];
-					if(formatting.equals(TextFormatting.OBFUSCATED.toString()))
-					{
-						obfuscated = true;
-					}
-					else if(formatting.equals(TextFormatting.UNDERLINE.toString()))
-					{
-						underlined = true;
-					}
-					else if(formatting.equals(TextFormatting.ITALIC.toString()))
-					{
-						italics = true;
-					}
-					else if(formatting.equals(TextFormatting.RESET.toString()))
-					{
-						underlined = false;
-						obfuscated = false;
-						italics = false;
-						inverseBitrottMode = false;
-					}
-					else if(formatting.equals("§§"))
-					{
-						inverseBitrottMode = true;
-					}
-					toSkip = 1;
+				    boolean escaped = false;
+				    if(index-1 >= 0)
+				    {
+				        if(chars[index-1] == '\\')
+				        {
+				            escaped = true;
+				        }
+				    }
+				    if(!escaped)
+				    {
+    					String formatting = ""+c+chars[index+1];
+    					if(formatting.equals(TextFormatting.OBFUSCATED.toString()))
+    					{
+    						obfuscated = true;
+    					}
+    					else if(formatting.equals(TextFormatting.UNDERLINE.toString()))
+    					{
+    						underlined = true;
+    					}
+    					else if(formatting.equals(TextFormatting.ITALIC.toString()))
+    					{
+    						italics = true;
+    					}
+    					else if(formatting.equals(TextFormatting.RESET.toString()))
+    					{
+    						underlined = false;
+    						obfuscated = false;
+    						italics = false;
+    						inverseBitrottMode = false;
+    					}
+    					else if(formatting.equals("§§"))
+    					{
+    						inverseBitrottMode = true;
+    					}
+    					toSkip = 1;
+    					continue;
+				    }
 				}
-				continue;
 			}
 			if(underlined)
 			{
@@ -210,13 +232,36 @@ public class FontRenderer
 				toSkip--;
 				continue;
 			}
+			if(c == '\\')
+            {
+			    if(index-1 >= 0)
+			    {
+			        if(chars[index-1] != '\\')
+			        {
+			            continue;
+			        }
+			    }
+			    else
+			        continue;
+            }
 			if(c == '§')
 			{
 				if(index+1 < chars.length)
 				{
-					toSkip = 1;
+				    boolean escaped = false;
+                    if(index-1 >= 0)
+                    {
+                        if(chars[index-1] == '\\')
+                        {
+                            escaped = true;
+                        }
+                    }
+                    if(!escaped)
+                    {
+                        toSkip = 1;
+                        continue;
+                    }
 				}
-				continue;
 			}
 			if(c < '!' || (c > '~' && c < '¡'))
 				continue;

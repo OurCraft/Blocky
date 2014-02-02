@@ -2,6 +2,8 @@ package org.jglrxavpok.blocky.server;
 
 import com.esotericsoftware.kryonet.Connection;
 
+import org.jglrxavpok.opengl.TextFormatting;
+
 public class BlockyClient
 {
 
@@ -12,7 +14,7 @@ public class BlockyClient
     public BlockyClient(int id, String name, Connection c)
     {
         this.clientID = id;
-        this.name = name;
+        this.name = TextFormatting.escapeString(name);
         this.connection = c;
     }
 

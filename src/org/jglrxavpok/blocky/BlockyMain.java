@@ -43,6 +43,7 @@ import org.jglrxavpok.blocky.utils.SoundManager;
 import org.jglrxavpok.blocky.world.World;
 import org.jglrxavpok.blocky.world.WorldGenerator.WorldType;
 import org.jglrxavpok.opengl.FontRenderer;
+import org.jglrxavpok.opengl.TextFormatting;
 import org.jglrxavpok.opengl.Textures;
 import org.jglrxavpok.storage.TaggedStorageSystem;
 import org.lwjgl.LWJGLException;
@@ -74,7 +75,7 @@ public class BlockyMain implements Runnable
 		}
 		if(args.length > 0 && args[0] != null)
 		{
-		    username = args[0];
+		    username = TextFormatting.escapeString(args[0]);
 		}
 		if(args.length > 1 && args[1] != null)
         {
