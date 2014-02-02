@@ -30,8 +30,8 @@ public class ThreadUpdateLevel extends Thread
             if(frame <= 60)
             {
                 world.tick();
-                ArrayList<Packet> packets = world.getUpdatePackets();
-                for(Packet packet : packets)
+                ArrayList<OldPacket> packets = world.getUpdatePackets();
+                for(OldPacket packet : packets)
                 {
                     for(Channel c : clients)
                         try

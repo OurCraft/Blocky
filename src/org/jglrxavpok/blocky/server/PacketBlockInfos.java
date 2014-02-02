@@ -3,7 +3,7 @@ package org.jglrxavpok.blocky.server;
 import org.jglrxavpok.blocky.block.BlockInfo;
 
 
-public class PacketBlockInfos extends Packet
+public class PacketBlockInfos extends OldPacket
 {
 
     private static final long serialVersionUID = -6030776033005045060L;

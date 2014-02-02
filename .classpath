@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/LWJGL 2.9/jinput.jar"/>
-	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/LWJGL 2.9/lwjgl.jar"/>
+	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/LWJGL 2.9/lwjgl.jar" sourcepath="C:/Users/jglrxavpok/.m2/repository/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0-sources.jar"/>
 	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/LWJGL 2.9/lwjgl_util.jar"/>
 	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/Apache Commons/commons-codec-1.8.jar"/>
 	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/Apache Commons/commons-codec-1.8-javadoc.jar"/>

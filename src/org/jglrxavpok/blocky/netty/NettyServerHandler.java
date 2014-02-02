@@ -15,7 +15,7 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jglrxavpok.blocky.block.BlockInfo;
 import org.jglrxavpok.blocky.entity.EntityPlayer;
-import org.jglrxavpok.blocky.server.Packet;
+import org.jglrxavpok.blocky.server.OldPacket;
 import org.jglrxavpok.blocky.server.PacketBlockInfos;
 import org.jglrxavpok.blocky.server.PacketChatContent;
 import org.jglrxavpok.blocky.server.PacketPlayer;
@@ -44,7 +44,7 @@ public class NettyServerHandler extends SimpleChannelHandler
         boolean flag = true;
         try
         {
-            Packet p = NettyCommons.readPacket((ChannelBuffer)e.getMessage());
+            OldPacket p = NettyCommons.readPacket((ChannelBuffer)e.getMessage());
             if(p.name.equals("Get server infos"))
             {
                 flag = false;
@@ -52,7 +52,7 @@ public class NettyServerHandler extends SimpleChannelHandler
             }
             else if(p.name.equals("Connection"))
             {
-                NettyCommons.sendPacket(new Packet("Connected "+level.entityID++,null), e.getChannel());
+                NettyCommons.sendPacket(new OldPacket("Connected "+level.entityID++,null), e.getChannel());
             }
             else
                 dispatchPacket(p, e.getChannel());
@@ -74,7 +74,7 @@ public class NettyServerHandler extends SimpleChannelHandler
         }
     }
 
-    private void dispatchPacket(Packet packetReceived, Channel client)
+    private void dispatchPacket(OldPacket packetReceived, Channel client)
     {
         if(packetReceived.name.startsWith("Request "))
         {
@@ -146,7 +146,7 @@ public class NettyServerHandler extends SimpleChannelHandler
         }
     }
     
-    private void handleRequestPacket(Packet p, Channel sender)
+    private void handleRequestPacket(OldPacket p, Channel sender)
     {
         String request = p.name.replaceFirst("Request ", "");
         if(request.startsWith("ChunkContent "))
@@ -155,9 +155,9 @@ public class NettyServerHandler extends SimpleChannelHandler
             try
             {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                baos.write(Packet.tagSystem.writeChunk(level.getChunkAt(chunkID*16, 0, true).createStorageChunk()));
+                baos.write(OldPacket.tagSystem.writeChunk(level.getChunkAt(chunkID*16, 0, true).createStorageChunk()));
                 baos.close();
-                NettyCommons.sendPacket(new Packet("Response ChunkContent "+chunkID, baos.toByteArray()), sender);
+                NettyCommons.sendPacket(new OldPacket("Response ChunkContent "+chunkID, baos.toByteArray()), sender);
             }
             catch (IOException e)
             {
@@ -166,7 +166,7 @@ public class NettyServerHandler extends SimpleChannelHandler
         }
     }
 
-    private void sendPacketToAllExcept(Packet packetReceived, Channel client)
+    private void sendPacketToAllExcept(OldPacket packetReceived, Channel client)
     {
 //        for(int i = 0;i<clients.size();i++)
 //        {

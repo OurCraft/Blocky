@@ -32,11 +32,15 @@ import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.biomes.Biome;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.block.BlockInfo;
+import org.jglrxavpok.blocky.client.ClientNetworkListener;
 import org.jglrxavpok.blocky.entity.Entity;
 import org.jglrxavpok.blocky.entity.EntityPlayer;
 import org.jglrxavpok.blocky.netty.NettyClientHandler;
 import org.jglrxavpok.blocky.netty.NettyCommons;
-import org.jglrxavpok.blocky.server.Packet;
+import org.jglrxavpok.blocky.network.NetworkCommons;
+import org.jglrxavpok.blocky.network.packets.Packet;
+import org.jglrxavpok.blocky.network.packets.PacketRequestChunk;
+import org.jglrxavpok.blocky.server.OldPacket;
 import org.jglrxavpok.blocky.server.PacketBlockInfos;
 import org.jglrxavpok.blocky.server.PacketEntityUpdate;
 import org.jglrxavpok.blocky.server.PacketTime;
@@ -77,8 +81,7 @@ public class World
     private ArrayList<EntityPlayer> loadedPlayers = new ArrayList<EntityPlayer>();
     public int entityID;
     public Vector2f spawnPoint = new Vector2f(0f, 0f);
-    public List<TileEntity> tileEntities = new ArrayList<TileEntity>(); 
-    private final static int sunTexID = Textures.getFromClasspath("/assets/textures/world/sun.png");
+    public List<TileEntity> tileEntities = new ArrayList<TileEntity>();
     public Biome lastBiome = null;
     public boolean isRaining = false;
 	
@@ -348,10 +351,10 @@ public class World
 		{
 		    if(this.worldType == WorldType.CLIENT)
 		    {
-//		        if(!chunkAsked.contains((int)chunkID))
+		        if(!chunkAsked.contains((int)chunkID))
 		        {
 		            askForChunk((int)chunkID);
-//		            chunkAsked.add((int)chunkID);
+		            chunkAsked.add((int)chunkID);
 		        }
 		    }
 		    else
@@ -383,7 +386,7 @@ public class World
     			    else
     			    {
     			        if(BlockyMain.isDevMode)
-    			        	BlockyMain.console("File \""+f.getName()+"\" doesn't exist");
+    			        	BlockyMain.console("File \""+f.getName()+"\"doesn't exist");
     			    }
     			}
     			if(!flag)
@@ -395,15 +398,22 @@ public class World
 
 	public void askForChunk(int chunkID)
     {
-	    if(NettyClientHandler.current != null)
-            try
-            {
-                NettyCommons.sendPacket(new Packet("Request ChunkContent "+chunkID, null), NettyClientHandler.current.serverChannel);
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+//	    if(NettyClientHandler.current != null)
+//            try
+//            {
+//                NettyCommons.sendPacket(new OldPacket("Request ChunkContent "+chunkID, null), NettyClientHandler.current.serverChannel);
+//            }
+//            catch (IOException e)
+//            {
+//                e.printStackTrace();
+//            }
+	    if(BlockyMain.instance.getClientNetwork() != null)
+	    {
+	        ClientNetworkListener list = BlockyMain.instance.getClientNetwork();
+	        Packet packet = new PacketRequestChunk(chunkID);
+	        
+	        NetworkCommons.sendPacketTo(packet, false, list.getClientConnection());
+	    }
     }
 
     public String getName()
@@ -499,6 +509,7 @@ public class World
 	
 	public void render()
 	{
+	    
 	    float voidFactor = 1;
 	    if(this.centerOfTheWorld != null)
 	    {
@@ -528,6 +539,7 @@ public class World
                 g = 0.15f;
             r*=0.15f;
             g*=0.15f;
+            
             r*=voidFactor;
             g*=voidFactor;
             b*=voidFactor;
@@ -541,14 +553,14 @@ public class World
 	        GL11.glRotatef(sunAngle,0,0,1);
 	        GL11.glTranslatef(600, 0, 0);
 	        GL11.glRotatef(-sunAngle,0,0,1);
-	        Textures.render(sunTexID , 0, 0, size, size);
+	        Textures.render(Textures.getFromClasspath("/assets/textures/world/sun.png"), 0, 0, size, size);
 
 	        GL11.glColor3f(1f, 1f, 1f);
 	        GL11.glRotatef(sunAngle,0,0,1);
 	        GL11.glTranslatef(-1200, 0, 0);
 	        GL11.glRotatef(-sunAngle,0,0,1);
 
-	        Textures.render(sunTexID, 0, 0, size, size);
+	        Textures.render(Textures.getFromClasspath("/assets/textures/world/sun.png"), 0, 0, size, size);
 
 	        GL11.glColor3f(1,1,1);
 	        
@@ -981,9 +993,9 @@ public class World
         particles.spawnParticle(p);
     }
 
-    public ArrayList<Packet> getUpdatePackets()
+    public ArrayList<OldPacket> getUpdatePackets()
     {
-        ArrayList<Packet> list = new ArrayList<Packet>();
+        ArrayList<OldPacket> list = new ArrayList<OldPacket>();
         for(int i =0;i< entities.size();i++)
         {
             Entity e = entities.get(i);
@@ -1025,7 +1037,16 @@ public class World
                 }
             }
         }
-        
         return null;
+    }
+
+    public WorldChunk getRandomChunk()
+    {
+        Random rand = new Random();
+        WorldChunk[] chunks = this.chunksList.values().toArray(new WorldChunk[0]);
+        if(chunks.length > 0)
+        return chunks[rand.nextInt(chunks.length)];
+        else 
+            return null;
     }
 }

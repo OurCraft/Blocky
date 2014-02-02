@@ -6,7 +6,7 @@ import java.util.Random;
 
 import org.jglrxavpok.blocky.entity.EntityPlayer;
 
-public class PacketPlayer extends Packet
+public class PacketPlayer extends OldPacket
 {
 
     private static final long serialVersionUID = 3947776726070866132L;

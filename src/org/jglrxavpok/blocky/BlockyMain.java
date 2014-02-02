@@ -29,6 +29,7 @@ import net.java.games.input.ControllerEnvironment;
 import org.jglrxavpok.blocky.achievements.AchievementRenderer;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.client.ChatHUDComponent;
+import org.jglrxavpok.blocky.client.ClientNetworkListener;
 import org.jglrxavpok.blocky.gui.UIMainMenu;
 import org.jglrxavpok.blocky.gui.UIPauseMenu;
 import org.jglrxavpok.blocky.input.ClientInput;
@@ -166,6 +167,7 @@ public class BlockyMain implements Runnable
     public long timeRunning;
     public AchievementRenderer achievementRenderer;
     private boolean f11Pressed;
+    private ClientNetworkListener listener;
     
     public static double ratioW;
     public static double ratioH;
@@ -614,6 +616,16 @@ public class BlockyMain implements Runnable
     public void removeInputProcessor(InputProcessor proc)
     {
         this.inputProcessors.remove(proc);
+    }
+
+    public ClientNetworkListener getClientNetwork()
+    {
+        return listener;
+    }
+    
+    public void setClientNetwork(ClientNetworkListener l)
+    {
+        listener = l;
     }
 
 }

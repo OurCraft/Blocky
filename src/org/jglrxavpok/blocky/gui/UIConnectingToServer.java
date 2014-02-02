@@ -2,7 +2,11 @@ package org.jglrxavpok.blocky.gui;
 
 import com.esotericsoftware.kryonet.Client;
 
+import org.jglrxavpok.blocky.BlockyMain;
+import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.client.ClientNetworkListener;
+import org.jglrxavpok.blocky.entity.EntityPlayerSP;
+import org.jglrxavpok.blocky.network.NetworkCommons;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.ui.UIButton;
 import org.jglrxavpok.blocky.ui.UIComponentBase;
@@ -17,6 +21,7 @@ public class UIConnectingToServer extends UIBlockyMenu
     private UIButton backButton;
     private boolean connecting;
     private String serverIP;
+    private Client client;
 
     public UIConnectingToServer(UIMenu parent, String serverIP)
     {
@@ -26,7 +31,7 @@ public class UIConnectingToServer extends UIBlockyMenu
     
     public void initMenu()
     {
-        comps.add(new UILabel("Connecting to server: "+serverIP, w/2-75, h/2, LabelAlignment.CENTERED).setColor(0xFFFFFF));
+        comps.add(new UILabel("Connecting to server: "+serverIP, w/2, h/2, LabelAlignment.CENTERED).setColor(0xFFFFFF));
         backButton = new UIButton(this, w/2-75, h/2-30, 150, 30,"Cancel");
         comps.add(backButton);
         if(!connecting)
@@ -49,9 +54,12 @@ public class UIConnectingToServer extends UIBlockyMenu
                 }
                 try
                 {
-                    Client client = new Client();
+                    client = new Client(6556500, 6556500);
                     client.start();
-                    client.addListener(new ClientNetworkListener());
+                    NetworkCommons.registerClassesFor(client);
+                    ClientNetworkListener listener = new ClientNetworkListener(client);
+                    BlockyMain.instance.setClientNetwork(listener);
+                    client.addListener(listener);
                     client.connect(8001, serverAddress, serverPort);
                 }
                 catch (Exception e)
@@ -64,10 +72,27 @@ public class UIConnectingToServer extends UIBlockyMenu
         connecting = true;
     }
     
+    public void update(int mx, int my, boolean[] buttons)
+    {
+        if(BlockyMain.instance.getClientNetwork() != null)
+        {
+            if(BlockyMain.instance.getClientNetwork().getWorld().getRandomChunk() != null)
+            {
+                UI.displayMenu(null);
+                EntityPlayerSP player = new EntityPlayerSP();
+                player.move(25000*Block.BLOCK_WIDTH, 250*Block.BLOCK_HEIGHT);
+                BlockyMain.instance.getClientNetwork().getWorld().centerOfTheWorld = player;
+                BlockyMain.instance.getClientNetwork().getWorld().addEntity(player);
+            }
+        }
+    }
+    
     public void componentClicked(UIComponentBase b)
     {
         if(backButton == b)
         {
+            if(client != null)
+                client.close();
             UI.displayMenu(parent);
         }
     }

@@ -20,7 +20,7 @@ import org.jglrxavpok.blocky.entity.Entity;
 import org.jglrxavpok.blocky.entity.EntityPlayer;
 import org.jglrxavpok.blocky.entity.EntityPlayerSP;
 import org.jglrxavpok.blocky.gui.UIMainMenu;
-import org.jglrxavpok.blocky.server.Packet;
+import org.jglrxavpok.blocky.server.OldPacket;
 import org.jglrxavpok.blocky.server.PacketBlockInfos;
 import org.jglrxavpok.blocky.server.PacketChatContent;
 import org.jglrxavpok.blocky.server.PacketEntityUpdate;
@@ -60,7 +60,7 @@ public class NettyClientHandler extends SimpleChannelHandler
         {
             try
             {
-                NettyCommons.sendPacket(new Packet("Get server infos", null), serverChannel);
+                NettyCommons.sendPacket(new OldPacket("Get server infos", null), serverChannel);
             }
             catch (IOException e1)
             {
@@ -72,7 +72,7 @@ public class NettyClientHandler extends SimpleChannelHandler
             waitingForAnwser = true;
             try
             {
-                NettyCommons.sendPacket(new Packet("Connection", null), serverChannel);
+                NettyCommons.sendPacket(new OldPacket("Connection", null), serverChannel);
             }
             catch (IOException e1)
             {
@@ -86,7 +86,7 @@ public class NettyClientHandler extends SimpleChannelHandler
     {
         try
         {
-            Packet p = NettyCommons.readPacket((ChannelBuffer)e.getMessage());
+            OldPacket p = NettyCommons.readPacket((ChannelBuffer)e.getMessage());
             if(p instanceof PacketServerInfos)
             {
                 PacketServerInfos infos = (PacketServerInfos)p;
@@ -133,7 +133,7 @@ public class NettyClientHandler extends SimpleChannelHandler
         }
     }
 
-    private void dispatchPacket(Packet p)
+    private void dispatchPacket(OldPacket p)
     {
         System.out.println(p.name);
         if(p.name.startsWith("Response "))
@@ -162,7 +162,7 @@ public class NettyClientHandler extends SimpleChannelHandler
         {
             try
             {
-                TaggedStorageChunk chunk = Packet.tagSystem.readChunk(p.data);
+                TaggedStorageChunk chunk = OldPacket.tagSystem.readChunk(p.data);
                 int entityID = Integer.parseInt(chunk.getChunkName().substring(chunk.getChunkName().length()-1, chunk.getChunkName().length()));
                 Entity e = level.getEntityByID(entityID);
                 if(e == null)

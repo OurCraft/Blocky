@@ -2,7 +2,7 @@ package org.jglrxavpok.blocky.server;
 
 import org.jglrxavpok.blocky.achievements.Achievement;
 
-public class PacketAchievement extends Packet
+public class PacketAchievement extends OldPacket
 {
 
     private static final long serialVersionUID = -959041276311702428L;

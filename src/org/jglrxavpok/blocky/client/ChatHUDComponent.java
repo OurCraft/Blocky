@@ -27,7 +27,7 @@ public class ChatHUDComponent implements HUDComponent
             {
                 if(index < 0 || index >= list.size() || index >= chatTime.size())
                     continue;
-                if(System.currentTimeMillis()-chatTime.get(index) <= 3500)
+                if(System.currentTimeMillis()-chatTime.get(index) <= 5500)
                 {
                     FontRenderer.drawString(list.get(index), 100, 50f+(max-index)*12f, 0xFFFFFF);
                 }

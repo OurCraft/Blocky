@@ -192,7 +192,7 @@ public abstract class Block implements GameObject
     public static Block chest = new BlockChest("chest");
     
     public static Block glass = generateBlock("glass", true, 0.1f, true, 0f).setTextureFromTerrain(12, 18, 6, 6).setAverageColor(0x000000);
-    public static Block snow = new BlockSnow("snow").setTextureFromTerrain(18, 18, 6, 6).setAverageColor(0x000000);
+    public static Block snow = new BlockSnow("snow").setTextureFromTerrain(18, 18, 6, 6).setAverageColor(0xFFFFFF);
     public static Block cactus = new BlockCactus("cactus").setTextureFromTerrain(6, 36, 6, 6).setAverageColor(0x5C8506);
     
     public static Block logDark = generateBlock("logDark", true, 2f).setTextureFromTerrain(30, 18, 6, 6).setAverageColor(0x451C02);

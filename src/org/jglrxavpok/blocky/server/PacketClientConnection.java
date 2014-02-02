@@ -1,6 +1,6 @@
 package org.jglrxavpok.blocky.server;
 
-public class PacketClientConnection extends Packet
+public class PacketClientConnection extends OldPacket
 {
 
     private static final long serialVersionUID = -652218709357551632L;
