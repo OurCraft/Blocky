@@ -1,6 +1,5 @@
 package org.jglrxavpok.blocky.client;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import net.java.games.input.Component;
@@ -12,9 +11,6 @@ import org.jglrxavpok.blocky.entity.EntityPlayerSP;
 import org.jglrxavpok.blocky.gui.UIPauseMenu;
 import org.jglrxavpok.blocky.input.InputProcessor;
 import org.jglrxavpok.blocky.inventory.ItemStack;
-import org.jglrxavpok.blocky.netty.NettyClientHandler;
-import org.jglrxavpok.blocky.netty.NettyCommons;
-import org.jglrxavpok.blocky.server.PacketPlayer;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.utils.AABB;
 import org.jglrxavpok.blocky.utils.DamageType;
@@ -202,15 +198,6 @@ public class ClientPlayerInputHandler implements InputProcessor
                 player.vx+=1f*2;
             }
         }
-        if(NettyClientHandler.current != null)
-            try
-            {
-                NettyCommons.sendPacket(new PacketPlayer(player), NettyClientHandler.current.serverChannel);
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
     }
     
 }

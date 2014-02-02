@@ -156,4 +156,9 @@ public class ServerNetworkListener extends Listener
     {
         return ingameConnections.toArray(new BlockyClient[0]);
     }
+
+    public void removeClient(BlockyClient client)
+    {
+        ingameConnections.remove(client);
+    }
 }

@@ -34,6 +34,8 @@ import org.jglrxavpok.blocky.gui.UIMainMenu;
 import org.jglrxavpok.blocky.gui.UIPauseMenu;
 import org.jglrxavpok.blocky.input.ClientInput;
 import org.jglrxavpok.blocky.input.InputProcessor;
+import org.jglrxavpok.blocky.network.NetworkCommons;
+import org.jglrxavpok.blocky.network.packets.PacketDisconnect;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.utils.Fluid;
 import org.jglrxavpok.blocky.utils.HUDComponent;
@@ -540,19 +542,30 @@ public class BlockyMain implements Runnable
 
     public void saveLevel() throws IOException
     {
-        if(level != null && level.worldType != WorldType.CLIENT)
+        if(level != null)
         {
-            File f = level.getChunkFolder();
-            if(f == null)
+            if(level.worldType != WorldType.CLIENT)
             {
-                f = new File(new File(getFolder(), "saves"), level.getName());
-                f.mkdirs();
+                File f = level.getChunkFolder();
+                if(f == null)
+                {
+                    f = new File(new File(getFolder(), "saves"), level.getName());
+                    f.mkdirs();
+                }
+                else if(!f.exists())
+                {
+                    f.mkdirs();
+                }
+                level.save(f);
             }
-            else if(!f.exists())
+            else
             {
-                f.mkdirs();
+                if(this.getClientNetwork() != null)
+                {
+                    NetworkCommons.sendPacketTo(new PacketDisconnect(), false, getClientNetwork().getClientConnection());
+                    this.getClientNetwork().getClientConnection().close();
+                }
             }
-            level.save(f);
         }
     }
 

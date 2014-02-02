@@ -6,6 +6,8 @@ import com.esotericsoftware.kryonet.Server;
 import org.jglrxavpok.blocky.network.IPacketHandler;
 import org.jglrxavpok.blocky.network.NetworkCommons;
 import org.jglrxavpok.blocky.network.packets.Packet;
+import org.jglrxavpok.blocky.network.packets.PacketChat;
+import org.jglrxavpok.blocky.network.packets.PacketDisconnect;
 import org.jglrxavpok.blocky.network.packets.PacketRequestChunk;
 import org.jglrxavpok.blocky.network.packets.PacketWorldChunk;
 
@@ -29,6 +31,14 @@ public class ServerPacketHandler implements IPacketHandler
             int id = ((PacketRequestChunk)p).getChunkID();
             PacketWorldChunk packet = new PacketWorldChunk(BlockyMainServer.world.getChunkByID(id, true));
             NetworkCommons.sendPacketTo(packet, false, c);
+        }
+        else if(p instanceof PacketDisconnect)
+        {
+            BlockyClient client = listener.getClientByID(c.getID());
+            NetworkCommons.sendPacketToExcept(new PacketChat("Player "+client.getName()+" just disconnected."), false, client.getConnection(), listener.getIngameConnectionsFromClients());
+            BlockyMainServer.console("Player "+client.getName()+" just disconnected.");
+            listener.removeClient(client);
+            client.getConnection().close();
         }
     }
 

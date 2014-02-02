@@ -270,6 +270,7 @@ public class WorldChunk
             chunk.setString("column "+x, column);
         }
         chunk.setString("biome", biomeID);
+        chunk.setInteger("id", chunkID);
         return chunk;
     }
 
@@ -297,6 +298,8 @@ public class WorldChunk
                 }
             }
         }
+        if(chunk.hasTag("id"))
+            this.chunkID = chunk.getInteger("id");
         biomeID = chunk.getString("biome");
         lvl.handlingChanges = false;
     }

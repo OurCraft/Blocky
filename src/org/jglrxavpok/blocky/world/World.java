@@ -35,8 +35,6 @@ import org.jglrxavpok.blocky.block.BlockInfo;
 import org.jglrxavpok.blocky.client.ClientNetworkListener;
 import org.jglrxavpok.blocky.entity.Entity;
 import org.jglrxavpok.blocky.entity.EntityPlayer;
-import org.jglrxavpok.blocky.netty.NettyClientHandler;
-import org.jglrxavpok.blocky.netty.NettyCommons;
 import org.jglrxavpok.blocky.network.NetworkCommons;
 import org.jglrxavpok.blocky.network.packets.Packet;
 import org.jglrxavpok.blocky.network.packets.PacketRequestChunk;
