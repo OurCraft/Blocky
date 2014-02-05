@@ -146,7 +146,7 @@ public class PlayerInputHandler implements InputProcessor
                 player.jump();
             int mx = BlockyMain.instance.getCursorX();
             int my = BlockyMain.instance.getCursorY();
-            int tx = (int)((float)(mx-player.world.lvlox)/Block.BLOCK_WIDTH);
+            int tx = (int)(Math.floor((float)(mx-player.world.lvlox)/Block.BLOCK_WIDTH));
             int ty = (int)((float)(my-player.world.lvloy)/Block.BLOCK_HEIGHT);
             if(buttonIndex.equals("0"))
             {
@@ -287,7 +287,7 @@ public class PlayerInputHandler implements InputProcessor
             }
             int mx = BlockyMain.instance.getCursorX();
             int my = BlockyMain.instance.getCursorY();
-            int tx = (int)((float)(mx-player.world.lvlox)/Block.BLOCK_WIDTH);
+            int tx = (int)(Math.floor((float)(mx-player.world.lvlox)/Block.BLOCK_WIDTH));
             int ty = (int)((float)(my-player.world.lvloy)/Block.BLOCK_HEIGHT);
             if(Mouse.isButtonDown(0))
             {

@@ -272,14 +272,14 @@ public class World
 		WorldChunk chunk = getChunkAt(x,y,false);
 		if(chunk == null)
 			return "out";
-		if(x != 0)
-		{
-			x = x-chunk.chunkID*16;
-			if(chunk.chunkID < 0)
-			{
-				x = 15-x;
-			}
-		}
+        if(x != 0)
+        {
+            x = x-chunk.chunkID*16;
+            if(chunk.chunkID < 0)
+            {
+                x = 15-x;
+            }
+        }
 		return chunk.getBlock(x,y);
 	}
 	
@@ -329,40 +329,34 @@ public class World
 	 */
 	public WorldChunk getChunkAt(int x, int y, boolean b)
 	{
-		float chunkID = (float)x/16f;
-		if(x < -1)
-		{
-			x+=1;
-		}
-		else if(x == -1)
-			chunkID = -1;
-		if(x == 0)
-			chunkID = 0;
-		if(chunkID < 0 && chunkID >=-1f)
-			chunkID = -1;
-		if(chunkID < 0f)
-		{
-			chunkID = (x-16)/16;
-		}
-		WorldChunk chunk = this.chunksList.get((int)chunkID);
+		int chunkID =(int) Math.floor(((float)x/16f));
+//		if(x == 0)
+//			chunkID = 0;
+//		if(chunkID < 0 && chunkID >=-1f)
+//			chunkID = -1;
+//		if(chunkID < 0f)
+//		{
+//			chunkID = (x-16)/16;
+//		}
+		WorldChunk chunk = this.chunksList.get(chunkID);
 		if(chunk == null && b)
 		{
 		    if(this.worldType == WorldType.CLIENT)
 		    {
-		        if(!chunkAsked.contains((int)chunkID))
+		        if(!chunkAsked.contains(chunkID))
 		        {
-		            askForChunk((int)chunkID);
-		            chunkAsked.add((int)chunkID);
+		            askForChunk(chunkID);
+		            chunkAsked.add(chunkID);
 		        }
 		    }
 		    else
 		    {
-    		    chunk = new WorldChunk(this, (int)chunkID);
-    			chunksList.put((int)chunkID, chunk);
+    		    chunk = new WorldChunk(this, chunkID);
+    			chunksList.put(chunkID, chunk);
     			boolean flag = false;
     			if(chunkFolder != null)
     			{
-    			    File f = new File(chunkFolder, (int)chunkID+".chunk");
+    			    File f = new File(chunkFolder, chunkID+".chunk");
     			    if(f.exists())
     			    {
     			        try
@@ -611,7 +605,7 @@ public class World
 		
         int mx = BlockyMain.instance.getCursorX();
         int my = BlockyMain.instance.getCursorY();
-		int tx = (int)((float)(mx-lvlox)/Block.BLOCK_WIDTH);
+		int tx = (int)(Math.floor((float)(mx-lvlox)/Block.BLOCK_WIDTH));
 		int ty = (int)((float)(my-lvloy)/Block.BLOCK_HEIGHT);
 //
 //		float posX = tx*Block.BLOCK_WIDTH+lvlox;
@@ -1046,5 +1040,18 @@ public class World
         return chunks[rand.nextInt(chunks.length)];
         else 
             return null;
+    }
+
+    public void handleBlockUpdate(BlockInfo info)
+    {
+        if(info.type == BlockInfo.ID)
+        {
+            // TODO
+        }
+        else if(info.type == BlockInfo.ATTACK_VALUE)
+        {
+            String[] parts = info.data.split(":");
+            this.setAttackValue(info.x, info.y, this.getAttackValue(info.x, info.y)+Integer.parseInt(parts[0]), parts[1]);
+        }
     }
 }

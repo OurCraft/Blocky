@@ -3,13 +3,13 @@ package org.jglrxavpok.blocky.client;
 import com.esotericsoftware.kryonet.Connection;
 
 import org.jglrxavpok.blocky.BlockyMain;
-import org.jglrxavpok.blocky.gui.UIConnectingToServer;
+import org.jglrxavpok.blocky.block.BlockInfo;
 import org.jglrxavpok.blocky.network.IPacketHandler;
 import org.jglrxavpok.blocky.network.packets.Packet;
+import org.jglrxavpok.blocky.network.packets.PacketBlockUpdate;
 import org.jglrxavpok.blocky.network.packets.PacketChat;
 import org.jglrxavpok.blocky.network.packets.PacketKick;
 import org.jglrxavpok.blocky.network.packets.PacketWorldChunk;
-import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.world.WorldChunk;
 
 public class ClientPacketHandler implements IPacketHandler
@@ -41,6 +41,12 @@ public class ClientPacketHandler implements IPacketHandler
         {
             WorldChunk chunk = ((PacketWorldChunk)p).readChunk(listener.getWorld());
             listener.getWorld().putChunk(chunk);
+        }
+        else if(p instanceof PacketBlockUpdate)
+        {
+            BlockInfo info = ((PacketBlockUpdate) p).getBlockInfo();
+            if(info != null)
+                listener.getWorld().handleBlockUpdate(info);
         }
     }
 

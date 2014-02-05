@@ -109,9 +109,7 @@ public class Particle
     
     private boolean canGo(float x, float y, World w)
     {
-        int gridX = (int) ((x)/Block.BLOCK_WIDTH);
-        if(gridX < -1)
-            gridX -= 1;
+        int gridX = (int) (Math.floor((x)/Block.BLOCK_WIDTH));
         int gridY = (int) ((y)/Block.BLOCK_HEIGHT);
         Block t = Block.getBlock(w.getBlockAt(gridX, gridY));
         if(t.isSolid())

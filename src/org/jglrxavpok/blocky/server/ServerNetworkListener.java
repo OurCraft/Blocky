@@ -37,6 +37,11 @@ public class ServerNetworkListener extends Listener
         NetworkCommons.sendPacketTo(new Packet("AuthPacket", null), false, c);
     }
     
+    public void idle(Connection c)
+    {
+        
+    }
+    
     public void disconnected(Connection c)
     {
         if(queuingConnections.contains((Integer)c.getID()))

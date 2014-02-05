@@ -13,6 +13,7 @@ import org.jglrxavpok.blocky.utils.DamageType;
 import org.jglrxavpok.blocky.utils.Fluid;
 import org.jglrxavpok.blocky.world.Particle;
 import org.jglrxavpok.blocky.world.World;
+import org.jglrxavpok.blocky.world.WorldChunk;
 import org.jglrxavpok.opengl.Textures;
 import org.jglrxavpok.storage.TaggedStorageChunk;
 import org.lwjgl.util.Point;
@@ -266,10 +267,14 @@ public abstract class Entity implements GameObject
 		{
 			for(int y1 = 0;y1<h;y1++)
 			{
-				int gridX = (int) ((x1+posX)/Block.BLOCK_WIDTH);
-				if(gridX < -1)
-				    gridX -= 1;
-				int gridY = (int) ((y1+posY)/Block.BLOCK_HEIGHT);
+			    float px = ((float)x1+posX)/Block.BLOCK_WIDTH;
+			    float py = ((float)y1+posY)/Block.BLOCK_HEIGHT;
+                
+				int gridX = (int) (px >=  0 ? Math.floor(px) : Math.floor(px));
+				int gridY = (int) (py);
+				WorldChunk chunk = world.getChunkAt(gridX, gridY, false);
+				if(chunk == null)
+				    return false;
 				Block t = Block.getBlock(world.getBlockAt(gridX, gridY));
 				if(t.isSolid() && t.getCollisionBox(gridX, gridY).collide(this.clipAABB().setX(posX).setY(posY)))
 					return false;

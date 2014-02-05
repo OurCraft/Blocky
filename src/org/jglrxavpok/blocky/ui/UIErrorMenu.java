@@ -22,7 +22,7 @@ public class UIErrorMenu extends UIMenu
 	
 	public void initMenu()
 	{
-		mainMenuButton = new UIButton(this, w/2f-350/2f,15,350,40,"MainMenu");
+		mainMenuButton = new UIButton(this, w/2f-75f,15,150,30,"Main Menu");
 		comps.add(mainMenuButton);
 	}
 	
@@ -53,7 +53,7 @@ public class UIErrorMenu extends UIMenu
 		String guiName = "A guy";
 		if(parent != null)
 		{
-			guiName = TextFormatting.UNDERLINE+"Bug in "+parent.getClass().getCanonicalName();
+			guiName = TextFormatting.UNDERLINE+"Crash in "+parent.getClass().getName();
 		}
 		GL11.glPushMatrix();
 		float factor = 2;
@@ -63,9 +63,9 @@ public class UIErrorMenu extends UIMenu
 		if(displayedError != null)
 		{
 			String s = TextFormatting.UNDERLINE+displayedError.getClass().getCanonicalName();
-			FontRenderer.drawShadowedString(s+(displayedError.getMessage() == null ? "":":"), 25, this.h/2+120, 0xFF2222);
+			FontRenderer.drawShadowedString(s+(displayedError.getMessage() == null ? "":":"), 25, this.h/2+105, 0xFF2222);
 			if(displayedError.getMessage() != null)
-			FontRenderer.drawShadowedString(displayedError.getMessage(), 25+16+FontRenderer.getWidth(s), this.h/2+120, 0xFFCCCC);
+			FontRenderer.drawShadowedString(displayedError.getMessage(), 25+16+FontRenderer.getWidth(s), this.h/2+105, 0xFFCCCC);
 			float stackY = 0;
 			int i = 0;
 			for(;i<15;i++)
@@ -94,11 +94,11 @@ public class UIErrorMenu extends UIMenu
 				{
 					sourceString += elem.getLineNumber();
 				}
-				FontRenderer.drawShadowedString("at "+elem.getClassName()+"."+elem.getMethodName()+"("+sourceString+")", 130, this.h/2+120-stackY, 0xFFCCCC);
+				FontRenderer.drawShadowedString("at "+elem.getClassName()+"."+elem.getMethodName()+"("+sourceString+")", 130, this.h/2+105-stackY, 0xFFCCCC);
 			}
 			if(i < displayedError.getStackTrace().length)
 			{
-				FontRenderer.drawShadowedString((displayedError.getStackTrace().length-i)+" more...", 130, this.h/2+120-stackY-20, 0xFFCCCC);
+				FontRenderer.drawShadowedString((displayedError.getStackTrace().length-i)+" more...", 130, this.h/2+105-stackY-20, 0xFFCCCC);
 			}
 		}
 	}

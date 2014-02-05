@@ -5,11 +5,12 @@ import com.esotericsoftware.kryonet.Client;
 import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.client.ClientNetworkListener;
-import org.jglrxavpok.blocky.entity.EntityPlayerSP;
+import org.jglrxavpok.blocky.entity.EntityPlayerClientMP;
 import org.jglrxavpok.blocky.network.NetworkCommons;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.ui.UIButton;
 import org.jglrxavpok.blocky.ui.UIComponentBase;
+import org.jglrxavpok.blocky.ui.UIErrorMenu;
 import org.jglrxavpok.blocky.ui.UILabel;
 import org.jglrxavpok.blocky.ui.UILabel.LabelAlignment;
 import org.jglrxavpok.blocky.ui.UIMenu;
@@ -64,6 +65,7 @@ public class UIConnectingToServer extends UIBlockyMenu
                 }
                 catch (Exception e)
                 {
+                    UI.displayMenu(new UIErrorMenu(new UIMainMenu(), UIConnectingToServer.this, e));
                     e.printStackTrace();
                 }
                 
@@ -79,8 +81,8 @@ public class UIConnectingToServer extends UIBlockyMenu
             if(BlockyMain.instance.getClientNetwork().getWorld().getRandomChunk() != null)
             {
                 UI.displayMenu(null);
-                EntityPlayerSP player = new EntityPlayerSP();
-                player.move(25000*Block.BLOCK_WIDTH, 250*Block.BLOCK_HEIGHT);
+                EntityPlayerClientMP player = new EntityPlayerClientMP();
+                player.move(0*Block.BLOCK_WIDTH, 250*Block.BLOCK_HEIGHT);
                 BlockyMain.instance.getClientNetwork().getWorld().centerOfTheWorld = player;
                 BlockyMain.instance.getClientNetwork().getWorld().addEntity(player);
             }

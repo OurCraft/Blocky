@@ -5,8 +5,10 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.EndPoint;
 
 import org.jglrxavpok.blocky.network.packets.Packet;
+import org.jglrxavpok.blocky.network.packets.PacketBlockUpdate;
 import org.jglrxavpok.blocky.network.packets.PacketChat;
 import org.jglrxavpok.blocky.network.packets.PacketDisconnect;
+import org.jglrxavpok.blocky.network.packets.PacketKeepAlive;
 import org.jglrxavpok.blocky.network.packets.PacketKick;
 import org.jglrxavpok.blocky.network.packets.PacketMessage;
 import org.jglrxavpok.blocky.network.packets.PacketRequestChunk;
@@ -22,6 +24,8 @@ public class NetworkCommons
         kryo.register(PacketMessage.class);
         kryo.register(PacketChat.class);
         kryo.register(PacketKick.class);
+        kryo.register(PacketBlockUpdate.class);
+        kryo.register(PacketKeepAlive.class);
         kryo.register(PacketDisconnect.class);
         kryo.register(PacketRequestChunk.class);
         kryo.register(PacketWorldChunk.class);

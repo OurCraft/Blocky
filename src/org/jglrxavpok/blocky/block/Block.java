@@ -558,7 +558,10 @@ public abstract class Block implements GameObject
         {
             Particle p = new Particle();
             ArrayList<Integer> list = Block.getBlock(lvl.getBlockAt(rx,y)).getParticleColors();
-            p.setColor(new Color(list.get(rand.nextInt(list.size()))).getRGB()/*0xFFFFFF*/);
+            if(list.size() <= 0)
+                p.setColor(0xFFFFFF);
+            else
+                p.setColor(new Color(list.get(rand.nextInt(list.size()))).getRGB()/*0xFFFFFF*/);
             p.setPos((rx)*Block.BLOCK_WIDTH+rand.nextInt((int) Block.BLOCK_WIDTH), y*Block.BLOCK_HEIGHT+rand.nextInt((int) Block.BLOCK_HEIGHT));
             p.setVelocity(0, 0f);
             p.setLife(50);

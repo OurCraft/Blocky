@@ -14,6 +14,7 @@ import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.network.ConnectionType;
 import org.jglrxavpok.blocky.network.NetworkCommons;
 import org.jglrxavpok.blocky.network.packets.Packet;
+import org.jglrxavpok.blocky.network.packets.PacketKeepAlive;
 import org.jglrxavpok.blocky.world.World;
 import org.jglrxavpok.blocky.world.WorldGenerator.WorldType;
 
@@ -25,6 +26,7 @@ public class ClientNetworkListener extends Listener
     private ClientPacketHandler packetHandler;
     private World world;
     private Client client;
+    private boolean seemsConnected;
 
     public ClientNetworkListener(Client c)
     {
@@ -43,6 +45,14 @@ public class ClientNetworkListener extends Listener
     public World getWorld()
     {
         return world;
+    }
+    
+    public void idle(Connection c)
+    {
+//        if(seemsConnected)
+//        {
+//            NetworkCommons.sendPacketTo(new PacketKeepAlive(), false, c);
+//        }
     }
     
     public void connected(Connection c)
@@ -98,6 +108,7 @@ public class ClientNetworkListener extends Listener
                 if(p.name.equals("AuthPacket"))
                 {
                     NetworkCommons.sendPacketTo(createAuthPacket(pingRequest ? ConnectionType.INFOS : ConnectionType.GAME), false, c);
+                    seemsConnected = true;
                 }
                 else
                 {
