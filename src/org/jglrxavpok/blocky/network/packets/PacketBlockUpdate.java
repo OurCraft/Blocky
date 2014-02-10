@@ -43,6 +43,7 @@ public class PacketBlockUpdate extends Packet
             int id = in.readInt();
             String data = in.readUTF();
             BlockInfo info = new BlockInfo(x,y,id,data);
+            in.close();
             return info;   
         }
         catch(Exception e)

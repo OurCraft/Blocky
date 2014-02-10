@@ -1,9 +1,15 @@
 package org.jglrxavpok.blocky.server;
 
+import java.io.File;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Scanner;
 
 import javax.swing.UIManager;
 
+import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 
 import org.jglrxavpok.blocky.BlockyMain;
@@ -18,34 +24,82 @@ public class BlockyMainServer
 {
 
     private static int serverPort;
-    public static World world;
+    public static WorldServer world;
 
-    public static void main(String[] args)
+    public static void injectIntoClasspath(URL path)
     {
-        if(args != null && args.length > 0)
-        {
-            serverPort = Integer.parseInt(args[0]);
-        }
-        else
-        {
-            serverPort = 35565;
-        }
         try
         {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            URLClassLoader classLoader = (URLClassLoader)ClassLoader.getSystemClassLoader();
+            Method addURL = URLClassLoader.class.getDeclaredMethod("addURL", new Class<?>[]{URL.class}); 
+            addURL.setAccessible(true);
+            addURL.invoke(classLoader, new Object[]{path});
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-        BlockyMain.instance = new BlockyMain();
-        Fluid.load();
-        Block.loadAll();
-        world = new World("Server");
-        new BlockyMainServer().startServer(serverPort);;
+    }
+    
+    public static void main(String[] args)
+    {
+        try
+        {
+            if(args != null)
+            {
+                if(args.length > 0)
+                    serverPort = Integer.parseInt(args[0]);
+                else
+                {
+                    serverPort = 35565;
+                }
+                if(args.length > 1)
+                {
+                    File f = new File(args[1]);
+                    File[] list = f.listFiles();
+                    if(list != null)
+                    for(File file : list)
+                    {
+                        try
+                        {
+                            injectIntoClasspath(file.toURI().toURL());
+                        }
+                        catch (MalformedURLException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+    //            else
+    //            {
+    //                System.out.println("Librairies not found, can't continue. :'(");
+    //            }
+            }
+            
+            try
+            {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            BlockyMain.instance = new BlockyMain();
+            Fluid.load();
+            Block.loadAll();
+            world = new WorldServer("Server");
+            new BlockyMainServer().startServer(serverPort);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
     public static BlockyMainServer instance;
+    private ServerNetworkListener listener;
+    public boolean running;
     
     public BlockyMainServer()
     {
@@ -65,8 +119,10 @@ public class BlockyMainServer
             NetworkCommons.registerClassesFor(server);
             server.start();
             server.bind(port);
-            final ServerNetworkListener listener = new ServerNetworkListener(server);
+            listener = new ServerNetworkListener(server);
             server.addListener(listener);
+            running = true;
+            new ThreadUpdateServerWorld(world, instance.listener).start();
             console("Server started on port "+port);
             Thread thread = new Thread("Commands")
             {
@@ -96,6 +152,7 @@ public class BlockyMainServer
             String command = line.substring(1);
             if(command.equals("stop"))
             {
+                running = false;
                 server.stop();
                 BlockyMainServer.console("Server closed");
                 System.exit(0);
@@ -116,7 +173,15 @@ public class BlockyMainServer
                 String username = command.replace("kick ", "");
                 String parts[] = username.split(" ");
                 username = parts[0];
-                String reason = command.substring(6+username.length());
+                String reason = "Kicked by admin";
+                try
+                {
+                    reason = command.substring(6+username.length());
+                }
+                catch(Exception e)
+                {
+//                    e.printStackTrace();
+                }
                 BlockyClient[] clients = listener.getClients();
                 BlockyClient toKick = null;
                 for(BlockyClient c : clients)
@@ -131,7 +196,7 @@ public class BlockyMainServer
                 {
                     NetworkCommons.sendPacketTo(new PacketKick(reason), false, toKick.getConnection());
                     toKick.getConnection().close();
-                    BlockyMainServer.console("Player "+toKick.getName()+" has been kicked");
+                    BlockyMainServer.console("Player "+toKick.getName()+" has been kicked for: \""+reason+"\"");
                 }
                 else
                 {
@@ -143,6 +208,11 @@ public class BlockyMainServer
         {
             server.sendToAllTCP(new PacketChat("{Server} "+line));
         }
+    }
+
+    public ServerNetworkListener getNetwork()
+    {
+        return listener;
     }
 
 }

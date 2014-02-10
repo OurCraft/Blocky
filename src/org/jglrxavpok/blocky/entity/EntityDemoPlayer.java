@@ -65,6 +65,11 @@ public class EntityDemoPlayer extends EntityPlayer
         }
         else
             helpCounter = 0;
+        if(helpCounter >= 30)
+        {
+            world.setBlock((int)(this.x/Block.BLOCK_WIDTH)+1, (int)(this.y/Block.BLOCK_HEIGHT)+1, "air");
+            world.setBlock((int)(this.x/Block.BLOCK_WIDTH)+1, (int)(this.y/Block.BLOCK_HEIGHT), "air");
+        }
         if(helpCounter >= 60)
             helpMode = true;
     }

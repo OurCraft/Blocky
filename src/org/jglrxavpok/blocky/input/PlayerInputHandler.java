@@ -63,7 +63,7 @@ public class PlayerInputHandler implements InputProcessor
         
         if(this.getIntForKey(key) <= 9 && this.getIntForKey(key) >= 0)
         {
-            player.setSelectedHotBat(this.getIntForKey(key));
+            player.setSelectedHotbar(this.getIntForKey(key));
         }
         
         if(released && UI.isMenuNull())

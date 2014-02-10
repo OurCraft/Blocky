@@ -2,10 +2,10 @@ package org.jglrxavpok.blocky.entity;
 
 import org.jglrxavpok.blocky.BlockyMain;
 import org.jglrxavpok.blocky.client.ClientPlayerInputHandler;
-import org.jglrxavpok.blocky.entity.EntityPlayerSP.PlayerHUDComponent;
 import org.jglrxavpok.blocky.gui.UIGameOverMenu;
-import org.jglrxavpok.blocky.input.PlayerInputHandler;
 import org.jglrxavpok.blocky.inventory.ItemStack;
+import org.jglrxavpok.blocky.network.NetworkCommons;
+import org.jglrxavpok.blocky.network.packets.PacketHotbarSelection;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.utils.DamageType;
 import org.jglrxavpok.blocky.utils.HUDComponent;
@@ -28,6 +28,21 @@ public class EntityPlayerClientMP extends EntityPlayer
         }
         BlockyMain.instance.addHUDComponent(new PlayerHUDComponent(this));
         BlockyMain.instance.addInputProcessor(new ClientPlayerInputHandler(this));
+    }
+    
+    public void incrementSelectedHotbar(float f)
+    {
+        super.incrementSelectedHotbar(f);
+        if(f != 0)
+        {
+            NetworkCommons.sendPacketTo(new PacketHotbarSelection(invIndex), false, BlockyMain.instance.getClientNetwork().getClientConnection());
+        }
+    }
+    
+    public void setSelectedHotbar(int i)
+    {
+        super.setSelectedHotbar(i);
+        NetworkCommons.sendPacketTo(new PacketHotbarSelection(invIndex), false, BlockyMain.instance.getClientNetwork().getClientConnection());
     }
     
     
@@ -57,19 +72,6 @@ public class EntityPlayerClientMP extends EntityPlayer
             tPressed = false;
         }
         
-    }
-    
-    public void incrementSelectedHotbar(float f)
-    {
-        invIndex+=f;
-        if(invIndex < 0)
-        {
-            invIndex = 9;
-        }
-        else if(invIndex >= 10)
-        {
-            invIndex = 0;
-        }
     }
     
     public static class PlayerHUDComponent implements HUDComponent
@@ -214,10 +216,5 @@ public class EntityPlayerClientMP extends EntityPlayer
             if(player.alive == false)
                 BlockyMain.instance.removeHUDComponent(this);
         }
-    }
-    
-    public void setSelectedHotBat(int i)
-    {
-        this.invIndex = (float) i;
     }
 }

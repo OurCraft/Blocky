@@ -41,6 +41,24 @@ public class EntityPlayer extends EntityLiving
         h = 24*2;
     }
     
+    public void setSelectedHotbar(int i)
+    {
+        this.invIndex = (float) i;
+    }
+    
+    public void incrementSelectedHotbar(float f)
+    {
+        invIndex+=f;
+        if(invIndex < 0)
+        {
+            invIndex = 9;
+        }
+        else if(invIndex >= 10)
+        {
+            invIndex = 0;
+        }
+    }
+    
     public TaggedStorageChunk writeTaggedStorageChunk(int nbr)
     {
         TaggedStorageChunk chunk = super.writeTaggedStorageChunk(nbr);
@@ -51,7 +69,11 @@ public class EntityPlayer extends EntityLiving
     public void readFromChunk(TaggedStorageChunk chunk)
     {
         super.readFromChunk(chunk);
-        username = chunk.getString("username");
+        if(chunk.hasTag("username"))
+            username = chunk.getString("username");
+        if(chunk.hasTag("invIndex"))
+            invIndex = chunk.getFloat("invIndex");
+
     }
     
     public void tick()

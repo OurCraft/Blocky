@@ -39,6 +39,7 @@ public class EntityPig extends EntityLiving
         		if(rand.nextBoolean())
         		{
         			vx = -vx;
+        			needUpdate = true;
         		}
         	}
         	
@@ -69,6 +70,7 @@ public class EntityPig extends EntityLiving
         	if(this.maxDirectionTimes == 0)
         	{
         		this.maxDirectionTimes = rand.nextInt(300);
+        		needUpdate = true;
         	}
         	
         	this.directionTimer++;

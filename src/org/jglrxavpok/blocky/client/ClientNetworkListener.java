@@ -11,10 +11,10 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import org.jglrxavpok.blocky.BlockyMain;
+import org.jglrxavpok.blocky.entity.EntityPlayerClientMP;
 import org.jglrxavpok.blocky.network.ConnectionType;
 import org.jglrxavpok.blocky.network.NetworkCommons;
 import org.jglrxavpok.blocky.network.packets.Packet;
-import org.jglrxavpok.blocky.network.packets.PacketKeepAlive;
 import org.jglrxavpok.blocky.world.World;
 import org.jglrxavpok.blocky.world.WorldGenerator.WorldType;
 
@@ -27,6 +27,7 @@ public class ClientNetworkListener extends Listener
     private World world;
     private Client client;
     private boolean seemsConnected;
+    private EntityPlayerClientMP player;
 
     public ClientNetworkListener(Client c)
     {
@@ -37,6 +38,7 @@ public class ClientNetworkListener extends Listener
     {
         client = c;
         world = new World("Client");
+        world.isRemote = true;
         world.worldType = WorldType.CLIENT;
         this.pingRequest = pingRequest;
         this.packetHandler = new ClientPacketHandler(this);
@@ -76,6 +78,8 @@ public class ClientNetworkListener extends Listener
         if(o instanceof Packet)
         {
             Packet p = ((Packet)o);
+            p.decompressData();
+//            BlockyMain.console("Received packet "+p.name);
             if(p.name.equals("Ping+infos response"))
             {
                 try
@@ -161,6 +165,16 @@ public class ClientNetworkListener extends Listener
     public Connection getClientConnection()
     {
         return client;
+    }
+
+    public EntityPlayerClientMP getPlayer()
+    {
+        return player;
+    }
+
+    public void setPlayer(EntityPlayerClientMP player)
+    {
+        this.player = player;
     }
 }
 

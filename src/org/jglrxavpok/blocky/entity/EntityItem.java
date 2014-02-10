@@ -2,6 +2,7 @@ package org.jglrxavpok.blocky.entity;
 
 import org.jglrxavpok.blocky.inventory.BasicInventory;
 import org.jglrxavpok.blocky.inventory.ItemStack;
+import org.jglrxavpok.blocky.server.WorldServer;
 
 public class EntityItem extends Entity
 {
@@ -25,8 +26,14 @@ public class EntityItem extends Entity
             die();
         if(e instanceof EntityPlayer)
         {
-            if(e.addToInventory(inv.getStackIn(0)) == null)
-                die();
+            if(!this.world.isRemote)
+            {
+                if(e.addToInventory(inv.getStackIn(0)) == null)
+                {
+                    needUpdate = true;
+                    die();
+                }
+            }
         }
     }
     

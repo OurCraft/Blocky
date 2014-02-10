@@ -15,12 +15,12 @@ public class WorldChunk
 	public int[][] lightChanges;
 	public float[][] lightValues;
 //	private String[][][] data;
-	private World	lvl;
+	protected World	lvl;
 	public int	chunkID;
-	private int[] heightMap = new int[16];
-	private int[][] attackValue;
-    private String[][] lastAttackPlayerName;
-    private int[][] blockChanges;
+	protected int[] heightMap = new int[16];
+	protected int[][] attackValue;
+    protected String[][] lastAttackPlayerName;
+    protected int[][] blockChanges;
 //    private Random rand = new Random();
     public String biomeID;
  
@@ -39,6 +39,7 @@ public class WorldChunk
 	
 	public void tick()
 	{
+	    if(!this.lvl.isRemote)
 		if(blocks != null)
 		{
 		    boolean flag = false;
@@ -214,7 +215,6 @@ public class WorldChunk
 		if(chunkID < 0)
 			x = 15-x;
 		blocks[x][y] = block;
-		attackValue[x][y] = -1;
 		this.lastAttackPlayerName[x][y] = null;
 		if(y >= heightMap[x] && Block.getBlock(block).letLightGoThrough())
 		{

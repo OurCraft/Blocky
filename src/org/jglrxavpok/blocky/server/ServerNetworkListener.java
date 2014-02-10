@@ -12,9 +12,12 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import org.jglrxavpok.blocky.network.ConnectionType;
+import org.jglrxavpok.blocky.network.EntityState;
 import org.jglrxavpok.blocky.network.NetworkCommons;
 import org.jglrxavpok.blocky.network.packets.Packet;
 import org.jglrxavpok.blocky.network.packets.PacketChat;
+import org.jglrxavpok.blocky.network.packets.PacketPlayerConnection;
+import org.jglrxavpok.blocky.network.packets.PacketPlayerDisconnect;
 
 public class ServerNetworkListener extends Listener
 {
@@ -54,8 +57,8 @@ public class ServerNetworkListener extends Listener
             if(client != null)
             {
                 ingameConnections.remove(client);
-                BlockyMainServer.console("Player "+client.getName()+" just deconnected.");
-                NetworkCommons.sendPacketToExcept(new PacketChat("Player "+client.getName()+" just deconnected."), false, c, getIngameConnectionsFromClients());
+                BlockyMainServer.console("Player "+client.getName()+" just disconnected.");
+                NetworkCommons.sendPacketToExcept(new PacketPlayerDisconnect(client.getName()), false, c, getIngameConnectionsFromClients());
             }
         }
     }
@@ -75,6 +78,7 @@ public class ServerNetworkListener extends Listener
         if(o instanceof Packet)
         {
             Packet packet = ((Packet) o);
+            packet.decompressData();
             if(packet.name.equals("Ping+infos request"))
             {
                 sendServerInfos(c);
@@ -104,6 +108,7 @@ public class ServerNetworkListener extends Listener
                             ingameConnections.add(client);
                             BlockyMainServer.console("Player "+client.getName()+" just connected!");
                             NetworkCommons.sendPacketToExcept(new PacketChat("Player "+client.getName()+" just connected!"), false, c, getIngameConnectionsFromClients());
+                            NetworkCommons.sendPacketTo(new PacketPlayerConnection(BlockyMainServer.world.getCorrectID(), EntityState.createFromEntity(BlockyMainServer.world.getPlayerByName(client.getName()))), false, c);
                         }
                         else
                         {

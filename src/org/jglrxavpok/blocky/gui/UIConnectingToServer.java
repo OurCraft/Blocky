@@ -81,10 +81,6 @@ public class UIConnectingToServer extends UIBlockyMenu
             if(BlockyMain.instance.getClientNetwork().getWorld().getRandomChunk() != null)
             {
                 UI.displayMenu(null);
-                EntityPlayerClientMP player = new EntityPlayerClientMP();
-                player.move(0*Block.BLOCK_WIDTH, 250*Block.BLOCK_HEIGHT);
-                BlockyMain.instance.getClientNetwork().getWorld().centerOfTheWorld = player;
-                BlockyMain.instance.getClientNetwork().getWorld().addEntity(player);
             }
         }
     }

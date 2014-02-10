@@ -57,19 +57,6 @@ public class EntityPlayerSP extends EntityPlayer
 		
 	}
 	
-	public void incrementSelectedHotbar(float f)
-    {
-	    invIndex+=f;
-        if(invIndex < 0)
-        {
-            invIndex = 9;
-        }
-        else if(invIndex >= 10)
-        {
-            invIndex = 0;
-        }
-    }
-	
 	public static class PlayerHUDComponent implements HUDComponent
 	{
 
@@ -214,8 +201,4 @@ public class EntityPlayerSP extends EntityPlayer
 		}
 	}
 	
-	public void setSelectedHotBat(int i)
-	{
-	    this.invIndex = (float) i;
-	}
 }

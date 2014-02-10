@@ -6,13 +6,7 @@
 	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/LWJGL 2.9/lwjgl.jar" sourcepath="C:/Users/jglrxavpok/.m2/repository/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0-sources.jar"/>
 	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/LWJGL 2.9/lwjgl_util.jar"/>
 	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/Apache Commons/commons-codec-1.8.jar"/>
-	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/Apache Commons/commons-codec-1.8-javadoc.jar"/>
-	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/Apache Commons/commons-codec-1.8-sources.jar"/>
 	<classpathentry kind="lib" path="D:/Code/Java/JavaWorkbench/Dependencies/LWJGL 2.9/lwjgl_natives.zip"/>
-	<classpathentry kind="lib" path="kryonet-2.21-all.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/D:/Downloads/kryonet-2.21/kryonet-2.21/javadoc/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="kryonet-2.21-all.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

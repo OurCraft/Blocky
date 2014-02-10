@@ -16,7 +16,7 @@ public class SoundManager
 	
 	public void playSoundFX(String sound, float volume, float pitch)
 	{
-		sndSystem.newStreamingSource(true, sound, SoundManager.class.getResource(sound), sound.substring(sound.lastIndexOf(".")+1), false, 0, 0, 0, 0, 0);
+		sndSystem.newStreamingSource(false, sound, SoundManager.class.getResource(sound), sound.substring(sound.lastIndexOf(".")+1), false, 0, 0, 0, 0, 0);
 		sndSystem.setVolume(sound, volume);
 		sndSystem.setPitch(sound, pitch);
 		sndSystem.play(sound);
@@ -40,7 +40,7 @@ public class SoundManager
 			}
 			catch (ClassNotFoundException classnotfoundexception) { }
 
-	            sndSystem = new SoundSystem();
+			sndSystem = new SoundSystem();
 		}
 		catch (Throwable throwable)
 		{
@@ -48,4 +48,17 @@ public class SoundManager
 			throwable.printStackTrace();
 		}
 	}
+
+    public void playBackgroundMusic(String music, float volume, float pitch)
+    {
+        sndSystem.newStreamingSource(true, "bgmusic", SoundManager.class.getResource(music), music.substring(music.lastIndexOf(".")+1), false, 0, 0, 0, 0, 0);
+        sndSystem.setVolume("bgmusic", volume);
+        sndSystem.setPitch("bgmusic", pitch);
+        sndSystem.play("bgmusic");
+    }
+    
+    public void setLooping(String source, boolean toLoop)
+    {
+        sndSystem.setLooping(source, toLoop);
+    }
 }

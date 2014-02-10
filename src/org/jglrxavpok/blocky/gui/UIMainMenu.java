@@ -9,6 +9,7 @@ import org.jglrxavpok.blocky.entity.EntityDemoPlayer;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.ui.UIButton;
 import org.jglrxavpok.blocky.ui.UIComponentBase;
+import org.jglrxavpok.blocky.utils.SoundManager;
 import org.jglrxavpok.blocky.world.World;
 import org.jglrxavpok.opengl.Textures;
 import org.lwjgl.opengl.GL11;
@@ -36,6 +37,9 @@ public class UIMainMenu extends UIBlockyMenu
         comps.add(quitButton);
         comps.add(playButton);
         comps.add(serverButton);
+        
+        SoundManager.instance.playBackgroundMusic("/assets/musics/menu.ogg", 1, 0.8f);
+        SoundManager.instance.setLooping("bgmusic", true);
     }
     
     public void componentClicked(UIComponentBase c)

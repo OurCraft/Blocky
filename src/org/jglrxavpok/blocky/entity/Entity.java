@@ -22,7 +22,7 @@ public abstract class Entity implements GameObject
 {
 
 	public boolean visible = true, noclip = false, isInAir = true, wasInAir = true, gravityEfficient = true,
-					alive = true, computeCollisions = true;
+					alive = true, computeCollisions = true, needUpdate = false;
 	public World world;
 	public float x,y,vx,vy;
 	protected int direction;
@@ -64,6 +64,8 @@ public abstract class Entity implements GameObject
 	
 	public void tick()
 	{
+	    if(!alive)
+	        world.removeEntity(this);
 		stepTimers();
 		stepMovements();
 		if(this.computeCollisions)
@@ -301,20 +303,35 @@ public abstract class Entity implements GameObject
 	
 	public void readFromChunk(TaggedStorageChunk chunk)
 	{
+	    if(chunk.hasTag("x"))
 	    x = chunk.getFloat("x");
+	    if(chunk.hasTag("y"))
 	    y = chunk.getFloat("y");
+	    if(chunk.hasTag("vx"))
 	    vx = chunk.getFloat("vx");
+	    if(chunk.hasTag("vy"))
 	    vy = chunk.getFloat("vy");
+	    if(chunk.hasTag("width"))
 	    w = chunk.getInteger("width");
+	    if(chunk.hasTag("height"))
 	    h = chunk.getInteger("height");
+	    if(chunk.hasTag("max+VX"))
 	    maxPositiveVX = chunk.getFloat("max+VX");
+	    if(chunk.hasTag("max+VY"))
 	    maxPositiveVY = chunk.getFloat("max+VY");
+	    if(chunk.hasTag("max-VX"))
 	    maxNegativeVX = chunk.getFloat("max-VX");
+	    if(chunk.hasTag("max-VY"))
 	    maxNegativeVY = chunk.getFloat("max-VY");
+	    if(chunk.hasTag("noclip"))
 	    noclip = chunk.getBoolean("noclip");
+	    if(chunk.hasTag("gravityEfficient"))
 	    gravityEfficient = chunk.getBoolean("gravityEfficient");
+	    if(chunk.hasTag("visible"))
 	    visible = chunk.getBoolean("visible");
+	    if(chunk.hasTag("decceleration"))
 	    decceleration = chunk.getFloat("decceleration");
+	    if(chunk.hasTag("ticksAlive"))
 	    ticksAlive = chunk.getInteger("ticksAlive");
 	    if(chunk.hasTag("invEntity_Size"))
 	    {

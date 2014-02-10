@@ -69,10 +69,10 @@ public class World
 	public float	animTime;
 	private ArrayList<LevelListener>	listeners = new ArrayList<LevelListener>();
 	public ArrayList<EntityPlayer>	players = new ArrayList<EntityPlayer>();
-	private HashMap<Integer, WorldChunk>	chunksList;
+	protected HashMap<Integer, WorldChunk>	chunksList;
 	public WorldType	worldType;
-    private File chunkFolder;
-    private ArrayList<Integer> chunkAsked = new ArrayList<Integer>();
+    protected File chunkFolder;
+    protected ArrayList<Integer> chunkAsked = new ArrayList<Integer>();
     public boolean handlingChanges;
     public long time;
     private ParticleSystem particles = new ParticleSystem(2000);
@@ -82,6 +82,7 @@ public class World
     public List<TileEntity> tileEntities = new ArrayList<TileEntity>();
     public Biome lastBiome = null;
     public boolean isRaining = false;
+    public boolean isRemote = false;
 	
 	public static final World zeroBlocks = new World("zeroBlocks")
 	{
@@ -330,14 +331,6 @@ public class World
 	public WorldChunk getChunkAt(int x, int y, boolean b)
 	{
 		int chunkID =(int) Math.floor(((float)x/16f));
-//		if(x == 0)
-//			chunkID = 0;
-//		if(chunkID < 0 && chunkID >=-1f)
-//			chunkID = -1;
-//		if(chunkID < 0f)
-//		{
-//			chunkID = (x-16)/16;
-//		}
 		WorldChunk chunk = this.chunksList.get(chunkID);
 		if(chunk == null && b)
 		{
@@ -422,42 +415,12 @@ public class World
 	    if(worldType != WorldType.CLIENT)
         time+=1;
 		
-	    time = 14000;
 		ticks+=tickSpeed;
 		this.particles.tickAll(this);
         
-		int startID = (int)((-(lvlox))/Block.BLOCK_WIDTH/16f)-1;
-        int endID = (int)(((-(lvlox))+BlockyMain.width)/Block.BLOCK_WIDTH/16f)+1;
-        int index = startID;
+		tickChunks();
         
-        for(;index<endID;index++)
-        {
-            WorldChunk chunk = getChunkByID(index, true);
-            if(chunk != null)
-                chunk.tick();
-        }
-        
-        for(int i = 0;i<entities.size();i++)
-        {
-            Entity e = entities.get(i);
-            if(e != null)
-            {
-                e.tick();
-            }
-        }
-        
-        if(!this.tileEntities.isEmpty())
-        {
-        	for(int i = 0 ; i < this.tileEntities.size() ; i++)
-	        {
-	            TileEntity e = this.tileEntities.get(i);
-	            
-	            if(e != null)
-	            {
-	                e.onUpdate();
-	            }
-	        }
-        }
+        tickEntities();
         
         if(this.isRaining)
         {
@@ -499,7 +462,46 @@ public class World
         }
 	}
 	
-	public void render()
+	protected void tickChunks()
+    {
+	    int startID = (int)((-(lvlox))/Block.BLOCK_WIDTH/16f)-1;
+        int endID = (int)(((-(lvlox))+BlockyMain.width)/Block.BLOCK_WIDTH/16f)+1;
+        int index = startID;
+        
+        for(;index<endID;index++)
+        {
+            WorldChunk chunk = getChunkByID(index, true);
+            if(chunk != null)
+                chunk.tick();
+        }
+    }
+
+    protected void tickEntities()
+    {
+        for(int i = 0;i<entities.size();i++)
+        {
+            Entity e = entities.get(i);
+            if(e != null)
+            {
+                e.tick();
+            }
+        }
+        
+        if(!this.tileEntities.isEmpty())
+        {
+            for(int i = 0 ; i < this.tileEntities.size() ; i++)
+            {
+                TileEntity e = this.tileEntities.get(i);
+                
+                if(e != null)
+                {
+                    e.onUpdate();
+                }
+            }
+        }
+    }
+
+    public void render()
 	{
 	    
 	    float voidFactor = 1;
@@ -623,6 +625,28 @@ public class World
 		return this.getChunkAt(index*16, 0, generate);
 	}
 
+	public void addEntityWithID(int entityID, Entity e)
+	{
+	    if(entities.contains(e))
+            entities.remove(e);
+        if(e instanceof EntityPlayer && !players.contains(e))
+        {
+            for(int i = 0;i<loadedPlayers.size();i++)
+            {
+                if(((EntityPlayer) e).username.equals(loadedPlayers.get(i).username))
+                {
+                    e.readFromChunk(loadedPlayers.get(i).writeTaggedStorageChunk(0));
+                    loadedPlayers.remove(i);
+                    break;
+                }
+            }
+            players.add((EntityPlayer) e);
+        }
+        entities.add(e);
+        e.entityID = entityID;
+        e.world = this;
+	}
+	
 	public void addEntity(Entity e)
 	{
 		if(entities.contains(e))
@@ -640,12 +664,29 @@ public class World
 			}
 			players.add((EntityPlayer) e);
 		}
+		e.entityID = getCorrectID();
 		entities.add(e);
-		e.entityID = ++entityID;
 		e.world = this;
 	}
 	
-	public Entity getEntityByID(int id)
+	public int getCorrectID()
+    {
+	    boolean flag;
+	    do
+	    {
+	        flag = false;
+	        for(Entity e : entities)
+	        {
+	            if(e.entityID == entityID)
+	                flag = true;
+	        }
+	        if(flag)
+	            entityID++;
+	    }while(flag);
+	    return entityID;
+    }
+
+    public Entity getEntityByID(int id)
 	{
 	    for(Entity e : entities)
 	    {
@@ -1037,7 +1078,7 @@ public class World
         Random rand = new Random();
         WorldChunk[] chunks = this.chunksList.values().toArray(new WorldChunk[0]);
         if(chunks.length > 0)
-        return chunks[rand.nextInt(chunks.length)];
+            return chunks[rand.nextInt(chunks.length)];
         else 
             return null;
     }
@@ -1046,7 +1087,7 @@ public class World
     {
         if(info.type == BlockInfo.ID)
         {
-            // TODO
+            this.setBlock(info.x, info.y, info.data);
         }
         else if(info.type == BlockInfo.ATTACK_VALUE)
         {

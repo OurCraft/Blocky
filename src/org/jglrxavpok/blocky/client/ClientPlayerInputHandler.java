@@ -13,11 +13,14 @@ import org.jglrxavpok.blocky.gui.UIInventory;
 import org.jglrxavpok.blocky.gui.UIPauseMenu;
 import org.jglrxavpok.blocky.input.InputProcessor;
 import org.jglrxavpok.blocky.inventory.ItemStack;
+import org.jglrxavpok.blocky.network.EntityState;
 import org.jglrxavpok.blocky.network.NetworkCommons;
 import org.jglrxavpok.blocky.network.packets.PacketBlockUpdate;
+import org.jglrxavpok.blocky.network.packets.PacketEntityState;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.utils.AABB;
 import org.jglrxavpok.blocky.utils.DamageType;
+import org.jglrxavpok.storage.TaggedStorageTag;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -26,6 +29,7 @@ public class ClientPlayerInputHandler implements InputProcessor
 
     private EntityPlayerClientMP player;
     private boolean menuButton;
+    protected boolean sendUpdate;
 
     public ClientPlayerInputHandler(EntityPlayerClientMP entityPlayerClientMP)
     {
@@ -43,32 +47,38 @@ public class ClientPlayerInputHandler implements InputProcessor
         if(key == Keyboard.KEY_Q)
         {
             player.vx-=1f;
+            sendUpdate = true;
         }
         if(key == Keyboard.KEY_D)
         {
             player.vx+=1f;
+            sendUpdate = true;
         }
         if(key == Keyboard.KEY_SPACE)
         {
             player.jump();
+            sendUpdate = true;
         }
         
         if(key == Keyboard.KEY_Q)
         {
             player.vx-=1f;
+            sendUpdate = true;
         }
         if(key == Keyboard.KEY_D)
         {
             player.vx+=1f;
+            sendUpdate = true;
         }
         if(key == Keyboard.KEY_SPACE)
         {
             player.jump();
+            sendUpdate = true;
         }
         
         if(this.getIntForKey(key) <= 9 && this.getIntForKey(key) >= 0)
         {
-            player.setSelectedHotBat(this.getIntForKey(key));
+            player.setSelectedHotbar(this.getIntForKey(key));
         }
         
         if(released && UI.isMenuNull())
@@ -136,13 +146,18 @@ public class ClientPlayerInputHandler implements InputProcessor
         if(component.getIdentifier() == Component.Identifier.Axis.X)
         {
             if(Math.abs(value) > 0.2f)
+            {
                 player.vx+=value*2f;
+                sendUpdate = true;
+            }
         }
     }
 
     @Override
     public void onButtonUpdate(int controllerID, boolean buttonPressed, Component component)
     {
+        if(player.world == null)
+            return;
         if(buttonPressed)
         {
             String buttonIndex;
@@ -274,6 +289,8 @@ public class ClientPlayerInputHandler implements InputProcessor
     
     public void onUpdate()
     {
+        if(player.world == null)
+            return;
         if(player.alive == false || BlockyMain.instance.getLevel() != player.world)
             BlockyMain.instance.removeInputProcessor(this);
         if(!BlockyMain.instance.hasControllerPlugged())
@@ -281,14 +298,17 @@ public class ClientPlayerInputHandler implements InputProcessor
             if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
             {
                 player.jump();
+                sendUpdate = true;
             }
             if(Keyboard.isKeyDown(Keyboard.KEY_Q))
             {
                 player.vx-=1f*2;
+                sendUpdate = true;
             }
             if(Keyboard.isKeyDown(Keyboard.KEY_D))
             {
                 player.vx+=1f*2;
+                sendUpdate = true;
             }
             int mx = BlockyMain.instance.getCursorX();
             int my = BlockyMain.instance.getCursorY();
@@ -345,5 +365,19 @@ public class ClientPlayerInputHandler implements InputProcessor
                 
             }
         }
+        
+        if(sendUpdate)
+        {
+            sendUpdate = false;
+            new Thread()
+            {
+                public void run()
+                {
+                    EntityState state = EntityState.createFromEntity(player);
+                    NetworkCommons.sendPacketTo(new PacketEntityState(player.entityID, state), false, BlockyMain.instance.getClientNetwork().getClientConnection());
+                }
+            }.start();
+        }
+
     }
 }

@@ -50,6 +50,7 @@ public abstract class EntityLiving extends Entity
     public void readFromChunk(TaggedStorageChunk chunk)
     {
         super.readFromChunk(chunk);
+        if(chunk.hasTag("life"))
         life = chunk.getFloat("life");
     }
     
