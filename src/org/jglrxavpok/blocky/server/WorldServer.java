@@ -94,7 +94,7 @@ public class WorldServer extends World
             Entity e = entities.get(i);
             if(e != null)
             {
-                if(!(e instanceof EntityPlayer))
+//                if(!(e instanceof EntityPlayer))
                 {
                     e.world = this;
                     e.tick();

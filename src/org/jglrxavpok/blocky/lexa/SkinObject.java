@@ -58,7 +58,7 @@ public class SkinObject
     {
         if(part.equals("head"))
         {
-            return headColor;
+            return handsColor;
         }
         if(part.equals("hands"))
         {

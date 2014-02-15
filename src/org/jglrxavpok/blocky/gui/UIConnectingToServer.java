@@ -1,11 +1,11 @@
 package org.jglrxavpok.blocky.gui;
 
+import java.util.ConcurrentModificationException;
+
 import com.esotericsoftware.kryonet.Client;
 
 import org.jglrxavpok.blocky.BlockyMain;
-import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.blocky.client.ClientNetworkListener;
-import org.jglrxavpok.blocky.entity.EntityPlayerClientMP;
 import org.jglrxavpok.blocky.network.NetworkCommons;
 import org.jglrxavpok.blocky.ui.UI;
 import org.jglrxavpok.blocky.ui.UIButton;
@@ -78,9 +78,16 @@ public class UIConnectingToServer extends UIBlockyMenu
     {
         if(BlockyMain.instance.getClientNetwork() != null)
         {
-            if(BlockyMain.instance.getClientNetwork().getWorld().getRandomChunk() != null)
+            try
             {
-                UI.displayMenu(null);
+                if(BlockyMain.instance.getClientNetwork().getWorld().getRandomChunk() != null)
+                {
+                    UI.displayMenu(null);
+                }
+            }
+            catch(ConcurrentModificationException e)
+            {
+                ;
             }
         }
     }

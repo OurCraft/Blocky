@@ -66,8 +66,9 @@ public class ClientPacketHandler implements IPacketHandler
                 player.readFromChunk(chunk);
             }
             listener.setPlayer(player);
-            listener.getWorld().addEntityWithID(((PacketPlayerConnection) p).getEntityID(), player);
+            player.entityID = ((PacketPlayerConnection) p).getEntityID();
             listener.getWorld().centerOfTheWorld = player;
+            listener.getWorld().addEntityWithID(((PacketPlayerConnection) p).getEntityID(), player);
         }
         else if(p instanceof PacketEntitiesState)
         {

@@ -42,7 +42,7 @@ public class LWJGLHandler
 			if(!folder.exists())folder.mkdirs();
 			if(folder.isDirectory())
 			{
-				installNatives(folder);
+//				installNatives(folder);
 				System.setProperty("org.lwjgl.librarypath", nativesFolder);
 			}
 			loaded = true;

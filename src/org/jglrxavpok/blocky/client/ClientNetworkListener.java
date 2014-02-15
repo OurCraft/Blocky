@@ -90,6 +90,7 @@ public class ClientNetworkListener extends Listener
                     int nbrPlayers = in.readInt();
                     int maxPlayers = in.readInt();
                     String serverName = in.readUTF();
+                    long serverWorldTime = in.readLong();
                     in.close();
                     input.close();
                     System.out.println("Ping request on server: "+serverName);
@@ -97,6 +98,7 @@ public class ClientNetworkListener extends Listener
                     System.out.println("Number of connected players: "+nbrPlayers);
                     System.out.println("Max players: "+maxPlayers);
                     System.out.println("Ping: "+ping);
+                    System.out.println("WorldTime: "+serverWorldTime);
                     System.out.println("===================================");
                     if(pingRequest)
                         c.close();

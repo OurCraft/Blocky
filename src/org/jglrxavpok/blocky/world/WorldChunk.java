@@ -1,7 +1,6 @@
 package org.jglrxavpok.blocky.world;
 
 import org.jglrxavpok.blocky.BlockyMain;
-import org.jglrxavpok.blocky.biomes.Biome;
 import org.jglrxavpok.blocky.block.Block;
 import org.jglrxavpok.opengl.Tessellator;
 import org.jglrxavpok.storage.TaggedStorageChunk;
@@ -265,7 +264,7 @@ public class WorldChunk
                 if(y != 0)
                     column+=";";
                 int rx = (chunkID < 0 ? 15-x : x);
-                column+=getBlock(x,y)+":"+this.getAttackValue(x, y)+":"+this.lastAttackPlayerName[rx][y];
+                column+=blocks[x][y]+":"+attackValue[x][y]+":"+this.lastAttackPlayerName[rx][y]+":"+lightValues[x][y];
             }
             chunk.setString("column "+x, column);
         }
@@ -290,8 +289,11 @@ public class WorldChunk
                     if(yValues[y].contains(":"))
                     {
                         String[] p = yValues[y].split(":");
-                        setBlock(x,y,p[0]);
-                        this.setAttackValueToBlock(x, y, Integer.parseInt(p[1]), p[2]);
+                        blocks[x][y] = p[0];
+                        attackValue[x][y] = Integer.parseInt(p[1]);
+                        this.lastAttackPlayerName[x][y] = p[2];
+                        if(3 < p.length)
+                            lightValues[x][y] = (float)Double.parseDouble(p[3]);
                     }
                     else
                         setBlock(x,y,yValues[y]);

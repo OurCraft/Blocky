@@ -32,16 +32,19 @@ public class ThreadUpdateServerWorld extends Thread
             if(frame <= 60)
             {
                 world.tick();
-                ArrayList<Entity> ents = new ArrayList<Entity>();
-                for(Entity e : world.entities)
+                if(frame % 20 == 0)
                 {
-                    if(e.needUpdate)
+                    ArrayList<Entity> ents = new ArrayList<Entity>();
+                    for(Entity e : world.entities)
                     {
-                        ents.add(e);
-                        e.needUpdate = false;
+                        if(e.needUpdate)
+                        {
+                            ents.add(e);
+                            e.needUpdate = false;
+                        }
                     }
+                    NetworkCommons.sendPacketTo(new PacketEntitiesState(ents, new Class<?>[]{EntityPlayer.class}), false, BlockyMainServer.instance.getNetwork().getIngameConnectionsFromClients());
                 }
-                NetworkCommons.sendPacketTo(new PacketEntitiesState(ents, new Class<?>[]{EntityPlayer.class}), false, BlockyMainServer.instance.getNetwork().getIngameConnectionsFromClients());
             }
             if(System.currentTimeMillis()-lastTime >= 1000)
             {

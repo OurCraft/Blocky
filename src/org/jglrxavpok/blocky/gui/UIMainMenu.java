@@ -38,8 +38,8 @@ public class UIMainMenu extends UIBlockyMenu
         comps.add(playButton);
         comps.add(serverButton);
         
-        SoundManager.instance.playBackgroundMusic("/assets/musics/menu.ogg", 1, 0.8f);
-        SoundManager.instance.setLooping("bgmusic", true);
+//        SoundManager.instance.playBackgroundMusic("/assets/musics/menu.ogg", 1, 0.8f);
+//        SoundManager.instance.setLooping("bgmusic", true);
     }
     
     public void componentClicked(UIComponentBase c)

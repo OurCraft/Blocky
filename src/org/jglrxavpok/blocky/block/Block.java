@@ -91,7 +91,7 @@ public abstract class Block implements GameObject
 		@Override
 		public boolean isSolid()
 		{
-			return true;
+			return false;
 		}
 		
 		@Override
@@ -180,8 +180,8 @@ public abstract class Block implements GameObject
     public static Block torch = new BlockTorch("torch").setResistance(0);
     public static Block planks = generateBlock("planks", true, 1.5f).setTextureFromTerrain(6, 6, 6, 6).setAverageColor(0xFFD800);
     public static Block sand = generateBlock("sand", true, 1.f).setTextureFromTerrain(12, 12, 6, 6).setAverageColor(0xFAE47A);
-    public static final BlockDoor doorOpened = BlockDoor.opened; 
-    public static final BlockDoor doorClosed = BlockDoor.closed; 
+    public static BlockDoor doorOpened = BlockDoor.opened; 
+    public static BlockDoor doorClosed = BlockDoor.closed; 
     public static Block coal = generateBlock("coal", true, 2.5f).setTextureFromTerrain(0, 30, 6, 6).setAverageColor(0x838383);
     public static Block iron = generateBlock("iron", true, 2.5f).setTextureFromTerrain(6, 30, 6, 6).setAverageColor(0x838383);
     public static Block diamond = generateBlock("diamond", true, 2.5f).setTextureFromTerrain(12, 30, 6, 6).setAverageColor(0x838383);
@@ -299,7 +299,6 @@ public abstract class Block implements GameObject
         if(val > 1f)
             val = 1f;
         lvl.setLightValue(val,x,y);
-        
         if(lvl.isRaining && lvl.getBiomeAt(x, y).biomeId.equals("snow") && rand.nextInt(400) == 200)
 	    {
 	    	if(lvl.getBlockAt(x, y + 1).equals("air"))
@@ -567,6 +566,7 @@ public abstract class Block implements GameObject
             p.setLife(50);
             lvl.spawnParticle(p);
         }
+        if(!lvl.isRemote)
         dropItems(lvl, rx, y);
         return true;
     }

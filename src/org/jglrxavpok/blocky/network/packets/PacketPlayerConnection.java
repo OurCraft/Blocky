@@ -6,6 +6,7 @@ public class PacketPlayerConnection extends PacketEntityState
 {
 
     PacketPlayerConnection(){}
+    
     public PacketPlayerConnection(int entityID, EntityState state)
     {
         super(entityID, state);

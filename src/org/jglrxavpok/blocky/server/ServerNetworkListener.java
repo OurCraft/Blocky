@@ -11,6 +11,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
+import org.jglrxavpok.blocky.entity.EntityPlayer;
 import org.jglrxavpok.blocky.network.ConnectionType;
 import org.jglrxavpok.blocky.network.EntityState;
 import org.jglrxavpok.blocky.network.NetworkCommons;
@@ -108,7 +109,13 @@ public class ServerNetworkListener extends Listener
                             ingameConnections.add(client);
                             BlockyMainServer.console("Player "+client.getName()+" just connected!");
                             NetworkCommons.sendPacketToExcept(new PacketChat("Player "+client.getName()+" just connected!"), false, c, getIngameConnectionsFromClients());
-                            NetworkCommons.sendPacketTo(new PacketPlayerConnection(BlockyMainServer.world.getCorrectID(), EntityState.createFromEntity(BlockyMainServer.world.getPlayerByName(client.getName()))), false, c);
+                            EntityPlayer player = BlockyMainServer.world.getPlayerByName(client.getName());
+                            int entityID = 0;
+                            if(player != null)
+                                entityID = player.entityID;
+                            else
+                                entityID = BlockyMainServer.world.getCorrectID();
+                            NetworkCommons.sendPacketTo(new PacketPlayerConnection(entityID, EntityState.createFromEntity(player)), false, c);
                         }
                         else
                         {
@@ -151,6 +158,7 @@ public class ServerNetworkListener extends Listener
             out.writeInt(nbrPlayers);
             out.writeInt(maxPlayers);
             out.writeUTF(serverName);
+            out.writeLong(BlockyMainServer.world.time);
             out.close();
             baos.close();
             Packet response = new Packet("Ping+infos response", baos.toByteArray());

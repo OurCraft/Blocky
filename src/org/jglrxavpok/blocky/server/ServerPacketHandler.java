@@ -92,19 +92,21 @@ public class ServerPacketHandler implements IPacketHandler
                     Class<?> class1 = Class.forName(s1);
                     if(Reflect.isInstanceof(class1, EntityPlayer.class))
                     {
-                        Entity e = BlockyMainServer.world.getEntityByID(Integer.parseInt(s.substring(s.lastIndexOf("_")+1)));
+                        int id = ((PacketEntityState)p).getEntityID();
+                        Entity e = BlockyMainServer.world.getEntityByID(id);
                         if(e != null)
+                        {
                             e.readFromChunk(chunk);
+                        }
                         else
                         {
                             try
                             {
-                                if(class1 == EntityPlayerMP.class)
-                                    class1 = EntityPlayerClientMP.class;
+                                if(class1 == EntityPlayerClientMP.class)
+                                    class1 = EntityPlayerMP.class;
                                 e = (Entity) class1.newInstance();
-                                e.entityID = Integer.parseInt(s.substring(s.lastIndexOf("_")+1));
                                 e.readFromChunk(chunk);
-                                BlockyMainServer.world.addEntityWithID(e.entityID, e);
+                                BlockyMainServer.world.addEntityWithID(id, e);
                             }
                             catch (Exception e1)
                             {

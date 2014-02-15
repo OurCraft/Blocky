@@ -144,7 +144,7 @@ public class BlockyMain implements Runnable
 
 	public static String version()
 	{
-		return "Indev 1.2";
+		return "Indev 1.2.1"; // Parce que fuck la police
 	}
 
 	public static BlockyMain	instance;

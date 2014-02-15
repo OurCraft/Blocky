@@ -415,6 +415,8 @@ public class World
 	    if(worldType != WorldType.CLIENT)
         time+=1;
 		
+	    time = 14000;
+	    
 		ticks+=tickSpeed;
 		this.particles.tickAll(this);
         
@@ -483,6 +485,11 @@ public class World
             Entity e = entities.get(i);
             if(e != null)
             {
+                if(e.world != this)
+                {
+                    entities.remove(e);
+                }
+                else
                 e.tick();
             }
         }
@@ -643,6 +650,16 @@ public class World
             players.add((EntityPlayer) e);
         }
         entities.add(e);
+        for(Entity e1 : entities)
+        {
+            if(e1.entityID == entityID && !isRemote)
+            {
+                int old = entityID;
+                entityID = getCorrectID();
+                System.out.println("ID mismatch, "+old+" replaced by "+entityID);
+                break;
+            }
+        }
         e.entityID = entityID;
         e.world = this;
 	}
@@ -671,18 +688,20 @@ public class World
 	
 	public int getCorrectID()
     {
-	    boolean flag;
-	    do
+	    boolean flag = true;
+	    while(flag)
 	    {
 	        flag = false;
 	        for(Entity e : entities)
 	        {
 	            if(e.entityID == entityID)
+	            {
 	                flag = true;
+	                break;
+	            }
 	        }
-	        if(flag)
-	            entityID++;
-	    }while(flag);
+	        entityID++;
+	    }
 	    return entityID;
     }
 

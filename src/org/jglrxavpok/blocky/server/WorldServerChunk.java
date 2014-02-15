@@ -32,7 +32,7 @@ public class WorldServerChunk extends WorldChunk
     
     public void tick()
     {
-        if(!this.lvl.isRemote)
+//        if(!this.lvl.isRemote)
         if(blocks != null)
         {
             boolean flag = false;
@@ -98,8 +98,15 @@ public class WorldServerChunk extends WorldChunk
     
     public void setAttackValueToBlock(int x, int y, int v, String p)
     {
-        super.setAttackValueToBlock(x, y, v, p);
-        attackValue[x][y] = v;
-        System.err.println("attack: "+v);
+        if(v > Block.getBlock(getBlock((chunkID < 0 ? 15-x : x),y)).resistance*50f)
+        {
+            if(Block.getBlock(getBlock((chunkID < 0 ? 15-x : x),y)).onBlockDestroyedByPlayer(p, 16*chunkID+(chunkID < 0 ? 15-x : x), y, lvl))
+            {
+                setBlock(x,y,"air");
+            }
+            super.setAttackValueToBlock(x, y, 0, p);
+        }
+        else
+            super.setAttackValueToBlock(x, y, v, p);
     }
 }
